@@ -6,11 +6,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CRM.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CRM.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ContactoController : ControllerBase
     {
         private readonly CrmDbContext _context;
