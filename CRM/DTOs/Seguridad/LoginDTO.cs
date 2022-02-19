@@ -7,7 +7,12 @@ namespace CRM.DTOs.Seguridad
 {
     public class LoginDTO
     {
-        public string User { get; set; }
+        public string UserName { get; set; }
         public string Password { get; set; }
+    }
+
+    public class SuccessLoginDTO
+    {
+        public string Token { get; set; }
     }
 }

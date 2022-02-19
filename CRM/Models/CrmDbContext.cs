@@ -849,10 +849,9 @@ namespace CRM.Models
                     .IsRequired()
                     .HasMaxLength(100);
 
-                entity.Property(e => e.User)
+                entity.Property(e => e.UserName)
                     .IsRequired()
-                    .HasMaxLength(50)
-                    .HasColumnName("Usuario");
+                    .HasMaxLength(50);
 
                 entity.HasOne(d => d.IdPerfilNavigation)
                     .WithMany(p => p.Usuarios)

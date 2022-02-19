@@ -1,4 +1,5 @@
 ﻿using CRM.DTOs.Seguridad;
+using CRM.Helpers;
 using CRM.Models;
 using CRM.Services.Seguridad;
 using Microsoft.AspNetCore.Authorization;
@@ -18,29 +19,35 @@ namespace CRM.Controllers
     {
         private readonly CrmDbContext _context;
         private readonly TokenService TokenService;
+        private readonly LoginService LoginService;
 
         public LoginController(CrmDbContext context, IConfiguration configuration)
         {
-            TokenService = new TokenService(context, configuration);
+            TokenService = new TokenService(configuration);
+            LoginService = new LoginService(context);
         }
 
 
         [HttpPost]
-        [Route("authenticate")]
-        public IActionResult Authenticate(LoginDTO login)
+        public ApiResponse<SuccessLoginDTO> Authenticate(LoginDTO login)
         {
-            if (login == null)
-                return BadRequest(new { mensaje = "Enviar credenciales" });
+            try
+            {
+                ApiResponse<SuccessLoginDTO> response = new();
 
-            bool isCredentialValid = (login.Password == "123456");
-            if (isCredentialValid)
-            {
-                var token = TokenService.CreateToken(new Usuario() { User ="elias", Email="eliasmerc23@gmail.com" });
-                return Ok(token);
+                Usuario user = LoginService.CrearSesion(login.UserName, login.Password);
+                string token = TokenService.CreateToken(new Usuario() { UserName = user.UserName, Email = user.Email });
+                response.Data.Token = token;
+
+                return response;
             }
-            else
+            catch (ApiException)
             {
-                return Unauthorized();
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
     }

@@ -12,7 +12,7 @@ namespace CRM.Models
         public string Apellidos { get; set; }
         public string Email { get; set; }
         public string Direccion { get; set; }
-        public string User { get; set; }
+        public string UserName { get; set; }
         public string Password { get; set; }
         public DateTime FechaCreacion { get; set; }
         public int IdPerfil { get; set; }
