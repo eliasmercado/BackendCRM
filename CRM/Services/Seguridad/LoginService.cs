@@ -1,4 +1,5 @@
-﻿using CRM.Helpers;
+﻿using CRM.DTOs.Seguridad;
+using CRM.Helpers;
 using CRM.Models;
 using System;
 using System.Collections.Generic;
@@ -16,17 +17,32 @@ namespace CRM.Services.Seguridad
             _context = context;
         }
 
-        public Usuario CrearSesion(string usuario, string password)
+        public SuccessLoginDTO CrearSesion(string usuario, string password)
         {
             Usuario user = _context.Usuarios.Where(x => x.UserName == usuario).FirstOrDefault();
 
             if (user == null)
                 throw new ApiException("El usuario no existe.");
-            
+
             if (user.Password == password)
-                return user;
+            {
+                Perfil perfil = _context.Perfils.Where(x => x.IdPerfil == user.IdPerfil).FirstOrDefault();
+
+                return new SuccessLoginDTO()
+                {
+                    IdUsuario = user.IdUsuario,
+                    Nombres = user.Nombres,
+                    Apellidos = user.Apellidos,
+                    Email = user.Email,
+                    Perfil = perfil.Descripcion,
+                    UserName = user.UserName
+                };
+            }
             else
                 throw new ApiException("Credenciales inválidas.");
+
+
+
         }
     }
 }

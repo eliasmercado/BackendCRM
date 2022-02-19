@@ -1,5 +1,6 @@
 ﻿using CRM.Helpers;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,7 +39,7 @@ namespace CRM
                     }
                 };
 
-                var errorJson = JsonSerializer.Serialize(error);
+                var errorJson = JsonConvert.SerializeObject(error);
 
                 await response.WriteAsync(errorJson);
             }
@@ -56,7 +57,7 @@ namespace CRM
                     }
                 };
 
-                var errorJson = JsonSerializer.Serialize(error);
+                var errorJson = JsonConvert.SerializeObject(error);
 
                 await response.WriteAsync(errorJson);
             }
@@ -65,11 +66,13 @@ namespace CRM
 
     public class ApiError
     {
+        [JsonProperty("error")]
         public ErrorMessage Error { get; set; }
     }
 
     public class ErrorMessage
     {
+        [JsonProperty("message")]
         public string Message { get; set; }
     }
 }

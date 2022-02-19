@@ -17,7 +17,6 @@ namespace CRM.Controllers
     [ApiController]
     public class LoginController : ControllerBase
     {
-        private readonly CrmDbContext _context;
         private readonly TokenService TokenService;
         private readonly LoginService LoginService;
 
@@ -35,8 +34,9 @@ namespace CRM.Controllers
             {
                 ApiResponse<SuccessLoginDTO> response = new();
 
-                Usuario user = LoginService.CrearSesion(login.UserName, login.Password);
-                string token = TokenService.CreateToken(new Usuario() { UserName = user.UserName, Email = user.Email });
+                SuccessLoginDTO successLogin = LoginService.CrearSesion(login.UserName, login.Password);
+                string token = TokenService.CreateToken(new Usuario() { UserName = successLogin.UserName, Email = successLogin.Email });
+                response.Data = successLogin;
                 response.Data.Token = token;
 
                 return response;
