@@ -115,6 +115,55 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Obtener Menú",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url-base}}/api/menu",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"menu"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Menú por Usuario",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url-base}}/api/menu/1",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"menu",
+								"1"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
