@@ -13,47 +13,47 @@ namespace CRM.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class ContactoController : ControllerBase
+    public class UsuarioController : ControllerBase
     {
         private readonly CrmDbContext _context;
 
-        public ContactoController(CrmDbContext context)
+        public UsuarioController(CrmDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/Contacto
+        // GET: api/Usuario
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Contacto>>> GetContactos()
+        public async Task<ActionResult<IEnumerable<Usuario>>> GetUsuarios()
         {
-            return await _context.Contactos.ToListAsync();
+            return await _context.Usuarios.ToListAsync();
         }
 
-        // GET: api/Contacto/5
+        // GET: api/Usuario/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Contacto>> GetContacto(int id)
+        public async Task<ActionResult<Usuario>> GetUsuario(int id)
         {
-            var contacto = await _context.Contactos.FindAsync(id);
+            var usuario = await _context.Usuarios.FindAsync(id);
 
-            if (contacto == null)
+            if (usuario == null)
             {
                 return NotFound();
             }
 
-            return contacto;
+            return usuario;
         }
 
-        // PUT: api/Contacto/5
+        // PUT: api/Usuario/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutContacto(int id, Contacto contacto)
+        public async Task<IActionResult> PutUsuario(int id, Usuario usuario)
         {
-            if (id != contacto.IdContacto)
+            if (id != usuario.IdUsuario)
             {
                 return BadRequest();
             }
 
-            _context.Entry(contacto).State = EntityState.Modified;
+            _context.Entry(usuario).State = EntityState.Modified;
 
             try
             {
@@ -61,7 +61,7 @@ namespace CRM.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ContactoExists(id))
+                if (!UsuarioExists(id))
                 {
                     return NotFound();
                 }
@@ -74,36 +74,36 @@ namespace CRM.Controllers
             return NoContent();
         }
 
-        // POST: api/Contacto
+        // POST: api/Usuario
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Contacto>> PostContacto(Contacto contacto)
+        public async Task<ActionResult<Usuario>> PostUsuario(Usuario usuario)
         {
-            _context.Contactos.Add(contacto);
+            _context.Usuarios.Add(usuario);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetContacto", new { id = contacto.IdContacto }, contacto);
+            return CreatedAtAction("GetUsuario", new { id = usuario.IdUsuario }, usuario);
         }
 
-        // DELETE: api/Contacto/5
+        // DELETE: api/Usuario/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteContacto(int id)
+        public async Task<IActionResult> DeleteUsuario(int id)
         {
-            var contacto = await _context.Contactos.FindAsync(id);
-            if (contacto == null)
+            var usuario = await _context.Usuarios.FindAsync(id);
+            if (usuario == null)
             {
                 return NotFound();
             }
 
-            _context.Contactos.Remove(contacto);
+            _context.Usuarios.Remove(usuario);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool ContactoExists(int id)
+        private bool UsuarioExists(int id)
         {
-            return _context.Contactos.Any(e => e.IdContacto == id);
+            return _context.Usuarios.Any(e => e.IdUsuario == id);
         }
     }
 }

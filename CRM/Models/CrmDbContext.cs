@@ -34,10 +34,13 @@ namespace CRM.Models
         public virtual DbSet<FuenteTicket> FuenteTickets { get; set; }
         public virtual DbSet<Marca> Marcas { get; set; }
         public virtual DbSet<MedioComunicacion> MedioComunicacions { get; set; }
+        public virtual DbSet<Menu> Menus { get; set; }
         public virtual DbSet<Monedum> Moneda { get; set; }
         public virtual DbSet<MotivoComunicacion> MotivoComunicacions { get; set; }
         public virtual DbSet<Oportunidad> Oportunidads { get; set; }
         public virtual DbSet<Pedido> Pedidos { get; set; }
+        public virtual DbSet<Perfil> Perfils { get; set; }
+        public virtual DbSet<PerfilPermiso> PerfilPermisos { get; set; }
         public virtual DbSet<Pipeline> Pipelines { get; set; }
         public virtual DbSet<Prioridad> Prioridads { get; set; }
         public virtual DbSet<Producto> Productos { get; set; }
@@ -48,15 +51,7 @@ namespace CRM.Models
         public virtual DbSet<TipoDocumento> TipoDocumentos { get; set; }
         public virtual DbSet<TipoPedido> TipoPedidos { get; set; }
         public virtual DbSet<TipoTarea> TipoTareas { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Data Source=localhost;Initial Catalog=crm;User ID=crm;Password=crm;");
-            }
-        }
+        public virtual DbSet<Usuario> Usuarios { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -393,6 +388,29 @@ namespace CRM.Models
                     .HasMaxLength(50);
             });
 
+            modelBuilder.Entity<Menu>(entity =>
+            {
+                entity.HasKey(e => e.IdMenu)
+                    .HasName("PK__Menu__4D7EA8E15160C76C");
+
+                entity.ToTable("Menu");
+
+                entity.Property(e => e.Descripcion).HasMaxLength(100);
+
+                entity.Property(e => e.MenuUrl)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Nombre)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.HasOne(d => d.IdMenuPadreNavigation)
+                    .WithMany(p => p.InverseIdMenuPadreNavigation)
+                    .HasForeignKey(d => d.IdMenuPadre)
+                    .HasConstraintName("Menu_FK");
+            });
+
             modelBuilder.Entity<Monedum>(entity =>
             {
                 entity.HasKey(e => e.IdMoneda)
@@ -527,6 +545,39 @@ namespace CRM.Models
                     .HasForeignKey(d => d.IdTipoPedido)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("TipoPedido_Pedido_fk");
+            });
+
+            modelBuilder.Entity<Perfil>(entity =>
+            {
+                entity.HasKey(e => e.IdPerfil)
+                    .HasName("PK__Perfil__C7BD5CC15E4CBCFB");
+
+                entity.ToTable("Perfil");
+
+                entity.Property(e => e.Descripcion)
+                    .IsRequired()
+                    .HasMaxLength(60);
+            });
+
+            modelBuilder.Entity<PerfilPermiso>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("PerfilPermiso");
+
+                entity.Property(e => e.IdPerfilPermiso).ValueGeneratedOnAdd();
+
+                entity.HasOne(d => d.IdMenuNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.IdMenu)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("PerfilPermiso_FK_1");
+
+                entity.HasOne(d => d.IdPerfilNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.IdPerfil)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("PerfilPermiso_FK");
             });
 
             modelBuilder.Entity<Pipeline>(entity =>
@@ -769,6 +820,44 @@ namespace CRM.Models
                 entity.Property(e => e.Descripcion)
                     .IsRequired()
                     .HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<Usuario>(entity =>
+            {
+                entity.HasKey(e => e.IdUsuario)
+                    .HasName("PK__Usuario__5B65BF975104F4FF");
+
+                entity.ToTable("Usuario");
+
+                entity.Property(e => e.Apellidos)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Direccion).HasMaxLength(50);
+
+                entity.Property(e => e.Email)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.FechaCreacion).HasColumnType("datetime");
+
+                entity.Property(e => e.Nombres)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Password)
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.UserName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.HasOne(d => d.IdPerfilNavigation)
+                    .WithMany(p => p.Usuarios)
+                    .HasForeignKey(d => d.IdPerfil)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Usuario_FK");
             });
 
             OnModelCreatingPartial(modelBuilder);
