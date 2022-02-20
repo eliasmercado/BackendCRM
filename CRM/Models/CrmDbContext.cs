@@ -398,7 +398,6 @@ namespace CRM.Models
                 entity.Property(e => e.Descripcion).HasMaxLength(100);
 
                 entity.Property(e => e.MenuUrl)
-                    .IsRequired()
                     .HasMaxLength(50);
 
                 entity.Property(e => e.Nombre)
