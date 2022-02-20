@@ -20,6 +20,11 @@ namespace CRM.Services.Seguridad
             SecretKey = configuration["JWT:SecretKey"].ToString();
         }
 
+        /// <summary>
+        /// Obtiene un token para la sesión creada
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         public string CreateToken(Usuario user)
         {
             var key = Encoding.ASCII.GetBytes(SecretKey);

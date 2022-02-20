@@ -17,6 +17,12 @@ namespace CRM.Services.Seguridad
             _context = context;
         }
 
+        /// <summary>
+        /// Obtiene los datos de un usuario si las credenciales son correctas
+        /// </summary>
+        /// <param name="usuario"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         public SuccessLoginDTO CrearSesion(string usuario, string password)
         {
             Usuario user = _context.Usuarios.Where(x => x.UserName == usuario).FirstOrDefault();

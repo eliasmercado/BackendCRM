@@ -34,7 +34,9 @@ namespace CRM.Controllers
             {
                 ApiResponse<SuccessLoginDTO> response = new();
 
+                //Vamos a obtener los datos del usuario en caso de que sus credenciales sean correctas
                 SuccessLoginDTO successLogin = LoginService.CrearSesion(login.UserName, login.Password);
+                //Obtenemos el token que va utilizar para las peticiones autenticadas
                 string token = TokenService.CreateToken(new Usuario() { UserName = successLogin.UserName, Email = successLogin.Email });
                 response.Data = successLogin;
                 response.Data.Token = token;
