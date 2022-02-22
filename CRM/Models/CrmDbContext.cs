@@ -132,6 +132,12 @@ namespace CRM.Models
                     .HasForeignKey(d => d.IdMotivoComunicacion)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("MotivoLlamada_Llamada_fk");
+
+                entity.HasOne(d => d.IdUsuarioNavigation)
+                    .WithMany(p => p.Comunicacions)
+                    .HasForeignKey(d => d.IdUsuario)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Comunicacion_FK");
             });
 
             modelBuilder.Entity<Contacto>(entity =>
@@ -192,6 +198,12 @@ namespace CRM.Models
                     .WithMany(p => p.Contactos)
                     .HasForeignKey(d => d.IdEstadoCivil)
                     .HasConstraintName("EstadoCivil_Contacto_fk");
+
+                entity.HasOne(d => d.IdPropietarioNavigation)
+                    .WithMany(p => p.Contactos)
+                    .HasForeignKey(d => d.IdPropietario)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Contacto_FK");
 
                 entity.HasOne(d => d.IdTipoDocumentoNavigation)
                     .WithMany(p => p.Contactos)
@@ -278,6 +290,12 @@ namespace CRM.Models
                     .HasForeignKey(d => d.IdCiudad)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Ciudad_Empresa_fk");
+
+                entity.HasOne(d => d.IdPropietarioNavigation)
+                    .WithMany(p => p.Empresas)
+                    .HasForeignKey(d => d.IdPropietario)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Empresa_FK");
             });
 
             modelBuilder.Entity<EstadoActividad>(entity =>
@@ -478,6 +496,12 @@ namespace CRM.Models
                     .HasForeignKey(d => d.IdPrioridad)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Prioridad_Oportunidad_fk");
+
+                entity.HasOne(d => d.IdPropietarioNavigation)
+                    .WithMany(p => p.Oportunidads)
+                    .HasForeignKey(d => d.IdPropietario)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Oportunidad_FK");
 
                 entity.HasOne(d => d.IdSucursalNavigation)
                     .WithMany(p => p.Oportunidads)
@@ -729,6 +753,12 @@ namespace CRM.Models
                     .HasForeignKey(d => d.IdTipoTarea)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("TipoTarea_Tarea_fk");
+
+                entity.HasOne(d => d.IdUsuarioResponsableNavigation)
+                    .WithMany(p => p.Tareas)
+                    .HasForeignKey(d => d.IdUsuarioResponsable)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Tarea_FK");
             });
 
             modelBuilder.Entity<Ticket>(entity =>
@@ -783,6 +813,12 @@ namespace CRM.Models
                     .HasForeignKey(d => d.IdPrioridad)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Prioridad_Ticket_fk");
+
+                entity.HasOne(d => d.IdUsuarioResponsableNavigation)
+                    .WithMany(p => p.Tickets)
+                    .HasForeignKey(d => d.IdUsuarioResponsable)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Ticket_FK");
             });
 
             modelBuilder.Entity<TipoDocumento>(entity =>

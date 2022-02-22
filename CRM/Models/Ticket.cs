@@ -31,6 +31,7 @@ namespace CRM.Models
         public virtual FuenteTicket IdFuenteTicketNavigation { get; set; }
         public virtual Pipeline IdPipelineNavigation { get; set; }
         public virtual Prioridad IdPrioridadNavigation { get; set; }
+        public virtual Usuario IdUsuarioResponsableNavigation { get; set; }
         public virtual ICollection<Tarea> Tareas { get; set; }
     }
 }

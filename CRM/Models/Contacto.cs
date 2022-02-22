@@ -39,6 +39,7 @@ namespace CRM.Models
         public virtual ActividadEconomica IdActividadEconomicaNavigation { get; set; }
         public virtual Ciudad IdCiudadNavigation { get; set; }
         public virtual EstadoCivil IdEstadoCivilNavigation { get; set; }
+        public virtual Usuario IdPropietarioNavigation { get; set; }
         public virtual TipoDocumento IdTipoDocumentoNavigation { get; set; }
         public virtual ICollection<Comunicacion> Comunicacions { get; set; }
         public virtual ICollection<Oportunidad> Oportunidads { get; set; }

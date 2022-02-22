@@ -35,6 +35,7 @@ namespace CRM.Models
         public virtual Tarea IdTareaAsociadaNavigation { get; set; }
         public virtual Ticket IdTicketNavigation { get; set; }
         public virtual TipoTarea IdTipoTareaNavigation { get; set; }
+        public virtual Usuario IdUsuarioResponsableNavigation { get; set; }
         public virtual ICollection<Tarea> InverseIdTareaAsociadaNavigation { get; set; }
     }
 }

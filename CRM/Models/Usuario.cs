@@ -7,6 +7,16 @@ namespace CRM.Models
 {
     public partial class Usuario
     {
+        public Usuario()
+        {
+            Comunicacions = new HashSet<Comunicacion>();
+            Contactos = new HashSet<Contacto>();
+            Empresas = new HashSet<Empresa>();
+            Oportunidads = new HashSet<Oportunidad>();
+            Tareas = new HashSet<Tarea>();
+            Tickets = new HashSet<Ticket>();
+        }
+
         public int IdUsuario { get; set; }
         public string Nombres { get; set; }
         public string Apellidos { get; set; }
@@ -19,5 +29,11 @@ namespace CRM.Models
         public bool? Estado { get; set; }
 
         public virtual Perfil IdPerfilNavigation { get; set; }
+        public virtual ICollection<Comunicacion> Comunicacions { get; set; }
+        public virtual ICollection<Contacto> Contactos { get; set; }
+        public virtual ICollection<Empresa> Empresas { get; set; }
+        public virtual ICollection<Oportunidad> Oportunidads { get; set; }
+        public virtual ICollection<Tarea> Tareas { get; set; }
+        public virtual ICollection<Ticket> Tickets { get; set; }
     }
 }

@@ -33,6 +33,7 @@ namespace CRM.Models
         public virtual Etapa IdEtapaNavigation { get; set; }
         public virtual Fuente IdFuenteNavigation { get; set; }
         public virtual Prioridad IdPrioridadNavigation { get; set; }
+        public virtual Usuario IdPropietarioNavigation { get; set; }
         public virtual Sucursal IdSucursalNavigation { get; set; }
         public virtual ICollection<DetalleOportunidad> DetalleOportunidads { get; set; }
         public virtual ICollection<Pedido> Pedidos { get; set; }

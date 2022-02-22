@@ -31,6 +31,7 @@ namespace CRM.Models
         public int IdPropietario { get; set; }
 
         public virtual Ciudad IdCiudadNavigation { get; set; }
+        public virtual Usuario IdPropietarioNavigation { get; set; }
         public virtual ICollection<Comunicacion> Comunicacions { get; set; }
         public virtual ICollection<Oportunidad> Oportunidads { get; set; }
         public virtual ICollection<Tarea> Tareas { get; set; }

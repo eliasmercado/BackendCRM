@@ -19,5 +19,6 @@ namespace CRM.Models
         public virtual Empresa IdEmpresaNavigation { get; set; }
         public virtual MedioComunicacion IdMedioComunicacionNavigation { get; set; }
         public virtual MotivoComunicacion IdMotivoComunicacionNavigation { get; set; }
+        public virtual Usuario IdUsuarioNavigation { get; set; }
     }
 }
