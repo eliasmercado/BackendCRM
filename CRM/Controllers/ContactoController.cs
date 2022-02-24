@@ -1,4 +1,5 @@
 ﻿using System;
+using CRM.Helpers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,6 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CRM.Models;
 using Microsoft.AspNetCore.Authorization;
+using CRM.Services;
+using CRM.Services.ContactoService;
 
 namespace CRM.Controllers
 {
@@ -15,20 +18,32 @@ namespace CRM.Controllers
     [Authorize]
     public class ContactoController : ControllerBase
     {
-        private readonly CrmDbContext _context;
+        private readonly ContactoService ContactoService;
 
         public ContactoController(CrmDbContext context)
         {
-            _context = context;
+            ContactoService = new ContactoService(context);
         }
 
         // GET: api/Contacto
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Contacto>>> GetContactos()
+        public ApiResponse<List<Contacto>> GetContactos()
         {
-            return await _context.Contactos.ToListAsync();
+            try
+            {
+                ApiResponse<List<Contacto>> response = new();
+
+                response.Data = ContactoService.ObtenerListaContactos();
+
+                return response;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
+        /**
         // GET: api/Contacto/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Contacto>> GetContacto(int id)
@@ -104,6 +119,6 @@ namespace CRM.Controllers
         private bool ContactoExists(int id)
         {
             return _context.Contactos.Any(e => e.IdContacto == id);
-        }
+        }**/
     }
 }

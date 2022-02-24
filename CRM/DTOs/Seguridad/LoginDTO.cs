@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace CRM.DTOs.Seguridad
 {
-    public class LoginDTO
+    public class MenuDTO
     {
         public string UserName { get; set; }
         public string Password { get; set; }
