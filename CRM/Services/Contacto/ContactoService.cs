@@ -1,4 +1,5 @@
 ﻿using CRM.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace CRM.Services.ContactoService
         }
 
         /// <summary>
-        /// Obtiene la lista de todos los contactos del sistema
+        /// Obtiene un contacto dado su Id
         /// </summary>
         /// <returns></returns>
         public List<Contacto> ObtenerListaContactos()
@@ -26,5 +27,37 @@ namespace CRM.Services.ContactoService
             return listaContacto;
         }
 
+        public Contacto ObtenerContactoById(int id)
+        {
+            Contacto contacto = _context.Contactos.Single(x => x.IdContacto == id);
+
+            return contacto;
+        }
+
+        public String ModificarContactoById(int id, Contacto contactoModificado)
+        {
+            Contacto contacto = _context.Contactos.Single(x => x.IdContacto == id);
+            if (contacto != null) {
+                _context.Entry(contacto).State = EntityState.Modified;
+                contacto = contactoModificado;
+            }
+
+            return "Contacto modificado";
+        }
+
+        public String CrearContacto(Contacto contactoNuevo)
+        {
+            _context.Contactos.Add(contactoNuevo);
+
+            return "Contacto agregado";
+        }
+
+        public bool ContactoExists(int id) {
+            bool existe = false;
+            var contacto = _context.Contactos.Single(x => x.IdContacto == id);
+            if (contacto != null)
+                existe = true;
+            return existe;
+        }
     }
 }

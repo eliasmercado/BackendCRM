@@ -43,42 +43,44 @@ namespace CRM.Controllers
             }
         }
 
-        /**
+        
         // GET: api/Contacto/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Contacto>> GetContacto(int id)
+        public ApiResponse<Contacto> GetContacto(int id)
         {
-            var contacto = await _context.Contactos.FindAsync(id);
-
-            if (contacto == null)
+            try
             {
-                return NotFound();
+                ApiResponse<Contacto> response = new();
+                var contacto = ContactoService.ObtenerContactoById(id);
+                if (contacto != null)
+                    response.Data = ContactoService.ObtenerContactoById(id);
+                //no se como hacer la excepcion xd
+
+                return response;
             }
+            catch (Exception)
+            {
 
-            return contacto;
+                throw;
+            }
         }
-
+        
         // PUT: api/Contacto/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutContacto(int id, Contacto contacto)
+        public ApiResponse<Object> PutContacto(int id, Contacto contacto)
         {
-            if (id != contacto.IdContacto)
-            {
-                return BadRequest();
-            }
 
-            _context.Entry(contacto).State = EntityState.Modified;
-
+            ApiResponse<Object> response = new();
             try
             {
-                await _context.SaveChangesAsync();
+                response.Data = ContactoService.ModificarContactoById(id, contacto);            
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ContactoExists(id))
+                if (!ContactoService.ContactoExists(id))
                 {
-                    return NotFound();
+                    throw;
                 }
                 else
                 {
@@ -86,39 +88,25 @@ namespace CRM.Controllers
                 }
             }
 
-            return NoContent();
+            return response;
         }
-
+        
         // POST: api/Contacto
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Contacto>> PostContacto(Contacto contacto)
+        public ApiResponse<Object> PostContacto(Contacto contacto)
         {
-            _context.Contactos.Add(contacto);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetContacto", new { id = contacto.IdContacto }, contacto);
-        }
-
-        // DELETE: api/Contacto/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteContacto(int id)
-        {
-            var contacto = await _context.Contactos.FindAsync(id);
-            if (contacto == null)
+            ApiResponse<Object> response = new();
+            try
             {
-                return NotFound();
+                response.Data = ContactoService.CrearContacto(contacto);
             }
-
-            _context.Contactos.Remove(contacto);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            catch (DbUpdateConcurrencyException)
+            {
+              
+                    throw;
+             }
+            return response;
         }
-
-        private bool ContactoExists(int id)
-        {
-            return _context.Contactos.Any(e => e.IdContacto == id);
-        }**/
-    }
+     }
 }
