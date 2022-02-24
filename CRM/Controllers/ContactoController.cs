@@ -43,7 +43,6 @@ namespace CRM.Controllers
             }
         }
 
-        
         // GET: api/Contacto/5
         [HttpGet("{id}")]
         public ApiResponse<Contacto> GetContacto(int id)
@@ -51,62 +50,60 @@ namespace CRM.Controllers
             try
             {
                 ApiResponse<Contacto> response = new();
+
                 var contacto = ContactoService.ObtenerContactoById(id);
                 if (contacto != null)
                     response.Data = ContactoService.ObtenerContactoById(id);
-                //no se como hacer la excepcion xd
+                else
+                    throw new ApiException("No se encontró el contacto");
 
                 return response;
             }
+            catch (ApiException)
+            {
+                throw;
+            }
             catch (Exception)
             {
-
                 throw;
             }
         }
-        
-        // PUT: api/Contacto/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+
         [HttpPut("{id}")]
-        public ApiResponse<Object> PutContacto(int id, Contacto contacto)
+        public ApiResponse<object> PutContacto(int id, Contacto contacto)
         {
 
-            ApiResponse<Object> response = new();
+            ApiResponse<object> response = new();
+
             try
             {
-                response.Data = ContactoService.ModificarContactoById(id, contacto);            
+                response.Data = ContactoService.ModificarContactoById(id, contacto);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (ApiException)
             {
-                if (!ContactoService.ContactoExists(id))
-                {
-                    throw;
-                }
-                else
-                {
-                    throw;
-                }
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
             }
 
             return response;
         }
-        
-        // POST: api/Contacto
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+
         [HttpPost]
-        public ApiResponse<Object> PostContacto(Contacto contacto)
+        public ApiResponse<object> PostContacto(Contacto contacto)
         {
-            ApiResponse<Object> response = new();
+            ApiResponse<object> response = new();
             try
             {
                 response.Data = ContactoService.CrearContacto(contacto);
             }
             catch (DbUpdateConcurrencyException)
             {
-              
-                    throw;
-             }
+                throw;
+            }
             return response;
         }
-     }
+    }
 }

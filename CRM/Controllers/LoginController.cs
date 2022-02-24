@@ -26,26 +26,8 @@ namespace CRM.Controllers
             LoginService = new LoginService(context);
         }
 
-        [HttpGet]
-        public String Welcome()
-        {
-            try
-            {
-     
-                return "Levanta la API!";
-            }
-            catch (ApiException)
-            {
-                throw;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
         [HttpPost]
-        public ApiResponse<SuccessLoginDTO> Authenticate(ContactoDTO login)
+        public ApiResponse<SuccessLoginDTO> Authenticate(LoginDTO login)
         {
             try
             {

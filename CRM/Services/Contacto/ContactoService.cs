@@ -1,4 +1,5 @@
-﻿using CRM.Models;
+﻿using CRM.Helpers;
+using CRM.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -29,23 +30,40 @@ namespace CRM.Services.ContactoService
 
         public Contacto ObtenerContactoById(int id)
         {
-            Contacto contacto = _context.Contactos.Single(x => x.IdContacto == id);
+            Contacto contacto = _context.Contactos.Find(id);
 
             return contacto;
         }
 
-        public String ModificarContactoById(int id, Contacto contactoModificado)
+        public string ModificarContactoById(int id, Contacto contactoModificado)
         {
-            Contacto contacto = _context.Contactos.Single(x => x.IdContacto == id);
-            if (contacto != null) {
-                _context.Entry(contacto).State = EntityState.Modified;
-                contacto = contactoModificado;
+            if (id != contactoModificado.IdContacto)
+            {
+                throw new ApiException("Identificador de Contacto no válido");
+            }
+
+            _context.Entry(contactoModificado).State = EntityState.Modified;
+
+            try
+            {
+                 _context.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ContactoExists(id))
+                {
+                    throw new ApiException("El contacto no existe");
+                }
+                else
+                {
+                    throw;
+                }
             }
 
             return "Contacto modificado";
         }
 
-        public String CrearContacto(Contacto contactoNuevo)
+        public string CrearContacto(Contacto contactoNuevo)
         {
             _context.Contactos.Add(contactoNuevo);
 
