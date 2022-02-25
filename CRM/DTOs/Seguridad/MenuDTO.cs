@@ -7,11 +7,10 @@ namespace CRM.DTOs.Seguridad
 {
     public class MenuDTO
     {
-        public int IdMenu { get; set; }
-        public string Nombre { get; set; }
-        public string Descripcion { get; set; }
-        public string MenuUrl { get; set; }
+        public string Text { get; set; }
+        public string Path { get; set; }
+        public string Icon { get; set; }
         public int OrdenAparicion { get; set; }
-        public List<MenuDTO> SubMenu { get; set; }
+        public List<MenuDTO> Items { get; set; }
     }
 }

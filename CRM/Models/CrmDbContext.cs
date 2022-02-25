@@ -426,6 +426,9 @@ namespace CRM.Models
                     .WithMany(p => p.InverseIdMenuPadreNavigation)
                     .HasForeignKey(d => d.IdMenuPadre)
                     .HasConstraintName("Menu_FK");
+
+                entity.Property(e => e.Icono)
+                    .HasMaxLength(50);
             });
 
             modelBuilder.Entity<Monedum>(entity =>

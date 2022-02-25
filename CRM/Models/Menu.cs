@@ -19,6 +19,7 @@ namespace CRM.Models
         public int OrdenAparicion { get; set; }
         public bool Estado { get; set; }
         public int? IdMenuPadre { get; set; }
+        public string Icono { get; set; }
 
         public virtual Menu IdMenuPadreNavigation { get; set; }
         public virtual ICollection<Menu> InverseIdMenuPadreNavigation { get; set; }

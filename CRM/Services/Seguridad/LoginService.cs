@@ -46,9 +46,6 @@ namespace CRM.Services.Seguridad
             }
             else
                 throw new ApiException("Credenciales inválidas.");
-
-
-
         }
     }
 }
