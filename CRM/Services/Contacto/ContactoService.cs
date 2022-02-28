@@ -70,6 +70,32 @@ namespace CRM.Services.ContactoService
             return "Contacto agregado";
         }
 
+        public string EliminarContacto(int id)
+        {
+            Contacto contacto = _context.Contactos.Find(id);
+            contacto.Estado = false;
+
+            _context.Entry(contacto).State = EntityState.Modified;
+
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ContactoExists(id))
+                {
+                    throw new ApiException("El contacto no existe");
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return "Contacto eliminado";
+        }
+
         public bool ContactoExists(int id) {
             bool existe = false;
             var contacto = _context.Contactos.Single(x => x.IdContacto == id);

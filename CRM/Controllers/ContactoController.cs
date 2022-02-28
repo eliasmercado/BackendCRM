@@ -105,5 +105,20 @@ namespace CRM.Controllers
             }
             return response;
         }
+
+        [HttpDelete("{id}")]
+        public ApiResponse<object> DeleteContacto(int id)
+        {
+            ApiResponse<object> response = new();
+            try
+            {
+                response.Data = ContactoService.EliminarContacto(id);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+            return response;
+        }
     }
 }
