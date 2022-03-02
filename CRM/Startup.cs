@@ -55,6 +55,15 @@ namespace CRM
                 };
 
             });
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowMyOrigin",
+                builder => builder.WithOrigins("*")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    );
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -68,6 +77,8 @@ namespace CRM
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors("AllowMyOrigin");
 
             app.UseAuthentication();
 

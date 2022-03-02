@@ -55,12 +55,11 @@ namespace CRM.Services.Seguridad
                 {
                     MenuDTO menu = new()
                     {
-                        IdMenu = menuObj.IdMenu,
-                        Nombre = menuObj.Nombre,
-                        Descripcion = menuObj.Descripcion,
-                        MenuUrl = menuObj.MenuUrl,
+                        Text = menuObj.Nombre,
+                        Path = menuObj.MenuUrl,
+                        Icon = menuObj.Icono,
                         OrdenAparicion = menuObj.OrdenAparicion,
-                        SubMenu = GenerarSubMenu(menuList, menuObj)
+                        Items = GenerarSubMenu(menuList, menuObj)
                     };
                     menuListResponse.Add(menu);
                 }
@@ -85,12 +84,11 @@ namespace CRM.Services.Seguridad
                 {
                     MenuDTO menu = new()
                     {
-                        IdMenu = objeto.IdMenu,
-                        Nombre = objeto.Nombre,
-                        Descripcion = objeto.Descripcion,
-                        MenuUrl = objeto.MenuUrl,
+                        Text = objeto.Nombre,
+                        Path = objeto.MenuUrl,
+                        Icon = objeto.Icono,
                         OrdenAparicion = objeto.OrdenAparicion,
-                        SubMenu = GenerarSubMenu(menuList, objeto)
+                        Items = GenerarSubMenu(menuList, objeto)
                     };
                     menuListResponse.Add(menu);
                 }
