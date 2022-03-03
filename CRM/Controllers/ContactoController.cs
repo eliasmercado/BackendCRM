@@ -10,6 +10,7 @@ using CRM.Models;
 using Microsoft.AspNetCore.Authorization;
 using CRM.Services;
 using CRM.Services.ContactoService;
+using CRM.DTOs.Seguridad;
 
 namespace CRM.Controllers
 {
@@ -27,11 +28,11 @@ namespace CRM.Controllers
 
         // GET: api/Contacto
         [HttpGet]
-        public ApiResponse<List<Contacto>> GetContactos()
+        public ApiResponse<List<ContactoDTO>> GetContactos()
         {
             try
             {
-                ApiResponse<List<Contacto>> response = new();
+                ApiResponse<List<ContactoDTO>> response = new();
 
                 response.Data = ContactoService.ObtenerListaContactos();
 
@@ -45,11 +46,11 @@ namespace CRM.Controllers
 
         // GET: api/Contacto/5
         [HttpGet("{id}")]
-        public ApiResponse<Contacto> GetContacto(int id)
+        public ApiResponse<ContactoDTO> GetContacto(int id)
         {
             try
             {
-                ApiResponse<Contacto> response = new();
+                ApiResponse<ContactoDTO> response = new();
 
                 var contacto = ContactoService.ObtenerContactoById(id);
                 if (contacto != null)
@@ -70,9 +71,8 @@ namespace CRM.Controllers
         }
 
         [HttpPut("{id}")]
-        public ApiResponse<object> PutContacto(int id, Contacto contacto)
+        public ApiResponse<object> PutContacto(int id, ContactoDTO contacto)
         {
-
             ApiResponse<object> response = new();
 
             try
@@ -92,17 +92,22 @@ namespace CRM.Controllers
         }
 
         [HttpPost]
-        public ApiResponse<object> PostContacto(Contacto contacto)
+        public ApiResponse<object> PostContacto(ContactoDTO contacto)
         {
             ApiResponse<object> response = new();
             try
             {
                 response.Data = ContactoService.CrearContacto(contacto);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (ApiException)
             {
                 throw;
             }
+            catch (Exception)
+            {
+                throw;
+            }
+
             return response;
         }
 
@@ -114,10 +119,15 @@ namespace CRM.Controllers
             {
                 response.Data = ContactoService.EliminarContacto(id);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (ApiException)
             {
                 throw;
             }
+            catch (Exception)
+            {
+                throw;
+            }
+
             return response;
         }
     }

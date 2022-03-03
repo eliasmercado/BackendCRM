@@ -181,6 +181,8 @@ namespace CRM.Models
 
                 entity.Property(e => e.TelefonoLaboral).HasMaxLength(50);
 
+                entity.Property(e => e.Estado).HasDefaultValue(true);
+
                 entity.Property(e => e.UltimoContacto).HasColumnType("datetime");
 
                 entity.HasOne(d => d.IdActividadEconomicaNavigation)
