@@ -1,35 +1,38 @@
-﻿using System;
-using CRM.Helpers;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
-using CRM.Models;
 using Microsoft.AspNetCore.Authorization;
-using CRM.Services.ContactoService;
-using CRM.DTOs.Seguridad;
+using CRM.Models;
+
+using System.Linq;
+using System.Threading.Tasks;
+using CRM.Services.EmpresaService;
+using CRM.DTOs.Empresa;
+using CRM.Helpers;
 
 namespace CRM.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class ContactoController : ControllerBase
+    public class EmpresaController : ControllerBase
     {
-        private readonly ContactoService ContactoService;
+        private readonly EmpresaService EmpresaService;
 
-        public ContactoController(CrmDbContext context)
+        public EmpresaController(CrmDbContext context)
         {
-            ContactoService = new ContactoService(context);
+            EmpresaService = new EmpresaService(context);
         }
 
         // GET: api/Contacto
         [HttpGet]
-        public ApiResponse<List<ContactoDTO>> GetContactos()
+        public ApiResponse<List<EmpresaDTO>> GetEmpresas()
         {
             try
             {
-                ApiResponse<List<ContactoDTO>> response = new();
+                ApiResponse<List<EmpresaDTO>> response = new();
 
-                response.Data = ContactoService.ObtenerListaContactos();
+                response.Data = EmpresaService.ObtenerListaEmpresas();
 
                 return response;
             }
@@ -41,17 +44,17 @@ namespace CRM.Controllers
 
         // GET: api/Contacto/5
         [HttpGet("{id}")]
-        public ApiResponse<ContactoDTO> GetContacto(int id)
+        public ApiResponse<EmpresaDTO> GetEmpresa(int id)
         {
             try
             {
-                ApiResponse<ContactoDTO> response = new();
+                ApiResponse<EmpresaDTO> response = new();
 
-                var contacto = ContactoService.ObtenerContactoById(id);
-                if (contacto != null)
-                    response.Data = contacto;
+                var empresa = EmpresaService.ObtenerEmpresaById(id);
+                if (empresa != null)
+                    response.Data = empresa;
                 else
-                    throw new ApiException("No se encontró el contacto");
+                    throw new ApiException("No se encontró empresa");
 
                 return response;
             }
@@ -66,13 +69,13 @@ namespace CRM.Controllers
         }
 
         [HttpPut("{id}")]
-        public ApiResponse<object> PutContacto(int id, ContactoDTO contacto)
+        public ApiResponse<object> PutEmpresa(int id, EmpresaDTO empresa)
         {
             ApiResponse<object> response = new();
 
             try
             {
-                response.Data = ContactoService.ModificarContactoById(id, contacto);
+                response.Data = EmpresaService.ModificarEmpresaById(id, empresa);
             }
             catch (ApiException)
             {
@@ -87,12 +90,12 @@ namespace CRM.Controllers
         }
 
         [HttpPost]
-        public ApiResponse<object> PostContacto(ContactoDTO contacto)
+        public ApiResponse<object> PostEmpresa(EmpresaDTO empresa)
         {
             ApiResponse<object> response = new();
             try
             {
-                response.Data = ContactoService.CrearContacto(contacto);
+                response.Data = EmpresaService.CrearEmpresa(empresa);
             }
             catch (ApiException)
             {
@@ -107,12 +110,12 @@ namespace CRM.Controllers
         }
 
         [HttpDelete("{id}")]
-        public ApiResponse<object> DeleteContacto(int id)
+        public ApiResponse<object> DeleteEmpresa(int id)
         {
             ApiResponse<object> response = new();
             try
             {
-                response.Data = ContactoService.EliminarContacto(id);
+                response.Data = EmpresaService.EliminarEmpresa(id);
             }
             catch (ApiException)
             {
