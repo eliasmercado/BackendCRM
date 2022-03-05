@@ -16,6 +16,7 @@ namespace CRM.DTOs.Seguridad
         public int IdTipoDocumento { get; set; }
         public string Documento { get; set; }
         public int IdCiudad { get; set; }
+        public int IdDepartamento { get; set; }
         public string Direccion { get; set; }
         public int? IdEstadoCivil { get; set; }
         public int? IdActividadEconomica { get; set; }
