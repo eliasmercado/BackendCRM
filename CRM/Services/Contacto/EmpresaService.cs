@@ -24,23 +24,23 @@ namespace CRM.Services.EmpresaService
         public List<EmpresaDTO> ObtenerListaEmpresas()
         {
             List<EmpresaDTO> listaEmpresas = (from empresa in _context.Empresas
-                                               where empresa.Estado && !empresa.EsLead
-                                               select new EmpresaDTO()
-                                               {
-                                                   IdEmpresa = empresa.IdEmpresa,
-                                                   Nombre = empresa.Nombre,
-                                                   Celular = empresa.Celular,
-                                                   Telefono = empresa.Telefono,
-                                                   Ruc = empresa.Ruc,
-                                                   Email = empresa.Email,
-                                                   IdCiudad = empresa.IdCiudad,
-                                                   Direccion = empresa.Direccion,
-                                                   UltimoContacto = empresa.UltimoContacto,
-                                                   NombreRepresentante = empresa.NombreRepresentante,
-                                                   CelularRepresentante = empresa.CelularRepresentante,
-                                                   Estado = empresa.Estado,
-                                                   IdPropietario = empresa.IdPropietario
-                                               }).ToList();
+                                              where empresa.Estado && !empresa.EsLead
+                                              select new EmpresaDTO()
+                                              {
+                                                  IdEmpresa = empresa.IdEmpresa,
+                                                  Nombre = empresa.Nombre,
+                                                  Celular = empresa.Celular,
+                                                  Telefono = empresa.Telefono,
+                                                  Ruc = empresa.Ruc,
+                                                  Email = empresa.Email,
+                                                  IdCiudad = empresa.IdCiudad,
+                                                  Direccion = empresa.Direccion,
+                                                  UltimoContacto = empresa.UltimoContacto,
+                                                  NombreRepresentante = empresa.NombreRepresentante,
+                                                  CelularRepresentante = empresa.CelularRepresentante,
+                                                  Estado = empresa.Estado,
+                                                  IdPropietario = empresa.IdPropietario
+                                              }).ToList();
 
             return listaEmpresas;
         }
@@ -48,22 +48,22 @@ namespace CRM.Services.EmpresaService
         public EmpresaDTO ObtenerEmpresaById(int id)
         {
             EmpresaDTO contacto = (from empresa in _context.Empresas
-                                    where empresa.Estado && !empresa.EsLead && empresa.IdEmpresa == id
-                                    select new EmpresaDTO()
-                                    {
-                                        IdEmpresa = empresa.IdEmpresa,
-                                        Nombre = empresa.Nombre,
-                                        Celular = empresa.Celular,
-                                        Telefono = empresa.Telefono,
-                                        Ruc = empresa.Ruc,
-                                        Email = empresa.Email,
-                                        IdCiudad = empresa.IdCiudad,
-                                        Direccion = empresa.Direccion,
-                                        UltimoContacto = empresa.UltimoContacto,
-                                        NombreRepresentante = empresa.NombreRepresentante,
-                                        CelularRepresentante = empresa.CelularRepresentante,                               
-                                        IdPropietario = empresa.IdPropietario
-                                    }).FirstOrDefault();
+                                   where empresa.Estado && !empresa.EsLead && empresa.IdEmpresa == id
+                                   select new EmpresaDTO()
+                                   {
+                                       IdEmpresa = empresa.IdEmpresa,
+                                       Nombre = empresa.Nombre,
+                                       Celular = empresa.Celular,
+                                       Telefono = empresa.Telefono,
+                                       Ruc = empresa.Ruc,
+                                       Email = empresa.Email,
+                                       IdCiudad = empresa.IdCiudad,
+                                       Direccion = empresa.Direccion,
+                                       UltimoContacto = empresa.UltimoContacto,
+                                       NombreRepresentante = empresa.NombreRepresentante,
+                                       CelularRepresentante = empresa.CelularRepresentante,
+                                       IdPropietario = empresa.IdPropietario
+                                   }).FirstOrDefault();
 
             return contacto;
         }
@@ -137,5 +137,4 @@ namespace CRM.Services.EmpresaService
             return "Empresa eliminada";
         }
     }
-}
 }
