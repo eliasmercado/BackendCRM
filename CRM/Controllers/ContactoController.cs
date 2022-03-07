@@ -73,7 +73,7 @@ namespace CRM.Controllers
 
             try
             {
-                response.Data = ContactoService.ModificarContactoById(id, contacto);
+                response.Data = ContactoService.ModificarContacto(id, contacto);
             }
             catch (ApiException)
             {

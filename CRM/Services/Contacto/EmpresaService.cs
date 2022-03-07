@@ -35,7 +35,6 @@ namespace CRM.Services.ContactoService
                                                   Email = empresa.Email,
                                                   IdCiudad = empresa.IdCiudad,
                                                   Direccion = empresa.Direccion,
-                                                  UltimoContacto = empresa.UltimoContacto,
                                                   NombreRepresentante = empresa.NombreRepresentante,
                                                   CelularRepresentante = empresa.CelularRepresentante,
                                                   Estado = empresa.Estado,
@@ -59,7 +58,6 @@ namespace CRM.Services.ContactoService
                                        Email = empresa.Email,
                                        IdCiudad = empresa.IdCiudad,
                                        Direccion = empresa.Direccion,
-                                       UltimoContacto = empresa.UltimoContacto,
                                        NombreRepresentante = empresa.NombreRepresentante,
                                        CelularRepresentante = empresa.CelularRepresentante,
                                        IdPropietario = empresa.IdPropietario
@@ -68,7 +66,7 @@ namespace CRM.Services.ContactoService
             return contacto;
         }
 
-        public string ModificarEmpresaById(int id, EmpresaDTO empresaModificada)
+        public string ModificarEmpresa(int id, EmpresaDTO empresaModificada)
         {
             if (id != empresaModificada.IdEmpresa)
             {
@@ -87,15 +85,13 @@ namespace CRM.Services.ContactoService
             empresa.Email = empresaModificada.Email;
             empresa.IdCiudad = empresaModificada.IdCiudad;
             empresa.Direccion = empresaModificada.Direccion;
-            empresa.UltimoContacto = empresaModificada.UltimoContacto;
             empresa.NombreRepresentante = empresaModificada.NombreRepresentante;
             empresa.CelularRepresentante = empresaModificada.CelularRepresentante;
             empresa.IdPropietario = empresaModificada.IdPropietario;
 
-
             _context.SaveChanges();
 
-            return "Empresa modificada";
+            return "La empresa modificó correctamente.";
         }
 
         public string CrearEmpresa(EmpresaDTO empresaNueva)
@@ -110,7 +106,6 @@ namespace CRM.Services.ContactoService
                 Email = empresaNueva.Email,
                 IdCiudad = empresaNueva.IdCiudad,
                 Direccion = empresaNueva.Direccion,
-                UltimoContacto = empresaNueva.UltimoContacto,
                 NombreRepresentante = empresaNueva.NombreRepresentante,
                 CelularRepresentante = empresaNueva.CelularRepresentante,
                 IdPropietario = empresaNueva.IdPropietario,
@@ -119,7 +114,7 @@ namespace CRM.Services.ContactoService
             _context.Empresas.Add(empresa);
             _context.SaveChanges();
 
-            return "Empresa agregado";
+            return "La empresa se agregó correctamente.";
         }
 
         public string EliminarEmpresa(int id)
@@ -134,7 +129,7 @@ namespace CRM.Services.ContactoService
             _context.Entry(empresa).State = EntityState.Modified;
             _context.SaveChanges();
 
-            return "Empresa eliminada";
+            return "La empresa se eliminó correctamente.";
         }
     }
 }

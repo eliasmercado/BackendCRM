@@ -72,7 +72,7 @@ namespace CRM.Controllers
 
             try
             {
-                response.Data = EmpresaService.ModificarEmpresaById(id, empresa);
+                response.Data = EmpresaService.ModificarEmpresa(id, empresa);
             }
             catch (ApiException)
             {

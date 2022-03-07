@@ -81,7 +81,7 @@ namespace CRM.Services.ContactoService
             return contacto;
         }
 
-        public string ModificarContactoById(int id, ContactoDTO contactoModificado)
+        public string ModificarContacto(int id, ContactoDTO contactoModificado)
         {
             if (id != contactoModificado.IdContacto)
             {
@@ -111,7 +111,7 @@ namespace CRM.Services.ContactoService
             contacto.IdPropietario = contactoModificado.IdPropietario;
             _context.SaveChanges();
 
-            return "Contacto modificado";
+            return "El contacto se modificó correctamente.";
         }
 
         public string CrearContacto(ContactoDTO contactoNuevo)
@@ -139,7 +139,7 @@ namespace CRM.Services.ContactoService
             _context.Contactos.Add(contacto);
             _context.SaveChanges();
 
-            return "Contacto agregado";
+            return "El contacto se agregó correctamente.";
         }
 
         public string EliminarContacto(int id)
@@ -154,7 +154,7 @@ namespace CRM.Services.ContactoService
             _context.Entry(contacto).State = EntityState.Modified;
             _context.SaveChanges();
 
-            return "Contacto eliminado";
+            return "El contacto se eliminó correctamente.";
         }
 
         public List<TipoDocumentoDTO> ObtenerTipoDocumento()

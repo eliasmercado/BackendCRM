@@ -15,7 +15,6 @@ namespace CRM.DTOs.Empresa
         public string Email { get; set; }
         public int IdCiudad { get; set; }
         public string Direccion { get; set; }
-        public DateTime UltimoContacto { get; set; }
         public string NombreRepresentante { get; set; }
         public string CelularRepresentante { get; set; }
         public bool EsLead { get; set; }
