@@ -6,6 +6,7 @@ using CRM.Models;
 using Microsoft.AspNetCore.Authorization;
 using CRM.Services.ContactoService;
 using CRM.DTOs.Seguridad;
+using CRM.DTOs.Contacto;
 
 namespace CRM.Controllers
 {
@@ -124,6 +125,60 @@ namespace CRM.Controllers
             }
 
             return response;
+        }
+
+        [HttpGet]
+        [Route("tipoDocumento")]
+        public ApiResponse<List<TipoDocumentoDTO>> GetTipoDocumentos()
+        {
+            try
+            {
+                ApiResponse<List<TipoDocumentoDTO>> response = new();
+
+                response.Data = ContactoService.ObtenerTipoDocumento();
+
+                return response;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
+        [Route("estadoCivil")]
+        public ApiResponse<List<EstadoCivilDTO>> GetEstadoCiviles()
+        {
+            try
+            {
+                ApiResponse<List<EstadoCivilDTO>> response = new();
+
+                response.Data = ContactoService.ObtenerEstadoCivil();
+
+                return response;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
+        [Route("actividadEconomica")]
+        public ApiResponse<List<ActividadEconomicaDTO>> GetActividadesEconomicas()
+        {
+            try
+            {
+                ApiResponse<List<ActividadEconomicaDTO>> response = new();
+
+                response.Data = ContactoService.ObtenerActividadEconomica();
+
+                return response;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

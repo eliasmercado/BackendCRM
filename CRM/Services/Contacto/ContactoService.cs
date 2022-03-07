@@ -1,4 +1,5 @@
-﻿using CRM.DTOs.Seguridad;
+﻿using CRM.DTOs.Contacto;
+using CRM.DTOs.Seguridad;
 using CRM.Helpers;
 using CRM.Models;
 using Microsoft.EntityFrameworkCore;
@@ -155,5 +156,38 @@ namespace CRM.Services.ContactoService
 
             return "Contacto eliminado";
         }
-}
+
+        public List<TipoDocumentoDTO> ObtenerTipoDocumento()
+        {
+            List<TipoDocumentoDTO> tiposDocumento = (from tipoDoc in _context.TipoDocumentos
+                                                     select new TipoDocumentoDTO()
+                                                     {
+                                                         IdTipoDocumento = tipoDoc.IdTipoDocumento,
+                                                         TipoDocumento = tipoDoc.Descripcion
+                                                     }).ToList();
+            return tiposDocumento;
+        }
+
+        public List<EstadoCivilDTO> ObtenerEstadoCivil()
+        {
+            List<EstadoCivilDTO> estadoCivils = (from estadoCivil in _context.EstadoCivils
+                                                 select new EstadoCivilDTO()
+                                                 {
+                                                     IdEstadoCivil = estadoCivil.IdEstadoCivil,
+                                                     EstadoCivil = estadoCivil.Descripcion
+                                                 }).ToList();
+            return estadoCivils;
+        }
+
+        public List<ActividadEconomicaDTO> ObtenerActividadEconomica()
+        {
+            List<ActividadEconomicaDTO> actividadEconomica = (from actividad in _context.ActividadEconomicas
+                                                              select new ActividadEconomicaDTO()
+                                                              {
+                                                                  IdActividadEconomica = actividad.IdActividadEconomica,
+                                                                  ActividadEconomica = actividad.Descripcion
+                                                              }).ToList();
+            return actividadEconomica;
+        }
+    }
 }

@@ -281,6 +281,8 @@ namespace CRM.Models
                     .IsRequired()
                     .HasMaxLength(50);
 
+                entity.Property(e => e.Estado).HasDefaultValue(true);
+
                 entity.Property(e => e.Telefono)
                     .IsRequired()
                     .HasMaxLength(50);

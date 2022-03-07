@@ -3,12 +3,9 @@ using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using CRM.Models;
-
-using System.Linq;
-using System.Threading.Tasks;
-using CRM.Services.EmpresaService;
 using CRM.DTOs.Empresa;
 using CRM.Helpers;
+using CRM.Services.ContactoService;
 
 namespace CRM.Controllers
 {
