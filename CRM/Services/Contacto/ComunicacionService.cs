@@ -2,9 +2,6 @@
 using CRM.Helpers;
 using CRM.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace CRM.Services.ComunicacionService
 {
@@ -17,6 +14,11 @@ namespace CRM.Services.ComunicacionService
             _context = context;
         }
 
+        /// <summary>
+        /// Registra una llamada en la base de datos.
+        /// </summary>
+        /// <param name="llamada"></param>
+        /// <returns></returns>
         public string RegistrarLlamada(ComunicacionDTO llamada)
         {
             Comunicacion comunicacion = new()
@@ -39,22 +41,48 @@ namespace CRM.Services.ComunicacionService
             return "La llamada se registró correctamente.";
         }
 
-        public string RegistrarEmail(ComunicacionDTO llamada)
+        /// <summary>
+        /// Envia el email al contacto y registra en la base de datos.
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        public string RegistrarEmail(ComunicacionDTO email)
         {
+            DateTime fechaComunicacion = DateTime.Now;
+            Contacto contacto;
+            Empresa empresa;
+            string nombre;
+            string emailTo;
+            //Obtenemos el contacto o empresa de acuerdo al tipo
+            if (email.IdEmpresa == null)
+            {
+                contacto = _context.Contactos.Find(email.IdContacto);
+                contacto.UltimoContacto = fechaComunicacion;
+                nombre = contacto.Nombres + " " + contacto.Apellidos;
+                emailTo = contacto.Email;
+            }
+            else
+            {
+                empresa = _context.Empresas.Find(email.IdEmpresa);
+                empresa.UltimoContacto = fechaComunicacion;
+                nombre = empresa.Nombre;
+                emailTo = empresa.Email;
+            }
+
+            EmailUtil.EnviarEmail(nombre, emailTo, email.MotivoComunicacion, email.ContenidoEmail);
+
             Comunicacion comunicacion = new()
             {
-                IdEmpresa = llamada.IdEmpresa,
-                IdContacto = llamada.IdContacto,
-                MotivoComunicacion = llamada.MotivoComunicacion,
-                Observacion = llamada.Observacion,
+                IdEmpresa = email.IdEmpresa,
+                IdContacto = email.IdContacto,
+                MotivoComunicacion = email.MotivoComunicacion,
+                Observacion = email.Observacion,
                 IdMedioComunicacion = Defs.CORREO,
-                IdUsuario = llamada.IdUsuario,
-                Referencia = llamada.Referencia,
-                FechaComunicacion = DateTime.Now
+                IdUsuario = email.IdUsuario,
+                Referencia = email.Referencia,
+                FechaComunicacion = fechaComunicacion
             };
             _context.Comunicacions.Add(comunicacion);
-
-            ActualizarUltimoContacto(llamada.IdContacto, llamada.IdEmpresa, comunicacion.FechaComunicacion);
 
             _context.SaveChanges();
 

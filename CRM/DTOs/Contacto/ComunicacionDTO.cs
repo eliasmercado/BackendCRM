@@ -12,6 +12,7 @@ namespace CRM.DTOs.Contacto
         public int? IdContacto { get; set; }
         public string MotivoComunicacion { get; set; }
         public string Observacion { get; set; }
+        public string ContenidoEmail { get; set; }
         public int IdUsuario { get; set; }
         public string Referencia { get; set; }
     }
