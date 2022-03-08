@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using CRM.Models;
 using CRM.DTOs.Empresa;
 using CRM.Helpers;
-using CRM.Services.ContactoService;
+using CRM.Services.EmpresaService;
 
 namespace CRM.Controllers
 {

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 
-namespace CRM.Services.ContactoService
+namespace CRM.Services.EmpresaService
 {
     public class EmpresaService
     {
