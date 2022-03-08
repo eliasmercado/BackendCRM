@@ -15,5 +15,6 @@ namespace CRM.DTOs.Contacto
         public string ContenidoEmail { get; set; }
         public int IdUsuario { get; set; }
         public string Referencia { get; set; }
+        public DateTime FechaComunicacion { get; set; }
     }
 }

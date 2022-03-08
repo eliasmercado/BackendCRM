@@ -21,6 +21,8 @@ namespace CRM.Services.ComunicacionService
         /// <returns></returns>
         public string RegistrarLlamada(ComunicacionDTO llamada)
         {
+            DateTime fechaComunicacion = llamada.FechaComunicacion;
+
             Comunicacion comunicacion = new()
             {
                 IdEmpresa = llamada.IdEmpresa,
@@ -30,11 +32,11 @@ namespace CRM.Services.ComunicacionService
                 IdMedioComunicacion = Defs.LLAMADA,
                 IdUsuario = llamada.IdUsuario,
                 Referencia = llamada.Referencia,
-                FechaComunicacion = DateTime.Now
+                FechaComunicacion = fechaComunicacion
             };
             _context.Comunicacions.Add(comunicacion);
 
-            ActualizarUltimoContacto(llamada.IdContacto, llamada.IdEmpresa, comunicacion.FechaComunicacion);
+            ActualizarUltimoContacto(llamada.IdContacto, llamada.IdEmpresa, fechaComunicacion);
 
             _context.SaveChanges();
 
@@ -52,24 +54,22 @@ namespace CRM.Services.ComunicacionService
             Contacto contacto;
             Empresa empresa;
             string nombre;
-            string emailTo;
+
             //Obtenemos el contacto o empresa de acuerdo al tipo
             if (email.IdEmpresa == null)
             {
                 contacto = _context.Contactos.Find(email.IdContacto);
                 contacto.UltimoContacto = fechaComunicacion;
                 nombre = contacto.Nombres + " " + contacto.Apellidos;
-                emailTo = contacto.Email;
             }
             else
             {
                 empresa = _context.Empresas.Find(email.IdEmpresa);
                 empresa.UltimoContacto = fechaComunicacion;
                 nombre = empresa.Nombre;
-                emailTo = empresa.Email;
             }
 
-            EmailUtil.EnviarEmail(nombre, emailTo, email.MotivoComunicacion, email.ContenidoEmail);
+            EmailUtil.EnviarEmail(nombre, email.Referencia, email.MotivoComunicacion, email.ContenidoEmail);
 
             Comunicacion comunicacion = new()
             {
