@@ -33,11 +33,11 @@ namespace CRM.Services.EmpresaService
                                                   Telefono = empresa.Telefono,
                                                   Ruc = empresa.Ruc,
                                                   Email = empresa.Email,
+                                                  IdDepartamento = _context.Ciudads.Where(x => x.IdCiudad == empresa.IdCiudad).FirstOrDefault().IdDepartamento,
                                                   IdCiudad = empresa.IdCiudad,
                                                   Direccion = empresa.Direccion,
                                                   NombreRepresentante = empresa.NombreRepresentante,
                                                   CelularRepresentante = empresa.CelularRepresentante,
-                                                  Estado = empresa.Estado,
                                                   IdPropietario = empresa.IdPropietario
                                               }).ToList();
 
@@ -56,6 +56,7 @@ namespace CRM.Services.EmpresaService
                                        Telefono = empresa.Telefono,
                                        Ruc = empresa.Ruc,
                                        Email = empresa.Email,
+                                       IdDepartamento = _context.Ciudads.Where(x => x.IdCiudad == empresa.IdCiudad).FirstOrDefault().IdDepartamento,
                                        IdCiudad = empresa.IdCiudad,
                                        Direccion = empresa.Direccion,
                                        NombreRepresentante = empresa.NombreRepresentante,
