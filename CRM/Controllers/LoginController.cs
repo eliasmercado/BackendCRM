@@ -26,7 +26,6 @@ namespace CRM.Controllers
             LoginService = new LoginService(context);
         }
 
-
         [HttpPost]
         public ApiResponse<SuccessLoginDTO> Authenticate(LoginDTO login)
         {

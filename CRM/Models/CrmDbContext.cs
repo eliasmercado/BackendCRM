@@ -36,7 +36,6 @@ namespace CRM.Models
         public virtual DbSet<MedioComunicacion> MedioComunicacions { get; set; }
         public virtual DbSet<Menu> Menus { get; set; }
         public virtual DbSet<Monedum> Moneda { get; set; }
-        public virtual DbSet<MotivoComunicacion> MotivoComunicacions { get; set; }
         public virtual DbSet<Oportunidad> Oportunidads { get; set; }
         public virtual DbSet<Pedido> Pedidos { get; set; }
         public virtual DbSet<Perfil> Perfils { get; set; }
@@ -111,6 +110,10 @@ namespace CRM.Models
 
                 entity.Property(e => e.Observacion).HasMaxLength(200);
 
+                entity.Property(e => e.Referencia).HasMaxLength(200);
+
+                entity.Property(e => e.MotivoComunicacion).HasMaxLength(50);
+
                 entity.HasOne(d => d.IdContactoNavigation)
                     .WithMany(p => p.Comunicacions)
                     .HasForeignKey(d => d.IdContacto)
@@ -125,13 +128,7 @@ namespace CRM.Models
                     .WithMany(p => p.Comunicacions)
                     .HasForeignKey(d => d.IdMedioComunicacion)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("MedioComunicacion_Comunicacion_fk");
-
-                entity.HasOne(d => d.IdMotivoComunicacionNavigation)
-                    .WithMany(p => p.Comunicacions)
-                    .HasForeignKey(d => d.IdMotivoComunicacion)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("MotivoLlamada_Llamada_fk");
+                    .HasConstraintName("Medio_Comunicacion_FK");
 
                 entity.HasOne(d => d.IdUsuarioNavigation)
                     .WithMany(p => p.Comunicacions)
@@ -180,6 +177,8 @@ namespace CRM.Models
                     .HasMaxLength(50);
 
                 entity.Property(e => e.TelefonoLaboral).HasMaxLength(50);
+
+                entity.Property(e => e.Estado).HasDefaultValue(true);
 
                 entity.Property(e => e.UltimoContacto).HasColumnType("datetime");
 
@@ -278,6 +277,8 @@ namespace CRM.Models
                 entity.Property(e => e.Ruc)
                     .IsRequired()
                     .HasMaxLength(50);
+
+                entity.Property(e => e.Estado).HasDefaultValue(true);
 
                 entity.Property(e => e.Telefono)
                     .IsRequired()
@@ -435,18 +436,6 @@ namespace CRM.Models
             {
                 entity.HasKey(e => e.IdMoneda)
                     .HasName("Moneda_pk");
-
-                entity.Property(e => e.Descripcion)
-                    .IsRequired()
-                    .HasMaxLength(50);
-            });
-
-            modelBuilder.Entity<MotivoComunicacion>(entity =>
-            {
-                entity.HasKey(e => e.IdMotivoComunicacion)
-                    .HasName("MotivoComunicacion_pk");
-
-                entity.ToTable("MotivoComunicacion");
 
                 entity.Property(e => e.Descripcion)
                     .IsRequired()

@@ -26,7 +26,7 @@ namespace CRM.Models
         public string Password { get; set; }
         public DateTime FechaCreacion { get; set; }
         public int IdPerfil { get; set; }
-        public bool? Estado { get; set; }
+        public bool Estado { get; set; }
 
         public virtual Perfil IdPerfilNavigation { get; set; }
         public virtual ICollection<Comunicacion> Comunicacions { get; set; }

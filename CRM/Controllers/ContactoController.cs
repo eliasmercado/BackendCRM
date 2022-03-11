@@ -1,12 +1,12 @@
 ﻿using System;
+using CRM.Helpers;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using CRM.Models;
 using Microsoft.AspNetCore.Authorization;
+using CRM.Services.ContactoService;
+using CRM.DTOs.Seguridad;
+using CRM.DTOs.Contacto;
 
 namespace CRM.Controllers
 {
@@ -15,95 +15,170 @@ namespace CRM.Controllers
     [Authorize]
     public class ContactoController : ControllerBase
     {
-        private readonly CrmDbContext _context;
+        private readonly ContactoService ContactoService;
 
         public ContactoController(CrmDbContext context)
         {
-            _context = context;
+            ContactoService = new ContactoService(context);
         }
 
         // GET: api/Contacto
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Contacto>>> GetContactos()
+        public ApiResponse<List<ContactoDTO>> GetContactos()
         {
-            return await _context.Contactos.ToListAsync();
+            try
+            {
+                ApiResponse<List<ContactoDTO>> response = new();
+
+                response.Data = ContactoService.ObtenerListaContactos();
+
+                return response;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         // GET: api/Contacto/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Contacto>> GetContacto(int id)
+        public ApiResponse<ContactoDTO> GetContacto(int id)
         {
-            var contacto = await _context.Contactos.FindAsync(id);
-
-            if (contacto == null)
+            try
             {
-                return NotFound();
-            }
+                ApiResponse<ContactoDTO> response = new();
 
-            return contacto;
+                var contacto = ContactoService.ObtenerContactoById(id);
+                if (contacto != null)
+                    response.Data = contacto;
+                else
+                    throw new ApiException("No se encontró el contacto");
+
+                return response;
+            }
+            catch (ApiException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
-        // PUT: api/Contacto/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutContacto(int id, Contacto contacto)
+        public ApiResponse<object> PutContacto(int id, ContactoDTO contacto)
         {
-            if (id != contacto.IdContacto)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(contacto).State = EntityState.Modified;
+            ApiResponse<object> response = new();
 
             try
             {
-                await _context.SaveChangesAsync();
+                response.Data = ContactoService.ModificarContacto(id, contacto);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (ApiException)
             {
-                if (!ContactoExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
             }
 
-            return NoContent();
+            return response;
         }
 
-        // POST: api/Contacto
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Contacto>> PostContacto(Contacto contacto)
+        public ApiResponse<object> PostContacto(ContactoDTO contacto)
         {
-            _context.Contactos.Add(contacto);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetContacto", new { id = contacto.IdContacto }, contacto);
-        }
-
-        // DELETE: api/Contacto/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteContacto(int id)
-        {
-            var contacto = await _context.Contactos.FindAsync(id);
-            if (contacto == null)
+            ApiResponse<object> response = new();
+            try
             {
-                return NotFound();
+                response.Data = ContactoService.CrearContacto(contacto);
+            }
+            catch (ApiException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
             }
 
-            _context.Contactos.Remove(contacto);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            return response;
         }
 
-        private bool ContactoExists(int id)
+        [HttpDelete("{id}")]
+        public ApiResponse<object> DeleteContacto(int id)
         {
-            return _context.Contactos.Any(e => e.IdContacto == id);
+            ApiResponse<object> response = new();
+            try
+            {
+                response.Data = ContactoService.EliminarContacto(id);
+            }
+            catch (ApiException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return response;
+        }
+
+        [HttpGet]
+        [Route("tipoDocumento")]
+        public ApiResponse<List<TipoDocumentoDTO>> GetTipoDocumentos()
+        {
+            try
+            {
+                ApiResponse<List<TipoDocumentoDTO>> response = new();
+
+                response.Data = ContactoService.ObtenerTipoDocumento();
+
+                return response;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
+        [Route("estadoCivil")]
+        public ApiResponse<List<EstadoCivilDTO>> GetEstadoCiviles()
+        {
+            try
+            {
+                ApiResponse<List<EstadoCivilDTO>> response = new();
+
+                response.Data = ContactoService.ObtenerEstadoCivil();
+
+                return response;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
+        [Route("actividadEconomica")]
+        public ApiResponse<List<ActividadEconomicaDTO>> GetActividadesEconomicas()
+        {
+            try
+            {
+                ApiResponse<List<ActividadEconomicaDTO>> response = new();
+
+                response.Data = ContactoService.ObtenerActividadEconomica();
+
+                return response;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

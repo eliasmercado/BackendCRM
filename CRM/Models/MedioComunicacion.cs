@@ -14,7 +14,6 @@ namespace CRM.Models
 
         public int IdMedioComunicacion { get; set; }
         public string Descripcion { get; set; }
-        public bool Estado { get; set; }
 
         public virtual ICollection<Comunicacion> Comunicacions { get; set; }
     }
