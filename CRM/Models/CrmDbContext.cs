@@ -77,6 +77,9 @@ namespace CRM.Models
                     .IsRequired()
                     .HasMaxLength(50);
 
+                entity.Property(e => e.Estado)
+                    .HasDefaultValue(true);
+
                 entity.HasOne(d => d.IdCategoriaPadreNavigation)
                     .WithMany(p => p.InverseIdCategoriaPadreNavigation)
                     .HasForeignKey(d => d.IdCategoriaPadre)
@@ -390,6 +393,9 @@ namespace CRM.Models
 
                 entity.ToTable("Marca");
 
+                entity.Property(e => e.Estado)
+                    .HasDefaultValue(true);
+
                 entity.Property(e => e.Descripcion)
                     .IsRequired()
                     .HasMaxLength(50);
@@ -440,6 +446,10 @@ namespace CRM.Models
                 entity.Property(e => e.Descripcion)
                     .IsRequired()
                     .HasMaxLength(50);
+
+                entity.Property(e => e.Codigo)
+                    .IsRequired()
+                    .HasMaxLength(20);
             });
 
             modelBuilder.Entity<Oportunidad>(entity =>

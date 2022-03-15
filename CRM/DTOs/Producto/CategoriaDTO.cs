@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CRM.DTOs.CategoriaDto
+namespace CRM.DTOs.Producto
 {
     public class CategoriaDTO
     {

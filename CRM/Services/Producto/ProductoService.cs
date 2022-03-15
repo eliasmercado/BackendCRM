@@ -1,54 +1,65 @@
 ﻿using CRM.DTOs.Producto;
 using CRM.Helpers;
 using CRM.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CRM.Services.Producto
+namespace CRM.Services.ProductoService
 {
     public class ProductoService
     {
         private CrmDbContext _context;
 
-        public ProductoService(CrmDbContext context) {
+        public ProductoService(CrmDbContext context)
+        {
             _context = context;
         }
 
-        public List<ProductoDTO> ObtenerListaProdcutos()
+        public List<ProductoDTO> ObtenerListaProductos()
         {
             List<ProductoDTO> listaProductos = (from producto in _context.Productos
-                                       
-                                          select new ProductoDTO()
-                                          {
-                                              IdProducto = producto.IdProducto,
-                                              Descripcion = producto.Descripcion,
-                                              Precio  = producto.Precio,
-                                              IdMarca = producto.IdMarca,
-                                              IdCategoria = producto.IdCategoria,
-                                              IdMoneda = producto.IdMoneda
-                                          }).ToList();
+                                                select new ProductoDTO()
+                                                {
+                                                    IdProducto = producto.IdProducto,
+                                                    Descripcion = producto.Descripcion,
+                                                    Precio = producto.Precio,
+                                                    IdMarca = producto.IdMarca,
+                                                    IdCategoria = producto.IdCategoria,
+                                                    IdMoneda = producto.IdMoneda
+                                                }).ToList();
 
             return listaProductos;
         }
 
-        public ProductoDTO ObtenerPRoductoById(int id)
+        public ProductoDTO ObtenerProductoById(int id)
         {
             ProductoDTO productoDto = (from producto in _context.Productos
-                                 where producto.IdProducto == id
-                                 select new ProductoDTO()
-                                 {
-                                     IdProducto = producto.IdProducto,
-                                     Descripcion = producto.Descripcion,
-                                     Precio = producto.Precio,
-                                     IdMarca = producto.IdMarca,
-                                     IdCategoria = producto.IdCategoria,
-                                     IdMoneda = producto.IdMoneda
-
-                                 }).FirstOrDefault();
+                                       where producto.IdProducto == id
+                                       select new ProductoDTO()
+                                       {
+                                           IdProducto = producto.IdProducto,
+                                           Descripcion = producto.Descripcion,
+                                           Precio = producto.Precio,
+                                           IdMarca = producto.IdMarca,
+                                           IdCategoria = producto.IdCategoria,
+                                           IdMoneda = producto.IdMoneda
+                                       }).FirstOrDefault();
 
             return productoDto;
+        }
+
+        public List<MonedaDTO> ObtenerListaMonedas()
+        {
+            List<MonedaDTO> listaMonedas = (from moneda in _context.Moneda
+                                                select new MonedaDTO()
+                                                {
+                                                    IdMoneda= moneda.IdMoneda,
+                                                    Moneda = moneda.Descripcion,
+                                                    Codigo = moneda.Codigo,
+                                                }).ToList();
+
+            return listaMonedas;
         }
 
         public string ModificarProducto(int id, ProductoDTO prdModificado)
@@ -58,12 +69,11 @@ namespace CRM.Services.Producto
                 throw new ApiException("Identificador de Producto no válido");
             }
 
-            Models.Producto producto = _context.Productos.Find(id);
+            Producto producto = _context.Productos.Find(id);
 
             if (producto == null)
                 throw new ApiException("El producto no existe.");
 
-            producto.IdProducto = prdModificado.IdProducto;
             producto.Descripcion = prdModificado.Descripcion;
             producto.Precio = prdModificado.Precio;
             producto.IdMarca = prdModificado.IdMarca;
@@ -72,14 +82,13 @@ namespace CRM.Services.Producto
 
             _context.SaveChanges();
 
-            return "El Producto modificó correctamente.";
+            return "El producto se modificó correctamente.";
         }
 
         public string CrearProducto(ProductoDTO prodNuevo)
         {
-            Models.Producto producto = new()
+            Producto producto = new()
             {
-                IdProducto = prodNuevo.IdProducto,
                 Descripcion = prodNuevo.Descripcion,
                 Precio = prodNuevo.Precio,
                 IdMarca = prodNuevo.IdMarca,
@@ -92,7 +101,17 @@ namespace CRM.Services.Producto
             return "El producto se agregó correctamente.";
         }
 
-  
+        public string EliminarProducto(int id)
+        {
+            Producto producto = _context.Productos.Find(id);
 
+            if (producto == null)
+                throw new ApiException("El producto no existe.");
+
+            _context.Remove(producto);
+            _context.SaveChanges();
+
+            return "El producto se eliminó correctamente.";
+        }
     }
 }

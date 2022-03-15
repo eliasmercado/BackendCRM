@@ -14,6 +14,7 @@ namespace CRM.Models
 
         public int IdMoneda { get; set; }
         public string Descripcion { get; set; }
+        public string Codigo { get; set; }
 
         public virtual ICollection<Producto> Productos { get; set; }
     }

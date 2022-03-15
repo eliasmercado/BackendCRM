@@ -1,10 +1,9 @@
-﻿using CRM.DTOs.Marca;
-using CRM.Helpers;
+﻿using CRM.Helpers;
 using CRM.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Collections.Generic;
-
-
+using CRM.DTOs.Producto;
 
 namespace CRM.Services.MarcaService
 {
@@ -21,11 +20,11 @@ namespace CRM.Services.MarcaService
         public List<MarcaDTO> ObtenerListaMarcas()
         {
             List<MarcaDTO> listaMarcas = (from marca in _context.Marcas
-                                          where marca.Estado
                                           select new MarcaDTO()
                                                {
                                                    IdMarca = marca.IdMarca,
                                                    Descripcion = marca.Descripcion,
+                                                   Estado = marca.Estado
                                                }).ToList();
 
             return listaMarcas;
@@ -34,12 +33,12 @@ namespace CRM.Services.MarcaService
         public MarcaDTO ObtenerMarcaById(int id)
         {
             MarcaDTO marcaDTO = (from marca in _context.Marcas 
-                                    where marca.Estado && marca.IdMarca == id
+                                    where marca.IdMarca == id
                                     select new MarcaDTO()
                                    {
                                        IdMarca = marca.IdMarca,
                                        Descripcion = marca.Descripcion,
-
+                                       Estado = marca.Estado
                                    }).FirstOrDefault();
 
             return marcaDTO;
@@ -57,20 +56,20 @@ namespace CRM.Services.MarcaService
             if (marca == null)
                 throw new ApiException("La marca no existe.");
 
-            marca.IdMarca = marcaModificada.IdMarca;
             marca.Descripcion = marcaModificada.Descripcion;
+            marca.Estado = marcaModificada.Estado;
 
             _context.SaveChanges();
 
-            return "La marca modificó correctamente.";
+            return "La marca se modificó correctamente.";
         }
 
         public string CrearMarca(MarcaDTO marcaNueva)
         {
             Marca marca = new()
             {
-                IdMarca = marcaNueva.IdMarca,
-                Descripcion = marcaNueva.Descripcion
+                Descripcion = marcaNueva.Descripcion,
+                Estado = marcaNueva.Estado
             };
             _context.Marcas.Add(marca);
             _context.SaveChanges();

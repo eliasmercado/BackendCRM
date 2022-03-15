@@ -1,4 +1,4 @@
-﻿using CRM.DTOs.CategoriaDto;
+﻿using CRM.DTOs.Producto;
 using CRM.Helpers;
 using CRM.Models;
 using Microsoft.EntityFrameworkCore;
@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CRM.Services.Categoria
+namespace CRM.Services.CategoriaService
 {
     public class CategoriaService
     {
@@ -20,27 +20,27 @@ namespace CRM.Services.Categoria
 
         public List<CategoriaDTO> ObtenerListaCategorias()
         {
-            List<CategoriaDTO> listaCategorias = (from categoria in _context.Categoria 
-                                          where categoria.Estado
-                                          select new CategoriaDTO()
-                                          {
-                                              IdCategoria = categoria.IdCategoria,
-                                              Descripcion = categoria.Descripcion,
-                                              IdCategoriaPadre = categoria.IdCategoriaPadre
-                                          }).ToList();
-
+            List<CategoriaDTO> listaCategorias = (from categoria in _context.Categoria
+                                                  where categoria.IdCategoriaPadre == null
+                                                  select new CategoriaDTO()
+                                                  {
+                                                      IdCategoria = categoria.IdCategoria,
+                                                      Descripcion = categoria.Descripcion, 
+                                                      Estado = categoria.Estado
+                                                  }).ToList();
             return listaCategorias;
         }
 
-        public List<CategoriaDTO> ObtenerListaCategoriasSinPadre()
+        public List<CategoriaDTO> ObtenerListaSubCategorias()
         {
             List<CategoriaDTO> listaCategorias = (from categoria in _context.Categoria
-                                                  where categoria.Estado && categoria.IdCategoriaPadre == null
+                                                  where categoria.IdCategoriaPadre != null
                                                   select new CategoriaDTO()
                                                   {
                                                       IdCategoria = categoria.IdCategoria,
                                                       Descripcion = categoria.Descripcion,
-                                                      
+                                                      IdCategoriaPadre = categoria.IdCategoriaPadre,
+                                                      Estado = categoria.Estado
                                                   }).ToList();
 
             return listaCategorias;
@@ -49,13 +49,13 @@ namespace CRM.Services.Categoria
         public CategoriaDTO ObtenerCategoriaById(int id)
         {
             CategoriaDTO categoriaDTO = (from categoria in _context.Categoria
-                                 where categoria.Estado && categoria.IdCategoria == id
+                                 where categoria.IdCategoria == id
                                  select new CategoriaDTO()
                                  {
                                      IdCategoria = categoria.IdCategoria,
                                      Descripcion = categoria.Descripcion,
-                                     IdCategoriaPadre = categoria.IdCategoriaPadre
-
+                                     IdCategoriaPadre = categoria.IdCategoriaPadre,
+                                     Estado = categoria.Estado
                                  }).FirstOrDefault();
 
             return categoriaDTO;
@@ -68,25 +68,34 @@ namespace CRM.Services.Categoria
                 throw new ApiException("Identificador de Categoria no válido");
             }
 
-            Models.Categoria categoria = _context.Categoria.Find(id);
+            Categoria categoria = _context.Categoria.Find(id);
 
             if (categoria == null)
                 throw new ApiException("La categoria no existe.");
 
-            categoria.IdCategoria = categoriaNueva.IdCategoria;
+            if (categoria.IdCategoriaPadre == null && TieneCategoriasHijas(categoria.IdCategoria))
+                throw new ApiException("Existen subcategorias activas para la categoría. No se puede deshabilitar.");
+
             categoria.Descripcion = categoriaNueva.Descripcion;
             categoria.IdCategoriaPadre = categoriaNueva.IdCategoriaPadre;
+            categoria.Estado = categoriaNueva.Estado;
 
             _context.SaveChanges();
 
             return "La categoria modificó correctamente.";
         }
 
+        private bool TieneCategoriasHijas(int? idCategoriaPadre)
+        {
+            int cantidadCategorias = _context.Categoria.Where(x => x.IdCategoriaPadre == idCategoriaPadre && x.Estado).Count();
+
+            return cantidadCategorias > 0;
+        }
+
         public string CrearCategoria(CategoriaDTO categoriaNueva)
         {
-            Models.Categoria categoria = new()
+            Categoria categoria = new()
             {
-                IdCategoria = categoriaNueva.IdCategoria,
                 Descripcion = categoriaNueva.Descripcion,
                 IdCategoriaPadre = categoriaNueva.IdCategoriaPadre
             };
@@ -98,7 +107,7 @@ namespace CRM.Services.Categoria
 
         public string EliminarCategoria(int id)
         {
-            Models.Categoria categoria = _context.Categoria.Where(x => x.Estado && x.IdCategoria == id).FirstOrDefault();
+            Categoria categoria = _context.Categoria.Where(x => x.Estado && x.IdCategoria == id).FirstOrDefault();
 
             if (categoria == null)
                 throw new ApiException("La categoria no existe.");

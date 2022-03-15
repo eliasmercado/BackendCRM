@@ -9,5 +9,7 @@ namespace CRM.Helpers
     {
         public const int LLAMADA = 1;
         public const int CORREO = 2;
+        public const string MONEDA_GUARANIES = "PYG";
+        public const string MONEDA_DOLARES = "USD";
     }
 }
