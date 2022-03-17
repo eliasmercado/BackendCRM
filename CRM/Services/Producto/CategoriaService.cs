@@ -25,7 +25,8 @@ namespace CRM.Services.CategoriaService
                                                   select new CategoriaDTO()
                                                   {
                                                       IdCategoria = categoria.IdCategoria,
-                                                      Descripcion = categoria.Descripcion, 
+                                                      Nombre = categoria.Nombre, 
+                                                      Descripcion = categoria.Descripcion,
                                                       Estado = categoria.Estado
                                                   }).ToList();
             return listaCategorias;
@@ -38,6 +39,7 @@ namespace CRM.Services.CategoriaService
                                                   select new CategoriaDTO()
                                                   {
                                                       IdCategoria = categoria.IdCategoria,
+                                                      Nombre = categoria.Nombre,
                                                       Descripcion = categoria.Descripcion,
                                                       IdCategoriaPadre = categoria.IdCategoriaPadre,
                                                       Estado = categoria.Estado
@@ -53,6 +55,7 @@ namespace CRM.Services.CategoriaService
                                  select new CategoriaDTO()
                                  {
                                      IdCategoria = categoria.IdCategoria,
+                                     Nombre = categoria.Nombre,
                                      Descripcion = categoria.Descripcion,
                                      IdCategoriaPadre = categoria.IdCategoriaPadre,
                                      Estado = categoria.Estado
@@ -76,6 +79,7 @@ namespace CRM.Services.CategoriaService
             if (categoria.IdCategoriaPadre == null && TieneCategoriasHijas(categoria.IdCategoria))
                 throw new ApiException("Existen subcategorias activas para la categoría. No se puede deshabilitar.");
 
+            categoria.Nombre = categoriaNueva.Nombre;
             categoria.Descripcion = categoriaNueva.Descripcion;
             categoria.IdCategoriaPadre = categoriaNueva.IdCategoriaPadre;
             categoria.Estado = categoriaNueva.Estado;
@@ -96,6 +100,7 @@ namespace CRM.Services.CategoriaService
         {
             Categoria categoria = new()
             {
+                Nombre = categoriaNueva.Nombre,
                 Descripcion = categoriaNueva.Descripcion,
                 IdCategoriaPadre = categoriaNueva.IdCategoriaPadre
             };

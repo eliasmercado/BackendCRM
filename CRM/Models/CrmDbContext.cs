@@ -73,8 +73,11 @@ namespace CRM.Models
                 entity.HasKey(e => e.IdCategoria)
                     .HasName("Categoria_pk");
 
-                entity.Property(e => e.Descripcion)
+                entity.Property(e => e.Nombre)
                     .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Descripcion)
                     .HasMaxLength(50);
 
                 entity.Property(e => e.Estado)
