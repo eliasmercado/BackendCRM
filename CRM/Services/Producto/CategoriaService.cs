@@ -64,6 +64,22 @@ namespace CRM.Services.CategoriaService
             return categoriaDTO;
         }
 
+        public CategoriaDTO ObtenerSubCategoriaByIdPadre(int idCategoriaPadre)
+        {
+            CategoriaDTO categoriaDTO = (from categoria in _context.Categoria
+                                         where categoria.IdCategoriaPadre == idCategoriaPadre
+                                         select new CategoriaDTO()
+                                         {
+                                             IdCategoria = categoria.IdCategoria,
+                                             Nombre = categoria.Nombre,
+                                             Descripcion = categoria.Descripcion,
+                                             IdCategoriaPadre = categoria.IdCategoriaPadre,
+                                             Estado = categoria.Estado
+                                         }).FirstOrDefault();
+
+            return categoriaDTO;
+        }
+
         public string ModificarCategoria(int id, CategoriaDTO categoriaNueva)
         {
             if (id != categoriaNueva.IdCategoria)
@@ -76,11 +92,11 @@ namespace CRM.Services.CategoriaService
             if (categoria == null)
                 throw new ApiException("La categoria no existe.");
 
-            if (categoria.IdCategoriaPadre == null && TieneCategoriasHijas(categoria.IdCategoria))
+            if (categoria.IdCategoriaPadre == null && !categoria.Estado && TieneCategoriasHijas(categoria.IdCategoria))
                 throw new ApiException("Existen subcategorias activas para la categoría. No se puede deshabilitar.");
 
             categoria.Nombre = categoriaNueva.Nombre;
-            categoria.Descripcion = categoriaNueva.Descripcion;
+            categoria.Descripcion = string.IsNullOrEmpty(categoriaNueva.Descripcion) ? null : categoriaNueva.Descripcion;
             categoria.IdCategoriaPadre = categoriaNueva.IdCategoriaPadre;
             categoria.Estado = categoriaNueva.Estado;
 
@@ -101,7 +117,7 @@ namespace CRM.Services.CategoriaService
             Categoria categoria = new()
             {
                 Nombre = categoriaNueva.Nombre,
-                Descripcion = categoriaNueva.Descripcion,
+                Descripcion = string.IsNullOrEmpty(categoriaNueva.Descripcion) ? null : categoriaNueva.Descripcion,
                 IdCategoriaPadre = categoriaNueva.IdCategoriaPadre
             };
             _context.Categoria.Add(categoria);

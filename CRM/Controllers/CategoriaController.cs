@@ -86,6 +86,28 @@ namespace CRM.Controllers
             }
         }
 
+        [HttpGet("subCategoriaByPadre/{id}")]
+        public ApiResponse<CategoriaDTO> GetSubCategoriaByIdPadre(int id)
+        {
+            try
+            {
+                ApiResponse<CategoriaDTO> response = new();
+
+                var categoria = CategoriaService.ObtenerSubCategoriaByIdPadre(id);
+                response.Data = categoria;
+
+                return response;
+            }
+            catch (ApiException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         [HttpPost]
         public ApiResponse<object> PostCategoria(CategoriaDTO categoria)
         {
