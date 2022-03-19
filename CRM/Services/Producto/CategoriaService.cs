@@ -64,9 +64,9 @@ namespace CRM.Services.CategoriaService
             return categoriaDTO;
         }
 
-        public CategoriaDTO ObtenerSubCategoriaByIdPadre(int idCategoriaPadre)
+        public List<CategoriaDTO> ObtenerSubCategoriasByIdPadre(int idCategoriaPadre)
         {
-            CategoriaDTO categoriaDTO = (from categoria in _context.Categoria
+            List<CategoriaDTO> categoriasDTO = (from categoria in _context.Categoria
                                          where categoria.IdCategoriaPadre == idCategoriaPadre
                                          select new CategoriaDTO()
                                          {
@@ -75,9 +75,9 @@ namespace CRM.Services.CategoriaService
                                              Descripcion = categoria.Descripcion,
                                              IdCategoriaPadre = categoria.IdCategoriaPadre,
                                              Estado = categoria.Estado
-                                         }).FirstOrDefault();
+                                         }).ToList();
 
-            return categoriaDTO;
+            return categoriasDTO;
         }
 
         public string ModificarCategoria(int id, CategoriaDTO categoriaNueva)
@@ -92,7 +92,7 @@ namespace CRM.Services.CategoriaService
             if (categoria == null)
                 throw new ApiException("La categoria no existe.");
 
-            if (categoria.IdCategoriaPadre == null && !categoria.Estado && TieneCategoriasHijas(categoria.IdCategoria))
+            if (categoria.IdCategoriaPadre == null && categoria.Estado && !categoriaNueva.Estado && TieneCategoriasHijas(categoria.IdCategoria))
                 throw new ApiException("Existen subcategorias activas para la categoría. No se puede deshabilitar.");
 
             categoria.Nombre = categoriaNueva.Nombre;

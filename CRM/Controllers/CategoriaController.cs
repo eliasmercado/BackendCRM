@@ -87,13 +87,13 @@ namespace CRM.Controllers
         }
 
         [HttpGet("subCategoriaByPadre/{id}")]
-        public ApiResponse<CategoriaDTO> GetSubCategoriaByIdPadre(int id)
+        public ApiResponse<List<CategoriaDTO>> GetSubCategoriaByIdPadre(int id)
         {
             try
             {
-                ApiResponse<CategoriaDTO> response = new();
+                ApiResponse<List<CategoriaDTO>> response = new();
 
-                var categoria = CategoriaService.ObtenerSubCategoriaByIdPadre(id);
+                var categoria = CategoriaService.ObtenerSubCategoriasByIdPadre(id);
                 response.Data = categoria;
 
                 return response;
