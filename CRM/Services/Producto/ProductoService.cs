@@ -19,14 +19,23 @@ namespace CRM.Services.ProductoService
         public List<ProductoDTO> ObtenerListaProductos()
         {
             List<ProductoDTO> listaProductos = (from producto in _context.Productos
+                                                join moneda in _context.Moneda on producto.IdMoneda equals moneda.IdMoneda
+                                                join marca in _context.Marcas on producto.IdMarca equals marca.IdMarca
+                                                join categoria in _context.Categoria on producto.IdCategoria equals categoria.IdCategoria
+                                                join catPadre in _context.Categoria on categoria.IdCategoriaPadre equals catPadre.IdCategoria
                                                 select new ProductoDTO()
                                                 {
                                                     IdProducto = producto.IdProducto,
                                                     Descripcion = producto.Descripcion,
                                                     Precio = producto.Precio,
                                                     IdMarca = producto.IdMarca,
+                                                    IdCategoriaPadre = catPadre.IdCategoria,
                                                     IdCategoria = producto.IdCategoria,
-                                                    IdMoneda = producto.IdMoneda
+                                                    IdMoneda = producto.IdMoneda,
+                                                    Moneda = moneda.Descripcion,
+                                                    Marca = marca.Nombre,
+                                                    Categoria = catPadre.Nombre,
+                                                    SubCategoria = categoria.Nombre
                                                 }).ToList();
 
             return listaProductos;
@@ -43,7 +52,7 @@ namespace CRM.Services.ProductoService
                                            Precio = producto.Precio,
                                            IdMarca = producto.IdMarca,
                                            IdCategoria = producto.IdCategoria,
-                                           IdMoneda = producto.IdMoneda
+                                           // IdMoneda = producto.IdMoneda
                                        }).FirstOrDefault();
 
             return productoDto;
@@ -52,12 +61,12 @@ namespace CRM.Services.ProductoService
         public List<MonedaDTO> ObtenerListaMonedas()
         {
             List<MonedaDTO> listaMonedas = (from moneda in _context.Moneda
-                                                select new MonedaDTO()
-                                                {
-                                                    IdMoneda= moneda.IdMoneda,
-                                                    Moneda = moneda.Descripcion,
-                                                    Codigo = moneda.Codigo,
-                                                }).ToList();
+                                            select new MonedaDTO()
+                                            {
+                                                IdMoneda = moneda.IdMoneda,
+                                                Moneda = moneda.Descripcion,
+                                                Codigo = moneda.Codigo,
+                                            }).ToList();
 
             return listaMonedas;
         }
