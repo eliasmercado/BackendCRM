@@ -21,25 +21,27 @@ namespace CRM.Services.MarcaService
         {
             List<MarcaDTO> listaMarcas = (from marca in _context.Marcas
                                           select new MarcaDTO()
-                                               {
-                                                   IdMarca = marca.IdMarca,
-                                                   Descripcion = marca.Descripcion,
-                                                   Estado = marca.Estado
-                                               }).ToList();
+                                          {
+                                              IdMarca = marca.IdMarca,
+                                              Nombre = marca.Nombre,
+                                              Descripcion = marca.Descripcion,
+                                              Estado = marca.Estado
+                                          }).ToList();
 
             return listaMarcas;
         }
 
         public MarcaDTO ObtenerMarcaById(int id)
         {
-            MarcaDTO marcaDTO = (from marca in _context.Marcas 
-                                    where marca.IdMarca == id
-                                    select new MarcaDTO()
-                                   {
-                                       IdMarca = marca.IdMarca,
-                                       Descripcion = marca.Descripcion,
-                                       Estado = marca.Estado
-                                   }).FirstOrDefault();
+            MarcaDTO marcaDTO = (from marca in _context.Marcas
+                                 where marca.IdMarca == id
+                                 select new MarcaDTO()
+                                 {
+                                     IdMarca = marca.IdMarca,
+                                     Nombre = marca.Nombre,
+                                     Descripcion = marca.Descripcion,
+                                     Estado = marca.Estado
+                                 }).FirstOrDefault();
 
             return marcaDTO;
         }
@@ -56,7 +58,8 @@ namespace CRM.Services.MarcaService
             if (marca == null)
                 throw new ApiException("La marca no existe.");
 
-            marca.Descripcion = marcaModificada.Descripcion;
+            marca.Nombre = marcaModificada.Nombre;
+            marca.Descripcion = string.IsNullOrEmpty(marcaModificada.Descripcion) ? null : marcaModificada.Descripcion;
             marca.Estado = marcaModificada.Estado;
 
             _context.SaveChanges();
@@ -68,7 +71,8 @@ namespace CRM.Services.MarcaService
         {
             Marca marca = new()
             {
-                Descripcion = marcaNueva.Descripcion,
+                Nombre = marcaNueva.Nombre,
+                Descripcion = string.IsNullOrEmpty(marcaNueva.Descripcion) ? null : marcaNueva.Descripcion,
                 Estado = marcaNueva.Estado
             };
             _context.Marcas.Add(marca);
@@ -91,5 +95,5 @@ namespace CRM.Services.MarcaService
 
             return "La marca se eliminó correctamente.";
         }
-    } 
+    }
 }
