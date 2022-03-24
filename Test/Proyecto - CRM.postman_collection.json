@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "727ff43a-2dc0-46ef-ab0c-50a714d7d7a9",
+		"_postman_id": "d7551471-db39-4541-aa53-61a77e689c6d",
 		"name": "Proyecto - CRM",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -86,6 +86,1187 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Obtener Contactos por ID",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url-base}}/api/contacto/2",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"contacto",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Tipo Documento",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url-base}}/api/contacto/tipoDocumento",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"contacto",
+								"tipoDocumento"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Estado Civil",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url-base}}/api/contacto/actividadEconomica",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"contacto",
+								"actividadEconomica"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Actividad Economica",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url-base}}/api/contacto/estadoCivil",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"contacto",
+								"estadoCivil"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Agregar Contacto",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nombres\": \"Elias\",\r\n    \"apellidos\": \"Mercado\",\r\n    \"celular\": \"069555\",\r\n    \"email\": \"emercado@gmail.com\",\r\n    \"fechaNacimiento\": \"1999-01-14T00:00:00\",\r\n    \"idTipoDocumento\": 2,\r\n    \"documento\": \"54652-0\",\r\n    \"idCiudad\": 2,\r\n    \"direccion\": \"Ruta 1\",\r\n    \"idEstadoCivil\": null,\r\n    \"idActividadEconomica\": null,\r\n    \"nombreEmpresa\": null,\r\n    \"direccionLaboral\": \"Las Mercedes\",\r\n    \"telefonoLaboral\": \"5555\",\r\n    \"correoLaboral\": \"emercado@roshka.com\",\r\n    \"idPropietario\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url-base}}/api/contacto",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"contacto"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Modificar Contacto",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"idContacto\": 2,\r\n    \"nombres\": \"Elias Valentin\",\r\n    \"apellidos\": \"Mercado Lopez\",\r\n    \"celular\": \"069555\",\r\n    \"email\": \"emercado@gmail.com\",\r\n    \"fechaNacimiento\": \"1999-01-14T00:00:00\",\r\n    \"idTipoDocumento\": 2,\r\n    \"documento\": \"54652-0\",\r\n    \"idCiudad\": 2,\r\n    \"direccion\": \"Ruta 1\",\r\n    \"idEstadoCivil\": null,\r\n    \"idActividadEconomica\": null,\r\n    \"nombreEmpresa\": null,\r\n    \"direccionLaboral\": \"Las Mercedes\",\r\n    \"telefonoLaboral\": \"5555\",\r\n    \"correoLaboral\": \"emercado@roshka.com\",\r\n    \"idPropietario\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url-base}}/api/contacto/2",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"contacto",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar Contacto",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url-base}}/api/contacto/4",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"contacto",
+								"4"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Empresas",
+			"item": [
+				{
+					"name": "Obtener Empresas",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url-base}}/api/empresa",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"empresa"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Empresa por ID",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url-base}}/api/empresa/4",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"empresa",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Agregar Empresa",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"nombre\": \"CRM1\",\r\n        \"celular\": \"0972212222\",\r\n        \"telefono\": \"021212222\",\r\n        \"ruc\": \"8000015184-8\",\r\n        \"email\": \"crm@crm.com\",\r\n        \"idCiudad\": 1,\r\n        \"direccion\": \"Direccion\",\r\n        \"nombreRepresentante\": \"Elias\",\r\n        \"celularRepresentante\": \"0972250212\",\r\n        \"esLead\": false,\r\n        \"estado\": false,\r\n        \"idPropietario\": 1\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url-base}}/api/empresa",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"empresa"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Modificar Empresa",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"idEmpresa\": 2,\r\n        \"nombre\": \"CRM123121\",\r\n        \"celular\": \"0972212222\",\r\n        \"telefono\": \"021212222\",\r\n        \"ruc\": \"8000015184-8\",\r\n        \"email\": \"crm@crm.com\",\r\n        \"idCiudad\": 1,\r\n        \"direccion\": \"Direccion\",\r\n        \"nombreRepresentante\": \"Elias\",\r\n        \"celularRepresentante\": \"0972250212\",\r\n        \"esLead\": false,\r\n        \"estado\": false,\r\n        \"idPropietario\": 1\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url-base}}/api/empresa/2",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"empresa",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar Empresa",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url-base}}/api/empresa/2",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"empresa",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Comunicaciones",
+			"item": [
+				{
+					"name": "Registrar Llamada Contacto",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"idEmpresa\": null,\r\n    \"idContacto\": 9,\r\n    \"motivoComunicacion\": \"Aviso\",\r\n    \"observacion\": \"una observacion\",\r\n    \"idUsuario\": 1,\r\n    \"fechaComunicacion\": \"2022-03-08\",\r\n    \"referencia\": \"una referencia\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url-base}}/api/comunicacion/llamada",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"comunicacion",
+								"llamada"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Registrar Llamada Empresa",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"idEmpresa\": 3,\r\n    \"idContacto\": null,\r\n    \"motivoComunicacion\": \"Aviso\",\r\n    \"observacion\": \"una observacion\",\r\n    \"idUsuario\": 1,\r\n    \"fechaComunicacion\": \"2022-03-08\",\r\n    \"referencia\": \"una referencia\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url-base}}/api/comunicacion/llamada",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"comunicacion",
+								"llamada"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Registrar Correo Contacto",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"idEmpresa\": null,\r\n    \"idContacto\": 9,\r\n    \"motivoComunicacion\": \"Aviso\",\r\n    \"observacion\": null,\r\n    \"idUsuario\": 1,\r\n    \"contenidoEmail\": \"<h2> Formatted Text Editor (HTML Editor)</h2><p><br></p><p>DevExtreme JavaScript HTML Editor is a client-side WYSIWYG text editor that allows its users to format textual and visual content and store it as HTML or Markdown.</p><p>asdsaasda</p><p><br></p><p><span style=\\\"background-color: rgb(255, 255, 255); font-size: 13px; font-family: Roboto, arial, sans-serif; color: rgb(32, 33, 36);\\\">😋</span></p>\",\r\n    \"referencia\": \"eliasmerc23@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url-base}}/api/comunicacion/correo",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"comunicacion",
+								"correo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Registrar Correo Empresa",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"idEmpresa\": 2,\r\n    \"idContacto\": null,\r\n    \"motivoComunicacion\": \"Asunto correo\",\r\n    \"observacion\": null,\r\n    \"contenidoEmail\": \"<h2>Formatted Text Editor (HTML Editor)</h2><p><br></p><p>DevExtreme JavaScript HTML Editor is a client-side WYSIWYG text editor that allows its users to format textual and visual content and store it as HTML or Markdown.</p>\",\r\n    \"idUsuario\": 1,\r\n    \"referencia\": \"eliasmerc23@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url-base}}/api/comunicacion/correo",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"comunicacion",
+								"correo"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Categorías",
+			"item": [
+				{
+					"name": "Obtener Categorias",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url-base}}/api/categoria",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"categoria"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener SubCategorias",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url-base}}/api/categoria/subCategoria",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"categoria",
+								"subCategoria"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Categoria Por Id",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url-base}}/api/categoria/2",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"categoria",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Agregar Categoria",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"descripcion\": \"Vestimenta Prueba\",\r\n    \"idCategoriaPadre\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url-base}}/api/categoria",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"categoria"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Modificar Categoria",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"idCategoria\": 2,\r\n    \"descripcion\": \"Vestimenta Prueba\",\r\n    \"idCategoriaPadre\": null,\r\n    \"estado\" : false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url-base}}/api/categoria/2",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"categoria",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Marcas",
+			"item": [
+				{
+					"name": "Obtener Marcas",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url-base}}/api/marca",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"marca"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Marcas Por Id",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url-base}}/api/marca/2",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"marca",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Agregar Marca",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"descripcion\": \"Nike\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url-base}}/api/marca",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"marca"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Modificar Marca",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"idMarca\": 4,\r\n    \"descripcion\": \"Nike\",\r\n    \"estado\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url-base}}/api/marca/4",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"marca",
+								"4"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Productos",
+			"item": [
+				{
+					"name": "Obtener Marcas",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url-base}}/api/producto",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"producto"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Productos Por Id",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url-base}}/api/producto/2",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"producto",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Monedas",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url-base}}/api/producto/moneda",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"producto",
+								"moneda"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Agregar Producto",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"descripcion\": \"Zapato3\",\r\n    \"precio\": 300000,\r\n    \"idCategoria\": 6,\r\n    \"idMarca\": 2,\r\n    \"idMoneda\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url-base}}/api/producto",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"producto"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Modificar Producto",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"idProducto\": 3,\r\n    \"descripcion\": \"Zapato33\",\r\n    \"precio\": 300000,\r\n    \"idCategoria\": 6,\r\n    \"idMarca\": 2,\r\n    \"idMoneda\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url-base}}/api/producto/3",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"producto",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar Producto",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url-base}}/api/producto/3",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"producto",
+								"3"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -160,6 +1341,116 @@
 								"api",
 								"menu",
 								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Utils",
+			"item": [
+				{
+					"name": "Obtener Propietarios",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url-base}}/api/propietario",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"propietario"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Departamentos",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url-base}}/api/departamento",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"departamento"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Ciudades",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url-base}}/api/ciudad",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"ciudad"
 							]
 						}
 					},
