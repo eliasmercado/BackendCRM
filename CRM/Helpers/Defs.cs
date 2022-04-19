@@ -11,5 +11,9 @@ namespace CRM.Helpers
         public const int CORREO = 2;
         public const string MONEDA_GUARANIES = "PYG";
         public const string MONEDA_DOLARES = "USD";
+        public const string CLIENTE_LEAD = "Lead";
+        public const string CLIENTE_EXISTENTE = "Existente";
+        public const string CLIENTE_PF = "PF";
+        public const string CLIENTE_PJ = "PJ";
     }
 }

@@ -77,5 +77,24 @@ namespace CRM.Controllers
                 throw;
             }
         }
+
+
+        [HttpGet]
+        [Route("prioridad")]
+        public ApiResponse<List<PrioridadDTO>> GetPrioridades()
+        {
+            try
+            {
+                ApiResponse<List<PrioridadDTO>> response = new();
+
+                response.Data = UtilService.ObtenerPrioridades();
+
+                return response;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

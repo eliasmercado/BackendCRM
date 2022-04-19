@@ -50,5 +50,16 @@ namespace CRM.Services.Util
                                                    }).ToList();
             return ciudades;
         }
+
+        public List<PrioridadDTO> ObtenerPrioridades()
+        {
+            List<PrioridadDTO> prioridades = (from prioridad in _context.Prioridads
+                                     select new PrioridadDTO()
+                                     {
+                                         IdPrioridad = prioridad.IdPrioridad,
+                                         Prioridad = prioridad.Descripcion
+                                     }).ToList();
+            return prioridades;
+        }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CRM.DTOs.Sucursal
+namespace CRM.DTOs.Oportunidad
 {
     public class SucursalDTO
     {

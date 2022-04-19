@@ -1,4 +1,4 @@
-﻿using CRM.DTOs.Sucursal;
+﻿using CRM.DTOs.Oportunidad;
 using CRM.Helpers;
 using CRM.Models;
 using System;
@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CRM.Services.Sucursal
+namespace CRM.Services.SucursalService
 {
     public class SucursalService
     {
