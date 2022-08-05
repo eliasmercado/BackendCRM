@@ -38,7 +38,7 @@ namespace CRM.Services.Seguridad
             List<Menu> menuList = (from menu in _context.Menus
                                   join perfilPermiso in _context.PerfilPermisos on menu.IdMenu equals perfilPermiso.IdMenu
                                   join perfilUsuario in _context.Perfils on perfilPermiso.IdPerfil equals perfilUsuario.IdPerfil
-                                  where perfilUsuario.IdPerfil == idPerfil
+                                  where perfilUsuario.IdPerfil == idPerfil && menu.Estado
                                   select menu).ToList();
 
             return GenerarMenu(menuList);
