@@ -27,13 +27,30 @@ namespace CRM.Controllers
 
         // GET: api/Oportunidad
         [HttpGet]
-        public ApiResponse<List<OportunidadDTO>> GetOportunidades()
+        public ApiResponse<List<ListaOportunidadDTO>> GetOportunidades()
         {
             try
             {
-                ApiResponse<List<OportunidadDTO>> response = new();
+                ApiResponse<List<ListaOportunidadDTO>> response = new();
 
-                response.Data = OportunidadService.ObtenerListaPoportunidades();
+                response.Data = OportunidadService.ObtenerListaOportunidades();
+
+                return response;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet("{id}")]
+        public ApiResponse<OportunidadDTO> GetOportunidad()
+        {
+            try
+            {
+                ApiResponse<OportunidadDTO> response = new();
+
+                response.Data = OportunidadService.ObtenerOportunidadById();
 
                 return response;
             }

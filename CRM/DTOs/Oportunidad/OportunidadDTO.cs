@@ -7,14 +7,26 @@ using System.Threading.Tasks;
 
 namespace CRM.DTOs.Oportunidad
 {
+    public class ListaOportunidadDTO
+    {
+        public int IdOportunidad { get; set; }
+        public string Nombre { get; set; }
+        public DateTime FechaCierre { get; set; }
+        public DateTime FechaCreacion { get; set; }
+        public string Etapa { get; set; }
+        public string Prioridad { get; set; }
+        public decimal Valor { get; set; }
+        public string TipoCliente { get; set; }
+        public string Contacto { get; set; }
+        public string Propietario { get; set; }
+    }
+
     public class OportunidadDTO
     {
         public int IdOportunidad { get; set; }
         public string Nombre { get; set; }
         public DateTime FechaCierre { get; set; }
-        public string Etapa { get; set; }
         public int IdEtapa { get; set; }
-        public string Prioridad { get; set; }
         public int IdPrioridad { get; set; }
         public decimal Valor { get; set; }
         public string TipoCliente { get; set; }
@@ -24,7 +36,6 @@ namespace CRM.DTOs.Oportunidad
         public string ContactoAsociado { get; set; }
         public List<DetalleOportunidadDTO> Detalles { get; set; }
         public int IdFuente { get; set; }
-        public string Fuente{ get; set; }
         public string Observacion { get; set; }
         public int IdSucursal { get; set; }
         public int IdPropietario { get; set; }
