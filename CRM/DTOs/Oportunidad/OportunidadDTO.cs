@@ -30,10 +30,7 @@ namespace CRM.DTOs.Oportunidad
         public int IdPrioridad { get; set; }
         public decimal Valor { get; set; }
         public string TipoCliente { get; set; }
-        public ContactoAsociadoDTO LeadContacto { get; set; }
-        public EmpresaDTO LeadEmpresa { get; set; }
-        public int? IdContactoAsociado { get; set; }
-        public string ContactoAsociado { get; set; }
+        public string IdContactoAsociado { get; set; }
         public List<DetalleOportunidadDTO> Detalles { get; set; }
         public int IdFuente { get; set; }
         public string Observacion { get; set; }
@@ -73,5 +70,17 @@ namespace CRM.DTOs.Oportunidad
     {
         public int IdEtapa { get; set; }
         public string Etapa{ get; set; }
+    }
+
+    public class SelectSucursalDTO
+    {
+        public int IdSucursal { get; set; }
+        public string Sucursal { get; set; }
+    }
+
+    public class FuenteDTO
+    {
+        public int IdFuente { get; set; }
+        public string Fuente { get; set; }
     }
 }

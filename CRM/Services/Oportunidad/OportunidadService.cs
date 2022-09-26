@@ -23,7 +23,7 @@ namespace CRM.Services.OportunidadService
         /// <returns></returns>
         public List<ListaOportunidadDTO> ObtenerListaOportunidades()
         {
-            List<Oportunidad> listaOportunidades = (from oportunidad in _context.Oportunidads select oportunidad).ToList();
+            List<Oportunidad> listaOportunidades = _context.Oportunidads.ToList();
             List<ListaOportunidadDTO> listaOportunidadesDto = new();
             ListaOportunidadDTO oportunidadDto;
             InfoContacto contactoAsociado = new();
@@ -59,64 +59,49 @@ namespace CRM.Services.OportunidadService
         /// cliente existente o Lead para retornar los datos.
         /// </summary>
         /// <returns></returns>
-        public OportunidadDTO ObtenerOportunidadById()
+        public OportunidadDTO ObtenerOportunidadById(int idOportunidad)
         {
-            List<Oportunidad> listaOportunidades = (from oportunidad in _context.Oportunidads select oportunidad).ToList();
-            List<OportunidadDTO> listaOportunidadesDto = new();
-            OportunidadDTO oportunidadDto;
-            InfoContacto contacto;
+            Oportunidad oportunidad = _context.Oportunidads.Where(x => x.IdOportunidad == idOportunidad).FirstOrDefault();
 
-            foreach (var oportunidad in listaOportunidades)
-            {
-                oportunidadDto = new();
-                contacto = new();
-                oportunidadDto.IdOportunidad = oportunidad.IdOportunidad;
-                oportunidadDto.Nombre = oportunidad.Nombre;
-                oportunidadDto.FechaCierre = oportunidad.FechaCierre;
-                oportunidadDto.IdEtapa = oportunidad.IdEtapa;
-                oportunidadDto.IdPrioridad = oportunidad.IdPrioridad;
-                oportunidadDto.Valor = oportunidad.Valor;
+            if (oportunidad == null)
+                throw new ApiException("No se encontraron datos para el id " + idOportunidad);
 
-                contacto = ObtenerContacto(oportunidad);
-                oportunidadDto.TipoCliente = ObtenerTipoCliente(contacto);
+            OportunidadDTO oportunidadDto = new();
+            InfoContacto contacto = new();
 
-                if (oportunidadDto.TipoCliente == Defs.CLIENTE_LEAD)
-                {
-                    if(contacto.TipoContacto == Defs.CLIENTE_PF)
-                    {
-                        oportunidadDto.LeadContacto = (ContactoAsociadoDTO)contacto.DatosContacto;
-                        oportunidadDto.ContactoAsociado = oportunidadDto.LeadContacto.Nombres + " " + oportunidadDto.LeadContacto.Apellidos;
-                    }
-                    else
-                    {
-                        oportunidadDto.LeadEmpresa = (EmpresaAsociadaDTO)contacto.DatosContacto;
-                        oportunidadDto.ContactoAsociado = oportunidadDto.LeadContacto.Nombres;
-                    }
-                }
-                else
-                {
-                    if (contacto.TipoContacto == Defs.CLIENTE_PF)
-                        oportunidadDto.IdContactoAsociado = ((ContactoAsociadoDTO)contacto.DatosContacto).IdContacto;
-                    else
-                        oportunidadDto.IdContactoAsociado = ((EmpresaAsociadaDTO)contacto.DatosContacto).IdEmpresa;
-                }
+            oportunidadDto.IdOportunidad = oportunidad.IdOportunidad;
+            oportunidadDto.Nombre = oportunidad.Nombre;
+            oportunidadDto.FechaCierre = oportunidad.FechaCierre;
+            oportunidadDto.IdEtapa = oportunidad.IdEtapa;
+            oportunidadDto.Valor = oportunidad.Valor;
+            oportunidadDto.IdPrioridad = oportunidad.IdPrioridad;
+            oportunidadDto.IdFuente = oportunidad.IdFuente;
+            oportunidadDto.IdSucursal = oportunidad.IdSucursal;
 
-                oportunidadDto.Detalles = (from detalle in _context.DetalleOportunidads where detalle.IdOportunidad == oportunidad.IdOportunidad
-                                           select new DetalleOportunidadDTO() { 
-                                                IdDetalleOportunidad = detalle.IdDetalleOportunidad,
-                                                IdProducto = detalle.IdProducto,
-                                                Cantidad = detalle.Cantidad
-                                           }).ToList();
+            //Obtenemos los datos del contacto, manejamos si es LEAD o Cliente, PF o PJ
+            contacto = ObtenerContacto(oportunidad);
 
-                oportunidadDto.IdFuente= oportunidad.IdFuente;
-                oportunidadDto.Observacion= oportunidad.Observacion;
-                oportunidadDto.IdSucursal = oportunidad.IdSucursal;
-                oportunidadDto.IdPropietario = oportunidad.IdPropietario;
+            //Tipo de Cliente: Lead o Existente
+            oportunidadDto.TipoCliente = ObtenerTipoCliente(contacto);
 
-                listaOportunidadesDto.Add(oportunidadDto);
-            }
+            if (contacto.TipoContacto == Defs.CLIENTE_PF)
+                oportunidadDto.IdContactoAsociado = Defs.CLIENTE_PF + "-" + ((ContactoAsociadoDTO)contacto.DatosContacto).IdContacto;
+            else
+                oportunidadDto.IdContactoAsociado = Defs.CLIENTE_PJ + "-" + ((EmpresaAsociadaDTO)contacto.DatosContacto).IdEmpresa;
 
-            return null;
+            oportunidadDto.Detalles = (from detalle in _context.DetalleOportunidads
+                                       where detalle.IdOportunidad == oportunidad.IdOportunidad
+                                       select new DetalleOportunidadDTO()
+                                       {
+                                           IdDetalleOportunidad = detalle.IdDetalleOportunidad,
+                                           IdProducto = detalle.IdProducto,
+                                           Cantidad = detalle.Cantidad
+                                       }).ToList();
+
+            oportunidadDto.IdPropietario = oportunidad.IdPropietario;
+            oportunidadDto.Observacion = oportunidad.Observacion;
+
+            return oportunidadDto;
         }
 
         public string ModificarOportunidad(int id, OportunidadDTO oportunidadModificada)
@@ -166,18 +151,18 @@ namespace CRM.Services.OportunidadService
             return "La sucuoportunidadrsal se agregó correctamente.";
         }
 
-        public List<DetalleContactoDTO> ObtenerListaContactos()
+        public List<DetalleContactoDTO> ObtenerListaContactos(bool esLead)
         {
             List<DetalleContactoDTO> contactos = (from contacto in _context.Contactos
-                                                   where contacto.Estado && !contacto.EsLead
-                                                   select new DetalleContactoDTO()
-                                                   {
-                                                       IdContacto = Defs.CLIENTE_PF + "-" + contacto.IdContacto,
-                                                       Nombre = contacto.Nombres + " " + contacto.Apellidos
-                                                   }).ToList();
+                                                  where contacto.Estado && contacto.EsLead == esLead
+                                                  select new DetalleContactoDTO()
+                                                  {
+                                                      IdContacto = Defs.CLIENTE_PF + "-" + contacto.IdContacto,
+                                                      Nombre = contacto.Nombres + " " + contacto.Apellidos
+                                                  }).ToList();
 
             List<DetalleContactoDTO> empresas = (from empresa in _context.Empresas
-                                                 where empresa.Estado && !empresa.EsLead
+                                                 where empresa.Estado && empresa.EsLead == esLead
                                                  select new DetalleContactoDTO()
                                                  {
                                                      IdContacto = Defs.CLIENTE_PJ + "-" + empresa.IdEmpresa,
@@ -277,6 +262,28 @@ namespace CRM.Services.OportunidadService
                                          Etapa = etapa.Descripcion
                                      }).ToList();
             return etapas;
+        }
+
+        public List<SelectSucursalDTO> ObtenerSucursales()
+        {
+            List<SelectSucursalDTO> sucursales = (from sucursal in _context.Sucursals
+                                                  select new SelectSucursalDTO()
+                                                  {
+                                                      IdSucursal = sucursal.IdSucursal,
+                                                      Sucursal = sucursal.Descripcion
+                                                  }).ToList();
+            return sucursales;
+        }
+
+        public List<FuenteDTO> ObtenerFuentes()
+        {
+            List<FuenteDTO> fuentes = (from fuente in _context.Fuentes
+                                                  select new FuenteDTO()
+                                                  {
+                                                      IdFuente = fuente.IdFuente,
+                                                      Fuente = fuente.Descripcion
+                                                  }).ToList();
+            return fuentes;
         }
     }
 }

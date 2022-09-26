@@ -43,14 +43,14 @@ namespace CRM.Controllers
             }
         }
 
-        [HttpGet("{id}")]
-        public ApiResponse<OportunidadDTO> GetOportunidad()
+        [HttpGet("{idOportunidad}")]
+        public ApiResponse<OportunidadDTO> GetOportunidad(int idOportunidad)
         {
             try
             {
                 ApiResponse<OportunidadDTO> response = new();
 
-                response.Data = OportunidadService.ObtenerOportunidadById();
+                response.Data = OportunidadService.ObtenerOportunidadById(idOportunidad);
 
                 return response;
             }
@@ -62,13 +62,13 @@ namespace CRM.Controllers
 
         [HttpGet]
         [Route("contacto")]
-        public ApiResponse<List<DetalleContactoDTO>> GetContactosAsociados()
+        public ApiResponse<List<DetalleContactoDTO>> GetContactosAsociados([FromQuery] bool esLead = false)
         {
             try
             {
                 ApiResponse<List<DetalleContactoDTO>> response = new();
 
-                response.Data = OportunidadService.ObtenerListaContactos();
+                response.Data = OportunidadService.ObtenerListaContactos(esLead);
 
                 return response;
             }
@@ -87,6 +87,42 @@ namespace CRM.Controllers
                 ApiResponse<List<EtapaDTO>> response = new();
 
                 response.Data = OportunidadService.ObtenerEtapas();
+
+                return response;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
+        [Route("sucursal")]
+        public ApiResponse<List<SelectSucursalDTO>> GetSucursales()
+        {
+            try
+            {
+                ApiResponse<List<SelectSucursalDTO>> response = new();
+
+                response.Data = OportunidadService.ObtenerSucursales();
+
+                return response;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
+        [Route("fuente")]
+        public ApiResponse<List<FuenteDTO>> GetFuentes()
+        {
+            try
+            {
+                ApiResponse<List<FuenteDTO>> response = new();
+
+                response.Data = OportunidadService.ObtenerFuentes();
 
                 return response;
             }
