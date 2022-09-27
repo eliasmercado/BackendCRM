@@ -156,17 +156,61 @@ namespace CRM.Services.OportunidadService
 
         public string ModificarOportunidad(int id, OportunidadDTO oportunidadModificada)
         {
-            /*
-             *             foreach (DetalleOportunidadDTO detalle in oportunidadNueva.Detalles)
+            if (id != oportunidadModificada.IdOportunidad)
             {
+                throw new ApiException("Identificador de Oportunidad no válido");
+            }
+
+            Oportunidad oportunidad = _context.Oportunidads.Find(id);
+
+            if (oportunidad == null)
+                throw new ApiException("La oportunidad no existe.");
+
+            oportunidad.Nombre = oportunidadModificada.Nombre;
+            oportunidad.IdEtapa = oportunidadModificada.IdEtapa;
+            oportunidad.FechaCierre = oportunidadModificada.FechaCierre;
+            oportunidad.IdPrioridad = oportunidadModificada.IdPrioridad;
+
+
+            //para obtener el idContacto asociado hacemos un split
+            //el primer elemento es el tipo de cliente y el segundo el ID.
+            string[] elementos = oportunidadModificada.IdContactoAsociado.Split('-');
+            if (elementos[0] == Defs.CLIENTE_PF)
+            {
+                oportunidad.IdContacto = int.Parse(elementos[1]);
+                oportunidad.IdEmpresa = null;
+            }
+            else
+            {
+                oportunidad.IdEmpresa = int.Parse(elementos[1]);
+                oportunidad.IdContacto = null;
+            }
+
+            oportunidad.IdFuente = oportunidadModificada.IdFuente;
+            oportunidad.Observacion = string.IsNullOrEmpty(oportunidadModificada.Observacion) ? null : oportunidadModificada.Observacion;
+            oportunidad.IdSucursal = oportunidadModificada.IdSucursal;
+            oportunidad.IdPropietario = oportunidadModificada.IdPropietario;
+
+            Producto producto;
+            oportunidad.Valor = 0;
+            foreach (DetalleOportunidadDTO detalle in oportunidadModificada.Detalles)
+            {
+                producto = _context.Productos.Find(detalle.IdProducto);
+                oportunidad.Valor += detalle.Cantidad * producto.Precio;
+            }
+
+            DetalleOportunidad detalleOportunidad;
+            foreach (DetalleOportunidadDTO detalle in oportunidadModificada.Detalles)
+            {
+                detalleOportunidad = new();
                 DetalleOportunidad detalleActual = _context.DetalleOportunidads.Find(detalle.IdDetalleOportunidad);
 
                 //si no existe vamos a insertar, si existe lo actualizamos
                 if (detalleActual == null)
                 {
-                    detalleActual.IdProducto = detalle.IdProducto;
-                    detalleActual.Cantidad = detalle.Cantidad;
-                    _context.DetalleOportunidads.Add(detalleActual);
+                    detalleOportunidad.IdProducto = detalle.IdProducto;
+                    detalleOportunidad.Cantidad = detalle.Cantidad;
+                    oportunidad.DetalleOportunidads.Add(detalleOportunidad);
                 }
                 else
                 {
@@ -175,25 +219,6 @@ namespace CRM.Services.OportunidadService
                     _context.Entry(detalleActual).State = EntityState.Modified;
                 }
             }
-             */
-
-            if (id != oportunidadModificada.IdSucursal)
-            {
-                throw new ApiException("Identificador de Oportunidad no válido");
-            }
-
-            Models.Oportunidad oportunidad = _context.Oportunidads.Find(id);
-
-            if (oportunidad == null)
-                throw new ApiException("La oportunidad no existe.");
-
-            oportunidad.IdSucursal = oportunidadModificada.IdSucursal;
-            oportunidad.IdEtapa = oportunidadModificada.IdEtapa;
-            oportunidad.IdPrioridad = oportunidadModificada.IdPrioridad;
-            oportunidad.IdPropietario = oportunidadModificada.IdPropietario;
-            oportunidad.Nombre = oportunidadModificada.Nombre;
-            oportunidad.Valor = oportunidadModificada.Valor;
-            oportunidad.Observacion = oportunidadModificada.Observacion;
 
             _context.SaveChanges();
 

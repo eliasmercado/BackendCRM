@@ -61,13 +61,34 @@ namespace CRM.Controllers
         }
 
         [HttpPost]
-        public ApiResponse<object> PostCategoria(OportunidadDTO oportunidad)
+        public ApiResponse<object> PostOportunidad(OportunidadDTO oportunidad)
         {
             ApiResponse<object> response = new();
 
             try
             {
                 response.Data = OportunidadService.CrearOportunidad(oportunidad);
+            }
+            catch (ApiException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return response;
+        }
+
+        [HttpPut("{id}")]
+        public ApiResponse<object> PutOportunidad(int id, OportunidadDTO oportunidad)
+        {
+            ApiResponse<object> response = new();
+
+            try
+            {
+                response.Data = OportunidadService.ModificarOportunidad(id, oportunidad);
             }
             catch (ApiException)
             {
