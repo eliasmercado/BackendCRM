@@ -1413,6 +1413,64 @@
 					"response": []
 				},
 				{
+					"name": "Insertar Oportunidad",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nombre\": \"nombrePrueba\",\r\n    \"idEtapa\": 1,\r\n    \"fechaCierre\": \"2022-09-25T14:18:13.467\",\r\n    \"idPrioridad\": 1,\r\n    \"idContactoAsociado\": \"PF-9\",\r\n    \"idFuente\": 1,\r\n    \"observacion\": \"una observacion de test\",\r\n    \"idSucursal\": 1,\r\n    \"idPropietario\": 1,\r\n    \"detalles\": [\r\n        {\r\n            \"cantidad\": 5,\r\n            \"idProducto\": 1\r\n        },\r\n        {\r\n            \"cantidad\": 10,\r\n            \"idProducto\": 6\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url-base}}/api/oportunidad",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"oportunidad"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Oportunidades By Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url-base}}/api/oportunidad/1",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"oportunidad",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Obtener Etapas",
 					"request": {
 						"method": "GET",
@@ -1438,7 +1496,57 @@
 					"response": []
 				},
 				{
-					"name": "Obtener Contactos Asociados Copy",
+					"name": "Obtener Sucursales",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url-base}}/api/oportunidad/sucursal",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"oportunidad",
+								"sucursal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ObtenerFuentes",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url-base}}/api/oportunidad/fuente",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"oportunidad",
+								"fuente"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Contactos asociados",
 					"request": {
 						"method": "GET",
 						"header": [

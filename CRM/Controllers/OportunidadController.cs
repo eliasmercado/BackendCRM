@@ -60,6 +60,27 @@ namespace CRM.Controllers
             }
         }
 
+        [HttpPost]
+        public ApiResponse<object> PostCategoria(OportunidadDTO oportunidad)
+        {
+            ApiResponse<object> response = new();
+
+            try
+            {
+                response.Data = OportunidadService.CrearOportunidad(oportunidad);
+            }
+            catch (ApiException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return response;
+        }
+
         [HttpGet]
         [Route("contacto")]
         public ApiResponse<List<DetalleContactoDTO>> GetContactosAsociados([FromQuery] bool esLead = false)

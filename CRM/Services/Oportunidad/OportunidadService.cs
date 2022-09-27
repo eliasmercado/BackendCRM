@@ -1,6 +1,7 @@
 ﻿using CRM.DTOs.Oportunidad;
 using CRM.Helpers;
 using CRM.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -104,8 +105,78 @@ namespace CRM.Services.OportunidadService
             return oportunidadDto;
         }
 
+        public string CrearOportunidad(OportunidadDTO oportunidadNueva)
+        {
+            Oportunidad oportunidad = new();
+            oportunidad.Nombre = oportunidadNueva.Nombre;
+            oportunidad.IdEtapa = oportunidadNueva.IdEtapa;
+            oportunidad.FechaCreacion = DateTime.Now;
+            oportunidad.FechaCierre = oportunidadNueva.FechaCierre;
+            oportunidad.IdPrioridad = oportunidadNueva.IdPrioridad;
+
+            //para obtener el idContacto asociado hacemos un split
+            //el primer elemento es el tipo de cliente y el segundo el ID.
+            string[] elementos = oportunidadNueva.IdContactoAsociado.Split('-');
+            if (elementos[0] == Defs.CLIENTE_PF)
+            {
+                oportunidad.IdContacto = int.Parse(elementos[1]);
+                oportunidad.IdEmpresa = null;
+            }
+            else
+            {
+                oportunidad.IdEmpresa = int.Parse(elementos[1]);
+                oportunidad.IdContacto = null;
+            }
+            oportunidad.IdFuente = oportunidadNueva.IdFuente;
+            oportunidad.Observacion = string.IsNullOrEmpty(oportunidadNueva.Observacion) ? null : oportunidadNueva.Observacion;
+            oportunidad.IdSucursal = oportunidadNueva.IdSucursal;
+            oportunidad.IdPropietario = oportunidadNueva.IdPropietario;
+
+            Producto producto;
+            foreach (DetalleOportunidadDTO detalle in oportunidadNueva.Detalles)
+            {
+                producto = _context.Productos.Find(detalle.IdProducto);
+                oportunidad.Valor += detalle.Cantidad * producto.Precio;
+            }
+
+            DetalleOportunidad detalleOportunidad;
+            foreach (DetalleOportunidadDTO detalle in oportunidadNueva.Detalles)
+            {
+                detalleOportunidad = new();
+                detalleOportunidad.IdProducto = detalle.IdProducto;
+                detalleOportunidad.Cantidad = detalle.Cantidad;
+                oportunidad.DetalleOportunidads.Add(detalleOportunidad);
+            }
+
+            _context.Oportunidads.Add(oportunidad);
+            _context.SaveChanges();
+
+            return "La oportunidad se agregó correctamente.";
+        }
+
         public string ModificarOportunidad(int id, OportunidadDTO oportunidadModificada)
         {
+            /*
+             *             foreach (DetalleOportunidadDTO detalle in oportunidadNueva.Detalles)
+            {
+                DetalleOportunidad detalleActual = _context.DetalleOportunidads.Find(detalle.IdDetalleOportunidad);
+
+                //si no existe vamos a insertar, si existe lo actualizamos
+                if (detalleActual == null)
+                {
+                    detalleActual.IdProducto = detalle.IdProducto;
+                    detalleActual.Cantidad = detalle.Cantidad;
+                    _context.DetalleOportunidads.Add(detalleActual);
+                }
+                else
+                {
+                    detalleActual.IdProducto = detalle.IdProducto;
+                    detalleActual.Cantidad = detalle.Cantidad;
+                    _context.Entry(detalleActual).State = EntityState.Modified;
+                }
+            }
+             */
+
             if (id != oportunidadModificada.IdSucursal)
             {
                 throw new ApiException("Identificador de Oportunidad no válido");
@@ -127,28 +198,6 @@ namespace CRM.Services.OportunidadService
             _context.SaveChanges();
 
             return "La Oportunidad se modificó correctamente.";
-        }
-
-        public string CrearOportunidad(OportunidadDTO oportunidadlNueva)
-        {
-
-            Models.Oportunidad oportunidad = new()
-            {
-                IdSucursal = oportunidadlNueva.IdSucursal,
-                FechaCierre = oportunidadlNueva.FechaCierre,
-                IdEtapa = oportunidadlNueva.IdEtapa,
-                IdFuente = oportunidadlNueva.IdFuente,
-                IdPrioridad = oportunidadlNueva.IdPrioridad,
-                IdPropietario = oportunidadlNueva.IdPropietario,
-                Nombre = oportunidadlNueva.Nombre,
-                Valor = oportunidadlNueva.Valor,
-                Observacion = oportunidadlNueva.Observacion
-
-            };
-            _context.Oportunidads.Add(oportunidad);
-            _context.SaveChanges();
-
-            return "La sucuoportunidadrsal se agregó correctamente.";
         }
 
         public List<DetalleContactoDTO> ObtenerListaContactos(bool esLead)
@@ -278,11 +327,11 @@ namespace CRM.Services.OportunidadService
         public List<FuenteDTO> ObtenerFuentes()
         {
             List<FuenteDTO> fuentes = (from fuente in _context.Fuentes
-                                                  select new FuenteDTO()
-                                                  {
-                                                      IdFuente = fuente.IdFuente,
-                                                      Fuente = fuente.Descripcion
-                                                  }).ToList();
+                                       select new FuenteDTO()
+                                       {
+                                           IdFuente = fuente.IdFuente,
+                                           Fuente = fuente.Descripcion
+                                       }).ToList();
             return fuentes;
         }
     }
