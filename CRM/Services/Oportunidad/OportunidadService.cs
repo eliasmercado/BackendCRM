@@ -52,7 +52,7 @@ namespace CRM.Services.OportunidadService
                 listaOportunidadesDto.Add(oportunidadDto);
             }
 
-            return listaOportunidadesDto.OrderByDescending(x => x.FechaCreacion).ToList();
+            return listaOportunidadesDto.OrderByDescending(x => x.FechaCreacion).Where(x => x.Etapa != Defs.OPORTUNIDAD_CANCELADA).ToList();
         }
 
         /// <summary>
@@ -107,6 +107,9 @@ namespace CRM.Services.OportunidadService
 
         public string CrearOportunidad(OportunidadDTO oportunidadNueva)
         {
+            //para identificar si es un contacto o empresa.
+            bool esPF = true;
+
             Oportunidad oportunidad = new();
             oportunidad.Nombre = oportunidadNueva.Nombre;
             oportunidad.IdEtapa = oportunidadNueva.IdEtapa;
@@ -117,15 +120,19 @@ namespace CRM.Services.OportunidadService
             //para obtener el idContacto asociado hacemos un split
             //el primer elemento es el tipo de cliente y el segundo el ID.
             string[] elementos = oportunidadNueva.IdContactoAsociado.Split('-');
+            int idContactoAsociado = int.Parse(elementos[1]);
+
             if (elementos[0] == Defs.CLIENTE_PF)
             {
                 oportunidad.IdContacto = int.Parse(elementos[1]);
                 oportunidad.IdEmpresa = null;
+                esPF = true;
             }
             else
             {
                 oportunidad.IdEmpresa = int.Parse(elementos[1]);
                 oportunidad.IdContacto = null;
+                esPF = false;
             }
             oportunidad.IdFuente = oportunidadNueva.IdFuente;
             oportunidad.Observacion = string.IsNullOrEmpty(oportunidadNueva.Observacion) ? null : oportunidadNueva.Observacion;
@@ -148,6 +155,25 @@ namespace CRM.Services.OportunidadService
                 oportunidad.DetalleOportunidads.Add(detalleOportunidad);
             }
 
+            //Verificamos si la etapa es cerrada ganada, en caso de que el cliente sea Lead va pasar a ser un contacto
+            Etapa etapa = _context.Etapas.Find(oportunidadNueva.IdEtapa);
+
+            if (etapa.Descripcion == Defs.OPORTUNIDAD_GANADA)
+            {
+                if (esPF)
+                {
+                    Contacto contacto = _context.Contactos.Where(x => x.IdContacto == idContactoAsociado).FirstOrDefault();
+                    contacto.EsLead = false;
+                    _context.Entry(contacto).State = EntityState.Modified;
+                }
+                else
+                {
+                    Empresa empresa = _context.Empresas.Where(x => x.IdEmpresa == idContactoAsociado).FirstOrDefault();
+                    empresa.EsLead = false;
+                    _context.Entry(empresa).State = EntityState.Modified;
+                }
+            }
+
             _context.Oportunidads.Add(oportunidad);
             _context.SaveChanges();
 
@@ -161,6 +187,9 @@ namespace CRM.Services.OportunidadService
                 throw new ApiException("Identificador de Oportunidad no válido");
             }
 
+            //para identificar si es un contacto o empresa.
+            bool esPF = true;
+
             Oportunidad oportunidad = _context.Oportunidads.Find(id);
 
             if (oportunidad == null)
@@ -171,19 +200,22 @@ namespace CRM.Services.OportunidadService
             oportunidad.FechaCierre = oportunidadModificada.FechaCierre;
             oportunidad.IdPrioridad = oportunidadModificada.IdPrioridad;
 
-
             //para obtener el idContacto asociado hacemos un split
             //el primer elemento es el tipo de cliente y el segundo el ID.
             string[] elementos = oportunidadModificada.IdContactoAsociado.Split('-');
+            int idContactoAsociado = int.Parse(elementos[1]);
+
             if (elementos[0] == Defs.CLIENTE_PF)
             {
                 oportunidad.IdContacto = int.Parse(elementos[1]);
                 oportunidad.IdEmpresa = null;
+                esPF = true;
             }
             else
             {
                 oportunidad.IdEmpresa = int.Parse(elementos[1]);
                 oportunidad.IdContacto = null;
+                esPF = false;
             }
 
             oportunidad.IdFuente = oportunidadModificada.IdFuente;
@@ -200,10 +232,12 @@ namespace CRM.Services.OportunidadService
             }
 
             DetalleOportunidad detalleOportunidad;
+            List<DetalleOportunidad> detallesOportunidad = _context.DetalleOportunidads.Where(x => x.IdOportunidad == oportunidadModificada.IdOportunidad).ToList();
+            List<int> idDetallesActualizados = new();
             foreach (DetalleOportunidadDTO detalle in oportunidadModificada.Detalles)
             {
                 detalleOportunidad = new();
-                DetalleOportunidad detalleActual = _context.DetalleOportunidads.Find(detalle.IdDetalleOportunidad);
+                DetalleOportunidad detalleActual = detallesOportunidad.Find(x => x.IdDetalleOportunidad == detalle.IdDetalleOportunidad);
 
                 //si no existe vamos a insertar, si existe lo actualizamos
                 if (detalleActual == null)
@@ -217,6 +251,33 @@ namespace CRM.Services.OportunidadService
                     detalleActual.IdProducto = detalle.IdProducto;
                     detalleActual.Cantidad = detalle.Cantidad;
                     _context.Entry(detalleActual).State = EntityState.Modified;
+                }
+                idDetallesActualizados.Add(detalle.IdDetalleOportunidad);
+            }
+
+            //Si existen registros que ya no vinieron en el detalle tenemos que borrar de la BD
+            foreach (DetalleOportunidad detalleOp in detallesOportunidad)
+            {
+                if (!idDetallesActualizados.Contains(detalleOp.IdDetalleOportunidad))
+                    _context.Remove(detalleOp);
+            }
+
+            //Verificamos si la etapa es cerrada ganada, en caso de que el cliente sea Lead va pasar a ser un contacto
+            Etapa etapa = _context.Etapas.Find(oportunidadModificada.IdEtapa);
+
+            if (etapa.Descripcion == Defs.OPORTUNIDAD_GANADA)
+            {
+                if(esPF)
+                {
+                    Contacto contacto = _context.Contactos.Where(x => x.IdContacto == idContactoAsociado).FirstOrDefault();
+                    contacto.EsLead = false;
+                    _context.Entry(contacto).State = EntityState.Modified;
+                }
+                else
+                {
+                    Empresa empresa = _context.Empresas.Where(x => x.IdEmpresa == idContactoAsociado).FirstOrDefault();
+                    empresa.EsLead = false;
+                    _context.Entry(empresa).State = EntityState.Modified;
                 }
             }
 
