@@ -4,6 +4,7 @@ using CRM.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -38,7 +39,7 @@ namespace CRM.Services.OportunidadService
                 oportunidadDto.FechaCreacion = oportunidad.FechaCreacion;
                 oportunidadDto.Etapa = (from etapa in _context.Etapas where etapa.IdEtapa == oportunidad.IdEtapa select etapa.Descripcion).FirstOrDefault();
                 oportunidadDto.Prioridad = (from prioridad in _context.Prioridads where prioridad.IdPrioridad == oportunidad.IdPrioridad select prioridad.Descripcion).FirstOrDefault();
-                oportunidadDto.Valor = oportunidad.Valor;
+                oportunidadDto.Valor =  "Gs " + oportunidad.Valor.ToString("N0", new CultureInfo("es-PY")); ;
                 oportunidadDto.Propietario = (from propietario in _context.Usuarios where propietario.IdUsuario == oportunidad.IdPropietario select propietario.Nombres + " " + propietario.Apellidos).FirstOrDefault();
 
                 contactoAsociado = ObtenerContacto(oportunidad);

@@ -15,7 +15,7 @@ namespace CRM.DTOs.Oportunidad
         public DateTime FechaCreacion { get; set; }
         public string Etapa { get; set; }
         public string Prioridad { get; set; }
-        public decimal Valor { get; set; }
+        public string Valor { get; set; }
         public string TipoCliente { get; set; }
         public string Contacto { get; set; }
         public string Propietario { get; set; }
