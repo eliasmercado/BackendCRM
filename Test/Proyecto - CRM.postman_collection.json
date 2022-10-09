@@ -1308,6 +1308,207 @@
 			]
 		},
 		{
+			"name": "Sucursales",
+			"item": [
+				{
+					"name": "Obtener Sucursales",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url-base}}/api/sucursal",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"sucursal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Sucursales Por Id",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url-base}}/api/sucursal/1",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"sucursal",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Agregar Sucursal",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"descripcion\": \"sucursal mariano\",\r\n    \"idCiudad\": 1,\r\n    \"direccion\": \"ruta 3\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url-base}}/api/sucursal",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"sucursal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Modificar Sucursal",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"idSucursal\": 3,\r\n    \"descripcion\": \"sucursal mariano1\",\r\n    \"idCiudad\": 1,\r\n    \"direccion\": \"ruta 31\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url-base}}/api/sucursal/3",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"sucursal",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar Sucursal",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url-base}}/api/sucursal/3",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"sucursal",
+								"3"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Usuarios",
 			"item": [
 				{
@@ -1440,6 +1641,40 @@
 							"path": [
 								"api",
 								"oportunidad"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Modificar Oportunidad",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"idOportunidad\": 13,\r\n    \"nombre\": \"nombrePrueba\",\r\n    \"idEtapa\": 2,\r\n    \"fechaCierre\": \"2022-09-25T14:18:13.467\",\r\n    \"idPrioridad\": 2,\r\n    \"idContactoAsociado\": \"PF-9\",\r\n    \"idFuente\": 1,\r\n    \"observacion\": \"una observacion de test\",\r\n    \"idSucursal\": 2,\r\n    \"idPropietario\": 1,\r\n    \"detalles\": [\r\n        {\r\n            \"idDetalleOportunidad\": 0,\r\n            \"cantidad\": 1,\r\n            \"idProducto\": 6\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url-base}}/api/oportunidad/13",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"oportunidad",
+								"13"
 							]
 						}
 					},
