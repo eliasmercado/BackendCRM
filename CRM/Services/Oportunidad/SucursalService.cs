@@ -1,14 +1,14 @@
-﻿using CRM.DTOs.Oportunidad;
+﻿using CRM.DTOs.Sucursal;
 using CRM.Helpers;
 using CRM.Models;
-using System;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace CRM.Services.SucursalService
 {
     public class SucursalService
+
     {
         private CrmDbContext _context;
 
@@ -17,33 +17,34 @@ namespace CRM.Services.SucursalService
             _context = context;
         }
 
-        public List<SucursalDTO> ObtenerListaSucursales()
+        public List<SucursalDTO> ObtenerSucursales()
         {
             List<SucursalDTO> listaSucursales = (from sucursal in _context.Sucursals
-                                          select new SucursalDTO()
-                                          {
-                                              IdSucursal = sucursal.IdSucursal,
-                                              IdCiudad = sucursal.IdCiudad,
-                                              Descripcion = sucursal.Descripcion,
-                                              Direccion = sucursal.Direccion
-
-                                          }).ToList();
+                                                 select new SucursalDTO()
+                                                 {
+                                                     IdSucursal = sucursal.IdSucursal,
+                                                     Descripcion = sucursal.Descripcion,
+                                                     Direccion = sucursal.Direccion,
+                                                     IdCiudad = sucursal.IdCiudad,
+                                                     IdDepartamento = _context.Ciudads.Where(x => x.IdCiudad == sucursal.IdCiudad).FirstOrDefault().IdDepartamento,
+                                                     Ciudad = _context.Ciudads.Where(x => x.IdCiudad == sucursal.IdCiudad).FirstOrDefault().Descripcion,
+                                                     Departamento = _context.Departamentos.Where(x => x.IdDepartamento == _context.Ciudads.Where(x => x.IdCiudad == sucursal.IdCiudad).FirstOrDefault().IdDepartamento).FirstOrDefault().Descripcion,
+                                                 }).ToList();
 
             return listaSucursales;
         }
 
-        public SucursalDTO ObtenerSucursalById(int id)
+        public SucursalDTO ObtenerSucursal(int id)
         {
             SucursalDTO sucursalDTO = (from sucursal in _context.Sucursals
-                                 where sucursal.IdSucursal == id
-                                 select new SucursalDTO()
-                                 {
-                                     IdSucursal = sucursal.IdSucursal,
-                                     IdCiudad = sucursal.IdCiudad,
-                                     Descripcion = sucursal.Descripcion,
-                                     Direccion = sucursal.Direccion
-
-                                 }).FirstOrDefault();
+                                       where sucursal.IdSucursal == id
+                                       select new SucursalDTO()
+                                       {
+                                           IdSucursal = sucursal.IdSucursal,
+                                           Descripcion = sucursal.Descripcion,
+                                           Direccion = sucursal.Direccion,
+                                           IdCiudad = sucursal.IdCiudad
+                                       }).FirstOrDefault();
 
             return sucursalDTO;
         }
@@ -55,13 +56,14 @@ namespace CRM.Services.SucursalService
                 throw new ApiException("Identificador de Sucursal no válido");
             }
 
-            Models.Sucursal sucursal = _context.Sucursals.Find(id);
+            Sucursal sucursal = _context.Sucursals.Find(id);
 
             if (sucursal == null)
                 throw new ApiException("La sucursal no existe.");
 
-            sucursal.Direccion = sucursalModificada.Direccion;
-            sucursal.Descripcion = string.IsNullOrEmpty(sucursalModificada.Descripcion) ? null : sucursalModificada.Descripcion ;
+            sucursal.IdCiudad = sucursalModificada.IdCiudad;
+            sucursal.Descripcion = string.IsNullOrEmpty(sucursalModificada.Descripcion) ? null : sucursalModificada.Descripcion;
+            sucursal.Direccion = string.IsNullOrEmpty(sucursalModificada.Direccion) ? null : sucursalModificada.Direccion;
 
             _context.SaveChanges();
 
@@ -70,18 +72,30 @@ namespace CRM.Services.SucursalService
 
         public string CrearSucursal(SucursalDTO sucursalNueva)
         {
-
-            Models.Sucursal sucursal = new()
+            Sucursal sucursal = new()
             {
+                Direccion = string.IsNullOrEmpty(sucursalNueva.Direccion) ? null : sucursalNueva.Direccion,
                 IdCiudad = sucursalNueva.IdCiudad,
-                Descripcion = sucursalNueva.Descripcion,
-                Direccion = sucursalNueva.Direccion,
-                
+                Descripcion = string.IsNullOrEmpty(sucursalNueva.Descripcion) ? null : sucursalNueva.Descripcion,
             };
             _context.Sucursals.Add(sucursal);
             _context.SaveChanges();
 
             return "La sucursal se agregó correctamente.";
         }
+
+        public string EliminarSucursal(int id)
+        {
+            Sucursal sucursal = _context.Sucursals.Where(x => x.IdSucursal == id).FirstOrDefault();
+
+            if (sucursal == null)
+                throw new ApiException("La sucursal no existe.");
+
+            _context.Entry(sucursal).State = EntityState.Deleted;
+            _context.SaveChanges();
+
+            return "La sucursal se eliminó correctamente.";
+        }
     }
+
 }
