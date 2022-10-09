@@ -24,6 +24,7 @@ namespace CRM.DTOs.Seguridad
         public string DireccionLaboral { get; set; }
         public string TelefonoLaboral { get; set; }
         public string CorreoLaboral { get; set; }
+        public bool EsLead{ get; set; }
         public int IdPropietario { get; set; }
     }
 }

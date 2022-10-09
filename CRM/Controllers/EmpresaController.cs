@@ -23,13 +23,13 @@ namespace CRM.Controllers
 
         // GET: api/Contacto
         [HttpGet]
-        public ApiResponse<List<EmpresaDTO>> GetEmpresas()
+        public ApiResponse<List<EmpresaDTO>> GetEmpresas([FromQuery] bool esLead = false)
         {
             try
             {
                 ApiResponse<List<EmpresaDTO>> response = new();
 
-                response.Data = EmpresaService.ObtenerListaEmpresas();
+                response.Data = EmpresaService.ObtenerListaEmpresas(esLead);
 
                 return response;
             }
@@ -41,13 +41,13 @@ namespace CRM.Controllers
 
         // GET: api/Contacto/5
         [HttpGet("{id}")]
-        public ApiResponse<EmpresaDTO> GetEmpresa(int id)
+        public ApiResponse<EmpresaDTO> GetEmpresa(int id, [FromQuery] bool esLead = false)
         {
             try
             {
                 ApiResponse<EmpresaDTO> response = new();
 
-                var empresa = EmpresaService.ObtenerEmpresaById(id);
+                var empresa = EmpresaService.ObtenerEmpresaById(id, esLead);
                 if (empresa != null)
                     response.Data = empresa;
                 else
