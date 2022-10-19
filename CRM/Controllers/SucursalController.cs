@@ -1,35 +1,37 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CRM.DTOs.Sucursal;
+using CRM.Helpers;
+using CRM.Models;
+using CRM.Services.SucursalService;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Authorization;
-using CRM.Models;
-using CRM.DTOs.Empresa;
-using CRM.Helpers;
-using CRM.Services.EmpresaService;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace CRM.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class EmpresaController : ControllerBase
+    public class SucursalController : ControllerBase
     {
-        private readonly EmpresaService EmpresaService;
+        private readonly SucursalService SucursalService;
 
-        public EmpresaController(CrmDbContext context)
+        public SucursalController(CrmDbContext context)
         {
-            EmpresaService = new EmpresaService(context);
+            SucursalService = new SucursalService(context);
         }
 
-        // GET: api/Contacto
         [HttpGet]
-        public ApiResponse<List<EmpresaDTO>> GetEmpresas([FromQuery] bool esLead = false)
+        public ApiResponse<List<SucursalDTO>> GetSucursales()
         {
             try
             {
-                ApiResponse<List<EmpresaDTO>> response = new();
+                ApiResponse<List<SucursalDTO>> response = new();
 
-                response.Data = EmpresaService.ObtenerListaEmpresas(esLead);
+                response.Data = SucursalService.ObtenerSucursales();
 
                 return response;
             }
@@ -39,19 +41,18 @@ namespace CRM.Controllers
             }
         }
 
-        // GET: api/Contacto/5
         [HttpGet("{id}")]
-        public ApiResponse<EmpresaDTO> GetEmpresa(int id, [FromQuery] bool esLead = false)
+        public ApiResponse<SucursalDTO> GetSucursal(int id)
         {
             try
             {
-                ApiResponse<EmpresaDTO> response = new();
+                ApiResponse<SucursalDTO> response = new();
 
-                var empresa = EmpresaService.ObtenerEmpresaById(id, esLead);
-                if (empresa != null)
-                    response.Data = empresa;
+                var sucursal = SucursalService.ObtenerSucursal(id);
+                if (sucursal != null)
+                    response.Data = sucursal;
                 else
-                    throw new ApiException("No se encontró empresa");
+                    throw new ApiException("No se encontró la sucursal");
 
                 return response;
             }
@@ -65,14 +66,13 @@ namespace CRM.Controllers
             }
         }
 
-        [HttpPut("{id}")]
-        public ApiResponse<object> PutEmpresa(int id, EmpresaDTO empresa)
+        [HttpPost]
+        public ApiResponse<object> PostSucursal(SucursalDTO sucursal)
         {
             ApiResponse<object> response = new();
-
             try
             {
-                response.Data = EmpresaService.ModificarEmpresa(id, empresa);
+                response.Data = SucursalService.CrearSucursal(sucursal);
             }
             catch (ApiException)
             {
@@ -86,13 +86,14 @@ namespace CRM.Controllers
             return response;
         }
 
-        [HttpPost]
-        public ApiResponse<object> PostEmpresa(EmpresaDTO empresa)
+        [HttpPut("{id}")]
+        public ApiResponse<object> PutSucursal(int id, SucursalDTO marca)
         {
             ApiResponse<object> response = new();
+
             try
             {
-                response.Data = EmpresaService.CrearEmpresa(empresa);
+                response.Data = SucursalService.ModificarSucursal(id, marca);
             }
             catch (ApiException)
             {
@@ -107,12 +108,13 @@ namespace CRM.Controllers
         }
 
         [HttpDelete("{id}")]
-        public ApiResponse<object> DeleteEmpresa(int id)
+        public ApiResponse<object> DeleteSucursal(int id)
         {
             ApiResponse<object> response = new();
+
             try
             {
-                response.Data = EmpresaService.EliminarEmpresa(id);
+                response.Data = SucursalService.EliminarSucursal(id);
             }
             catch (ApiException)
             {

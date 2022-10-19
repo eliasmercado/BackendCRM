@@ -18,6 +18,7 @@ namespace CRM.DTOs.Empresa
         public string Direccion { get; set; }
         public string NombreRepresentante { get; set; }
         public string CelularRepresentante { get; set; }
+        public bool EsLead { get; set; }
         public int IdPropietario { get; set; }
     }
 }

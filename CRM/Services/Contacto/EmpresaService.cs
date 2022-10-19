@@ -21,10 +21,10 @@ namespace CRM.Services.EmpresaService
         /// Obtiene una Empresa dada su Id
         /// </summary>
         /// <returns></returns>
-        public List<EmpresaDTO> ObtenerListaEmpresas()
+        public List<EmpresaDTO> ObtenerListaEmpresas(bool esLead)
         {
             List<EmpresaDTO> listaEmpresas = (from empresa in _context.Empresas
-                                              where empresa.Estado && !empresa.EsLead
+                                              where empresa.Estado && empresa.EsLead == esLead
                                               select new EmpresaDTO()
                                               {
                                                   IdEmpresa = empresa.IdEmpresa,
@@ -44,10 +44,10 @@ namespace CRM.Services.EmpresaService
             return listaEmpresas;
         }
 
-        public EmpresaDTO ObtenerEmpresaById(int id)
+        public EmpresaDTO ObtenerEmpresaById(int id, bool esLead)
         {
             EmpresaDTO contacto = (from empresa in _context.Empresas
-                                   where empresa.Estado && !empresa.EsLead && empresa.IdEmpresa == id
+                                   where empresa.Estado && empresa.EsLead == esLead && empresa.IdEmpresa == id
                                    select new EmpresaDTO()
                                    {
                                        IdEmpresa = empresa.IdEmpresa,
@@ -89,6 +89,7 @@ namespace CRM.Services.EmpresaService
             empresa.NombreRepresentante = empresaModificada.NombreRepresentante;
             empresa.CelularRepresentante = empresaModificada.CelularRepresentante;
             empresa.IdPropietario = empresaModificada.IdPropietario;
+            empresa.EsLead = empresaModificada.EsLead;
 
             _context.SaveChanges();
 
@@ -110,7 +111,7 @@ namespace CRM.Services.EmpresaService
                 NombreRepresentante = empresaNueva.NombreRepresentante,
                 CelularRepresentante = empresaNueva.CelularRepresentante,
                 IdPropietario = empresaNueva.IdPropietario,
-                EsLead = false
+                EsLead = empresaNueva.EsLead
             };
             _context.Empresas.Add(empresa);
             _context.SaveChanges();

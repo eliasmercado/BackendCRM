@@ -23,10 +23,10 @@ namespace CRM.Services.ContactoService
         /// Obtiene un contacto dado su Id
         /// </summary>
         /// <returns></returns>
-        public List<ContactoDTO> ObtenerListaContactos()
+        public List<ContactoDTO> ObtenerListaContactos(bool esLead)
         {
             List<ContactoDTO> listaContacto = (from contacto in _context.Contactos
-                                               where contacto.Estado && !contacto.EsLead
+                                               where contacto.Estado && contacto.EsLead == esLead
                                                select new ContactoDTO()
                                                {
                                                    IdContacto = contacto.IdContacto,
@@ -52,10 +52,10 @@ namespace CRM.Services.ContactoService
             return listaContacto;
         }
 
-        public ContactoDTO ObtenerContactoById(int id)
+        public ContactoDTO ObtenerContactoById(int id, bool esLead)
         {
             ContactoDTO contacto = (from contact in _context.Contactos
-                                    where contact.Estado && !contact.EsLead && contact.IdContacto == id
+                                    where contact.Estado && contact.EsLead == esLead && contact.IdContacto == id
                                     select new ContactoDTO()
                                     {
                                         IdContacto = contact.IdContacto,
@@ -109,6 +109,7 @@ namespace CRM.Services.ContactoService
             contacto.TelefonoLaboral = contactoModificado.TelefonoLaboral;
             contacto.CorreoLaboral = contactoModificado.CorreoLaboral;
             contacto.IdPropietario = contactoModificado.IdPropietario;
+            contacto.EsLead = contactoModificado.EsLead;
             _context.SaveChanges();
 
             return "El contacto se modificó correctamente.";
@@ -134,7 +135,7 @@ namespace CRM.Services.ContactoService
                 TelefonoLaboral = contactoNuevo.TelefonoLaboral,
                 CorreoLaboral = contactoNuevo.CorreoLaboral,
                 IdPropietario = contactoNuevo.IdPropietario,
-                EsLead = false
+                EsLead = contactoNuevo.EsLead
             };
             _context.Contactos.Add(contacto);
             _context.SaveChanges();
