@@ -287,6 +287,22 @@ namespace CRM.Services.OportunidadService
             return "La Oportunidad se modificó correctamente.";
         }
 
+        public string ModificarEtapaOportunidad(int id, string etapa)
+        {
+            Oportunidad oportunidad = _context.Oportunidads.Find(id);
+
+            if (oportunidad == null)
+                throw new ApiException("La oportunidad no existe.");
+
+            int idEtapa = _context.Etapas.Where(x => x.Descripcion == etapa).FirstOrDefault().IdEtapa;
+
+            oportunidad.IdEtapa = idEtapa;
+
+            _context.SaveChanges();
+
+            return "La etapa se modificó correctamente.";
+        }
+
         public List<DetalleContactoDTO> ObtenerListaContactos(bool esLead)
         {
             List<DetalleContactoDTO> contactos = (from contacto in _context.Contactos

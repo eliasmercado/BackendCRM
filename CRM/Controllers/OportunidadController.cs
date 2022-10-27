@@ -81,6 +81,27 @@ namespace CRM.Controllers
             return response;
         }
 
+        [HttpPut("actualizar-etapa/{idOportunidad}")]
+        public ApiResponse<object> ModificarEtapaOportunidad(int idOportunidad, [FromQuery] string etapa)
+        {
+            ApiResponse<object> response = new();
+
+            try
+            {
+                response.Data = OportunidadService.ModificarEtapaOportunidad(idOportunidad, etapa);
+            }
+            catch (ApiException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return response;
+        }
+
         [HttpPut("{id}")]
         public ApiResponse<object> PutOportunidad(int id, OportunidadDTO oportunidad)
         {
