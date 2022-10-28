@@ -16,6 +16,9 @@ namespace CRM.Helpers
         public const string CLIENTE_PF = "PF";
         public const string CLIENTE_PJ = "PJ";
         public const string OPORTUNIDAD_CANCELADA = "Cancelada";
-        public const string OPORTUNIDAD_GANADA= "Cerrada Ganada";
+        public const string OPORTUNIDAD_GANADA = "Cerrada Ganada";
+        public const string CONTACTO = "Contacto";
+        public const string EMPRESA = "Empresa";
+        public const string OPORTUNIDAD = "Oportunidad";
     }
 }
