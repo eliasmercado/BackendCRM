@@ -77,6 +77,48 @@ namespace CRM.Controllers
             }
         }
 
+        [HttpPost]
+        public ApiResponse<object> PostTarea(TareaDTO tarea)
+        {
+            ApiResponse<object> response = new();
+
+            try
+            {
+                response.Data = TareaService.CrearTarea(tarea);
+            }
+            catch (ApiException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return response;
+        }
+
+        [HttpPut("{id}")]
+        public ApiResponse<object> PutTarea(int id, TareaDTO tarea)
+        {
+            ApiResponse<object> response = new();
+
+            try
+            {
+                response.Data = TareaService.ModificarTarea(id, tarea);
+            }
+            catch (ApiException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return response;
+        }
+
         [HttpGet]
         [Route("tipo")]
         public ApiResponse<List<TipoTareaDTO>> GetTipoTarea()

@@ -19,118 +19,213 @@ namespace CRM.Services.Actividad
 
         public List<ListaTareaDTO> ObtenerListaTareas()
         {
-            return new List<ListaTareaDTO>
-            {
-                new ListaTareaDTO
-                {
-                    IdTarea = 1,
-                    Titulo = "Nueva Tarea",
-                    FechaInicio = DateTime.Now,
-                    FechaCierre = DateTime.Now,
-                    Estado = "Abierto",
-                    Tipo = "Llamada",
-                    Responsable = "Elias Mercado"
-                }
-            };
+            List<ListaTareaDTO> tareas = (from tarea in _context.Tareas
+                                          select new ListaTareaDTO
+                                          {
+                                              IdTarea = tarea.IdTarea,
+                                              Titulo = tarea.Titulo,
+                                              FechaInicio = tarea.FechaInicio,
+                                              FechaCierre = tarea.FechaCierre,
+                                              FechaCreacion = tarea.FechaCreacion,
+                                              Estado = _context.EstadoActividads.Where(x => x.IdEstadoActividad == tarea.IdEstadoActividad).Select(x => x.Descripcion).FirstOrDefault(),
+                                              Tipo = _context.TipoTareas.Where(x => x.IdTipoTarea == tarea.IdTipoTarea).Select(x => x.Descripcion).FirstOrDefault(),
+                                              Responsable = _context.Usuarios.Where(x => x.IdUsuario == tarea.IdUsuarioResponsable).Select(x => x.Nombres + " " + x.Apellidos).FirstOrDefault()
+                                          }).ToList();
+
+            return tareas.OrderByDescending(x => x.FechaCreacion).OrderByDescending(x => x.FechaInicio).ToList();
         }
 
         public TareaDTO ObtenerTareaById(int idTarea)
         {
-            TareaDTO tarea = new TareaDTO
+            Tarea tarea = _context.Tareas.Find(idTarea);
+
+            if (tarea == null)
+                throw new ApiException("La Tarea no existe");
+
+            TareaDTO tareaResponse = new TareaDTO
             {
-                IdTarea = 1,
-                Titulo = "Nueva Tarea",
-                Descripcion = "Desc Nueva Tarea",
-                FechaInicio = DateTime.Now,
-                FechaCierre = DateTime.Now,
-                IdTipo = 1,
-                IdEstado = 1,
-                IdResponsable = 1,
-                IdContactoAsociado = 9
+                IdTarea = tarea.IdTarea,
+                Titulo = tarea.Titulo,
+                Descripcion = tarea.Descripcion,
+                FechaInicio = tarea.FechaInicio,
+                FechaCierre = tarea.FechaCierre,
+                IdTipo = tarea.IdTipoTarea,
+                IdEstado = tarea.IdEstadoActividad,
+                IdResponsable = tarea.IdUsuarioResponsable,
+                IdContactoAsociado = tarea.IdContacto,
+                IdEmpresaAsociada = tarea.IdEmpresa,
+                IdOportunidadAsociada = tarea.IdOportunidad
             };
 
-            if (tarea.IdContactoAsociado != null)
-                tarea.AsociarCon = Defs.CONTACTO;
-            else if (tarea.IdEmpresaAsociada != null)
-                tarea.AsociarCon = Defs.EMPRESA;
-            else if (tarea.IdContactoAsociado != null)
-                tarea.AsociarCon = Defs.OPORTUNIDAD;
+            if (tareaResponse.IdContactoAsociado != null)
+                tareaResponse.AsociarCon = Defs.CONTACTO;
+            else if (tareaResponse.IdEmpresaAsociada != null)
+                tareaResponse.AsociarCon = Defs.EMPRESA;
+            else if (tareaResponse.IdContactoAsociado != null)
+                tareaResponse.AsociarCon = Defs.OPORTUNIDAD;
 
-            return tarea;
+            return tareaResponse;
+        }
+
+        public string CrearTarea(TareaDTO tareaNueva)
+        {
+            Tarea tarea = new()
+            {
+                Titulo = tareaNueva.Titulo,
+                Descripcion = tareaNueva.Descripcion,
+                IdTipoTarea = tareaNueva.IdTipo,
+                IdEstadoActividad = tareaNueva.IdEstado,
+                FechaInicio = tareaNueva.FechaInicio,
+                FechaCierre = tareaNueva.FechaCierre,
+                IdUsuarioResponsable = tareaNueva.IdResponsable
+            };
+
+            if (tareaNueva.AsociarCon == Defs.CONTACTO)
+                tarea.IdContacto = tareaNueva.IdContactoAsociado;
+            else if (tareaNueva.AsociarCon == Defs.EMPRESA)
+                tarea.IdEmpresa = tareaNueva.IdEmpresaAsociada;
+            else if (tareaNueva.AsociarCon == Defs.OPORTUNIDAD)
+                tarea.IdOportunidad = tareaNueva.IdOportunidadAsociada;
+
+            tarea.FechaCreacion = DateTime.Now;
+
+            _context.Tareas.Add(tarea);
+            _context.SaveChanges();
+
+            return "La tarea se agregó correctamente";
+        }
+
+        public string ModificarTarea(int id, TareaDTO tareaModificada)
+        {
+            if (id != tareaModificada.IdTarea)
+            {
+                throw new ApiException("Identificador de Tarea no válido");
+            }
+
+            Tarea tarea = _context.Tareas.Find(id);
+
+            if (tarea == null)
+                throw new ApiException("La Tarea no existe");
+
+            tarea.Titulo = tareaModificada.Titulo;
+            tarea.Descripcion = tareaModificada.Descripcion;
+            tarea.IdTipoTarea = tareaModificada.IdTipo;
+            tarea.IdEstadoActividad = tareaModificada.IdEstado;
+            tarea.FechaInicio = tareaModificada.FechaInicio;
+            tarea.FechaCierre = tareaModificada.FechaCierre;
+            tarea.IdUsuarioResponsable = tareaModificada.IdResponsable;
+
+            if (tareaModificada.AsociarCon == Defs.CONTACTO)
+            {
+                tarea.IdContacto = tareaModificada.IdContactoAsociado;
+                tarea.IdEmpresa = null;
+                tarea.IdOportunidad = null;
+            }
+            else if (tareaModificada.AsociarCon == Defs.EMPRESA)
+            {
+                tarea.IdEmpresa = tareaModificada.IdEmpresaAsociada;
+                tarea.IdContacto = null;
+                tarea.IdOportunidad = null;
+            }
+            else if (tareaModificada.AsociarCon == Defs.OPORTUNIDAD)
+            {
+                tarea.IdOportunidad = tareaModificada.IdOportunidadAsociada;
+                tarea.IdEmpresa = null;
+                tarea.IdContacto = null;
+            }
+            else
+            {
+                tarea.IdOportunidad = null;
+                tarea.IdEmpresa = null;
+                tarea.IdContacto = null;
+            }
+
+            _context.SaveChanges();
+
+            return "La tarea se modificó correctamente";
+        }
+
+        public string EliminarTarea(int id)
+        {
+            Tarea tarea = _context.Tareas.Find(id);
+
+            if (tarea == null)
+                throw new ApiException("La tarea no existe");
+
+            _context.Remove(tarea);
+            _context.SaveChanges();
+
+            return "La tarea se eliminó correctamente";
         }
 
         public List<TipoTareaDTO> ObtenerTiposTarea()
         {
-            return new List<TipoTareaDTO>
-            {
-                new TipoTareaDTO
-                {
-                    IdTipoTarea = 1,
-                    TipoTarea = "Llamada"
-                },
-                new TipoTareaDTO
-                {
-                    IdTipoTarea = 2,
-                    TipoTarea = "Correo"
-                }
+            List<TipoTarea> tipoTarea = _context.TipoTareas.ToList();
+            List<TipoTareaDTO> tipoTareaResponse = new();
 
-            };
+            foreach (var tipo in tipoTarea)
+            {
+                tipoTareaResponse.Add(new TipoTareaDTO
+                {
+                    IdTipoTarea = tipo.IdTipoTarea,
+                    TipoTarea = tipo.Descripcion
+                });
+            }
+
+            return tipoTareaResponse;
         }
 
         public List<ListaTareaCalendarioDTO> ObtenerListaTareasParaCalendario()
         {
-            return new List<ListaTareaCalendarioDTO>
+            List<Tarea> tareas = _context.Tareas.ToList();
+            List<ListaTareaCalendarioDTO> tareasCalendario = new();
+            string estadoTarea = null;
+            foreach (var tarea in tareas)
             {
                 //Vamos a pasar status number 1 cuando es tarea abierta y 0 tarea cerrado,
                 //esto es para poner colores en el calendario del Front.
                 //en todos los casos vamos a enviar allday = true porque no usamos Horas.
-                new ListaTareaCalendarioDTO
+                estadoTarea = _context.EstadoActividads.Find(tarea.IdEstadoActividad).Descripcion;
+                tareasCalendario.Add(new ListaTareaCalendarioDTO
                 {
-                    IdTarea = 1,
-                    Text = "Nueva tarea",
-                    StartDate = DateTime.Now,
-                    EndDate = DateTime.Now,
-                    StatusNumber = 1,
+                    IdTarea = tarea.IdTarea,
+                    Text = tarea.Titulo,
+                    StartDate = tarea.FechaInicio,
+                    EndDate = tarea.FechaCierre,
+                    StatusNumber = estadoTarea == Defs.TAREA_ABIERTA ? 1 : 0,
                     AllDay = true
-                },
-                new ListaTareaCalendarioDTO
-                {
-                    IdTarea = 1,
-                    Text = "Nueva tarea2",
-                    StartDate = DateTime.Now,
-                    EndDate = DateTime.Now.AddDays(2),
-                    StatusNumber = 0,
-                    AllDay = true
-                }
-            };
+                });
+            }
+
+            return tareasCalendario;
         }
 
         public List<EstadoTareaDTO> ObtenerEstadosTarea()
         {
-            return new List<EstadoTareaDTO>
+            List<EstadoActividad> estadoTarea = _context.EstadoActividads.ToList();
+            List<EstadoTareaDTO> estadoTareaResponse = new();
+
+            foreach (var estado in estadoTarea)
             {
-                new EstadoTareaDTO
+                estadoTareaResponse.Add(new EstadoTareaDTO
                 {
-                    IdEstadoTarea = 1,
-                    EstadoTarea = "Abierta"
-                },
-                new EstadoTareaDTO
-                {
-                    IdEstadoTarea =2,
-                    EstadoTarea ="Cerrada"
-                }
-            };
+                    IdEstadoTarea = estado.IdEstadoActividad,
+                    EstadoTarea = estado.Descripcion
+                });
+            }
+
+            return estadoTareaResponse;
         }
 
         public List<ContactoDTO> ObtenerListaContactos()
         {
             List<ContactoDTO> contactos = (from contacto in _context.Contactos
-                                                  where contacto.Estado && !contacto.EsLead
-                                                  select new ContactoDTO()
-                                                  {
-                                                      IdContacto = contacto.IdContacto,
-                                                      Nombre = contacto.Nombres + " " + contacto.Apellidos
-                                                  }).ToList();
+                                           where contacto.Estado && !contacto.EsLead
+                                           select new ContactoDTO()
+                                           {
+                                               IdContacto = contacto.IdContacto,
+                                               Nombre = contacto.Nombres + " " + contacto.Apellidos
+                                           }).ToList();
 
 
             return contactos;
@@ -139,12 +234,12 @@ namespace CRM.Services.Actividad
         public List<EmpresaDTO> ObtenerListaEmpresas()
         {
             List<EmpresaDTO> empresas = (from empresa in _context.Empresas
-                                           where empresa.Estado && !empresa.EsLead
-                                           select new EmpresaDTO()
-                                           {
-                                               IdEmpresa = empresa.IdEmpresa,
-                                               Nombre = empresa.Nombre
-                                           }).ToList();
+                                         where empresa.Estado && !empresa.EsLead
+                                         select new EmpresaDTO()
+                                         {
+                                             IdEmpresa = empresa.IdEmpresa,
+                                             Nombre = empresa.Nombre
+                                         }).ToList();
 
 
             return empresas;
@@ -153,13 +248,13 @@ namespace CRM.Services.Actividad
         {
             int idEtapaCancelada = _context.Etapas.Where(x => x.Descripcion == Defs.OPORTUNIDAD_CANCELADA).FirstOrDefault().IdEtapa;
 
-            List<OportunidadDTO> oportunidades= (from oportunidad in _context.Oportunidads
-                                         where oportunidad.IdEtapa != idEtapaCancelada
-                                         select new OportunidadDTO()
-                                         {
-                                             IdOportunidad = oportunidad.IdOportunidad,
-                                             Nombre = oportunidad.Nombre
-                                         }).ToList();
+            List<OportunidadDTO> oportunidades = (from oportunidad in _context.Oportunidads
+                                                  where oportunidad.IdEtapa != idEtapaCancelada
+                                                  select new OportunidadDTO()
+                                                  {
+                                                      IdOportunidad = oportunidad.IdOportunidad,
+                                                      Nombre = oportunidad.Nombre
+                                                  }).ToList();
 
             return oportunidades;
         }

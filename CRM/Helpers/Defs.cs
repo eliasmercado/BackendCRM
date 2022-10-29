@@ -20,5 +20,7 @@ namespace CRM.Helpers
         public const string CONTACTO = "Contacto";
         public const string EMPRESA = "Empresa";
         public const string OPORTUNIDAD = "Oportunidad";
+        public const string TAREA_ABIERTA = "Abierta";
+        public const string TAREA_CERRADA = "Cerrada";
     }
 }

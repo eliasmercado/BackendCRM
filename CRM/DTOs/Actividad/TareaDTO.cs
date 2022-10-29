@@ -29,6 +29,7 @@ namespace CRM.DTOs.Actividad
         public string Estado { get; set; }
         public DateTime FechaInicio { get; set; }
         public DateTime FechaCierre { get; set; }
+        public DateTime FechaCreacion { get; set; }
         public string Responsable { get; set; }
     }
 
