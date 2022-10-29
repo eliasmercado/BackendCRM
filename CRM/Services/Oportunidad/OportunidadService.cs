@@ -178,7 +178,7 @@ namespace CRM.Services.OportunidadService
             _context.Oportunidads.Add(oportunidad);
             _context.SaveChanges();
 
-            return "La oportunidad se agregó correctamente.";
+            return "La oportunidad se agregó correctamente";
         }
 
         public string ModificarOportunidad(int id, OportunidadDTO oportunidadModificada)
@@ -194,7 +194,7 @@ namespace CRM.Services.OportunidadService
             Oportunidad oportunidad = _context.Oportunidads.Find(id);
 
             if (oportunidad == null)
-                throw new ApiException("La oportunidad no existe.");
+                throw new ApiException("La oportunidad no existe");
 
             oportunidad.Nombre = oportunidadModificada.Nombre;
             oportunidad.IdEtapa = oportunidadModificada.IdEtapa;
@@ -284,7 +284,7 @@ namespace CRM.Services.OportunidadService
 
             _context.SaveChanges();
 
-            return "La Oportunidad se modificó correctamente.";
+            return "La Oportunidad se modificó correctamente";
         }
 
         public string ModificarEtapaOportunidad(int id, string etapa)
@@ -292,7 +292,7 @@ namespace CRM.Services.OportunidadService
             Oportunidad oportunidad = _context.Oportunidads.Find(id);
 
             if (oportunidad == null)
-                throw new ApiException("La oportunidad no existe.");
+                throw new ApiException("La oportunidad no existe");
 
             int idEtapa = _context.Etapas.Where(x => x.Descripcion == etapa).FirstOrDefault().IdEtapa;
 
@@ -300,7 +300,7 @@ namespace CRM.Services.OportunidadService
 
             _context.SaveChanges();
 
-            return "La etapa se modificó correctamente.";
+            return "La etapa se modificó correctamente";
         }
 
         public List<DetalleContactoDTO> ObtenerListaContactos(bool esLead)

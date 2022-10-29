@@ -28,7 +28,7 @@ namespace CRM.Services.Seguridad
             Usuario user = _context.Usuarios.Where(x => x.UserName == usuario).FirstOrDefault();
 
             if (user == null)
-                throw new ApiException("El usuario no existe.");
+                throw new ApiException("El usuario no existe");
 
             if (user.Password == password)
             {
@@ -45,7 +45,7 @@ namespace CRM.Services.Seguridad
                 };
             }
             else
-                throw new ApiException("Credenciales inválidas.");
+                throw new ApiException("La contraseña es incorrecta");
         }
     }
 }

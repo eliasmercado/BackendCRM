@@ -90,10 +90,10 @@ namespace CRM.Services.CategoriaService
             Categoria categoria = _context.Categoria.Find(id);
 
             if (categoria == null)
-                throw new ApiException("La categoria no existe.");
+                throw new ApiException("La categoria no existe");
 
             if (categoria.IdCategoriaPadre == null && categoria.Estado && !categoriaNueva.Estado && TieneCategoriasHijas(categoria.IdCategoria))
-                throw new ApiException("Existen subcategorias activas para la categoría. No se puede deshabilitar.");
+                throw new ApiException("Existen subcategorias activas para la categoría. No se puede deshabilitar");
 
             categoria.Nombre = categoriaNueva.Nombre;
             categoria.Descripcion = string.IsNullOrEmpty(categoriaNueva.Descripcion) ? null : categoriaNueva.Descripcion;
@@ -102,7 +102,7 @@ namespace CRM.Services.CategoriaService
 
             _context.SaveChanges();
 
-            return "La categoria modificó correctamente.";
+            return "La categoria modificó correctamente";
         }
 
         private bool TieneCategoriasHijas(int? idCategoriaPadre)
@@ -123,7 +123,7 @@ namespace CRM.Services.CategoriaService
             _context.Categoria.Add(categoria);
             _context.SaveChanges();
 
-            return "La categoria se agregó correctamente.";
+            return "La categoria se agregó correctamente";
         }
 
         public string EliminarCategoria(int id)
@@ -131,14 +131,14 @@ namespace CRM.Services.CategoriaService
             Categoria categoria = _context.Categoria.Where(x => x.Estado && x.IdCategoria == id).FirstOrDefault();
 
             if (categoria == null)
-                throw new ApiException("La categoria no existe.");
+                throw new ApiException("La categoria no existe");
 
             categoria.Estado = false;
 
             _context.Entry(categoria).State = EntityState.Modified;
             _context.SaveChanges();
 
-            return "La categoria se eliminó correctamente.";
+            return "La categoria se eliminó correctamente";
         }
     }
 }

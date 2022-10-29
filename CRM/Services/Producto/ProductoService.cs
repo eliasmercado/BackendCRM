@@ -81,7 +81,7 @@ namespace CRM.Services.ProductoService
             Producto producto = _context.Productos.Find(id);
 
             if (producto == null)
-                throw new ApiException("El producto no existe.");
+                throw new ApiException("El producto no existe");
 
             producto.Descripcion = prdModificado.Descripcion;
             producto.Precio = prdModificado.Precio;
@@ -91,7 +91,7 @@ namespace CRM.Services.ProductoService
 
             _context.SaveChanges();
 
-            return "El producto se modificó correctamente.";
+            return "El producto se modificó correctamente";
         }
 
         public string CrearProducto(ProductoDTO prodNuevo)
@@ -107,7 +107,7 @@ namespace CRM.Services.ProductoService
             _context.Productos.Add(producto);
             _context.SaveChanges();
 
-            return "El producto se agregó correctamente.";
+            return "El producto se agregó correctamente";
         }
 
         public string EliminarProducto(int id)
@@ -115,12 +115,12 @@ namespace CRM.Services.ProductoService
             Producto producto = _context.Productos.Find(id);
 
             if (producto == null)
-                throw new ApiException("El producto no existe.");
+                throw new ApiException("El producto no existe");
 
             _context.Remove(producto);
             _context.SaveChanges();
 
-            return "El producto se eliminó correctamente.";
+            return "El producto se eliminó correctamente";
         }
     }
 }

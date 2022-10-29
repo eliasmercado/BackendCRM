@@ -77,7 +77,7 @@ namespace CRM.Services.EmpresaService
             Empresa empresa = _context.Empresas.Find(id);
 
             if (empresa == null)
-                throw new ApiException("La empresa no existe.");
+                throw new ApiException("La empresa no existe");
 
             empresa.Nombre = empresaModificada.Nombre;
             empresa.Celular = empresaModificada.Celular;
@@ -93,7 +93,7 @@ namespace CRM.Services.EmpresaService
 
             _context.SaveChanges();
 
-            return "La empresa modificó correctamente.";
+            return "La empresa modificó correctamente";
         }
 
         public string CrearEmpresa(EmpresaDTO empresaNueva)
@@ -116,7 +116,7 @@ namespace CRM.Services.EmpresaService
             _context.Empresas.Add(empresa);
             _context.SaveChanges();
 
-            return "La empresa se agregó correctamente.";
+            return "La empresa se agregó correctamente";
         }
 
         public string EliminarEmpresa(int id)
@@ -124,14 +124,14 @@ namespace CRM.Services.EmpresaService
             Empresa empresa = _context.Empresas.Where(x => x.Estado && x.IdEmpresa == id).FirstOrDefault();
 
             if (empresa == null)
-                throw new ApiException("La empresa no existe.");
+                throw new ApiException("La empresa no existe");
 
             empresa.Estado = false;
 
             _context.Entry(empresa).State = EntityState.Modified;
             _context.SaveChanges();
 
-            return "La empresa se eliminó correctamente.";
+            return "La empresa se eliminó correctamente";
         }
     }
 }

@@ -59,7 +59,7 @@ namespace CRM.Services.SucursalService
             Sucursal sucursal = _context.Sucursals.Find(id);
 
             if (sucursal == null)
-                throw new ApiException("La sucursal no existe.");
+                throw new ApiException("La sucursal no existe");
 
             sucursal.IdCiudad = sucursalModificada.IdCiudad;
             sucursal.Descripcion = string.IsNullOrEmpty(sucursalModificada.Descripcion) ? null : sucursalModificada.Descripcion;
@@ -67,7 +67,7 @@ namespace CRM.Services.SucursalService
 
             _context.SaveChanges();
 
-            return "La sucursal se modificó correctamente.";
+            return "La sucursal se modificó correctamente";
         }
 
         public string CrearSucursal(SucursalDTO sucursalNueva)
@@ -81,7 +81,7 @@ namespace CRM.Services.SucursalService
             _context.Sucursals.Add(sucursal);
             _context.SaveChanges();
 
-            return "La sucursal se agregó correctamente.";
+            return "La sucursal se agregó correctamente";
         }
 
         public string EliminarSucursal(int id)
@@ -89,12 +89,12 @@ namespace CRM.Services.SucursalService
             Sucursal sucursal = _context.Sucursals.Where(x => x.IdSucursal == id).FirstOrDefault();
 
             if (sucursal == null)
-                throw new ApiException("La sucursal no existe.");
+                throw new ApiException("La sucursal no existe");
 
             _context.Entry(sucursal).State = EntityState.Deleted;
             _context.SaveChanges();
 
-            return "La sucursal se eliminó correctamente.";
+            return "La sucursal se eliminó correctamente";
         }
     }
 
