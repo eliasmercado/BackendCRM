@@ -3,6 +3,7 @@ using CRM.Helpers;
 using CRM.Models;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -32,7 +33,7 @@ namespace CRM.Services.Actividad
                                               Responsable = _context.Usuarios.Where(x => x.IdUsuario == tarea.IdUsuarioResponsable).Select(x => x.Nombres + " " + x.Apellidos).FirstOrDefault()
                                           }).ToList();
 
-            return tareas.OrderByDescending(x => x.FechaCreacion).OrderByDescending(x => x.FechaInicio).ToList();
+            return tareas.OrderBy(x => x.FechaInicio).OrderBy(x => x.Estado).ToList();
         }
 
         public TareaDTO ObtenerTareaById(int idTarea)
@@ -61,7 +62,7 @@ namespace CRM.Services.Actividad
                 tareaResponse.AsociarCon = Defs.CONTACTO;
             else if (tareaResponse.IdEmpresaAsociada != null)
                 tareaResponse.AsociarCon = Defs.EMPRESA;
-            else if (tareaResponse.IdContactoAsociado != null)
+            else if (tareaResponse.IdOportunidadAsociada != null)
                 tareaResponse.AsociarCon = Defs.OPORTUNIDAD;
 
             return tareaResponse;
@@ -93,6 +94,22 @@ namespace CRM.Services.Actividad
             _context.SaveChanges();
 
             return "La tarea se agregó correctamente";
+        }
+
+        public string CerrarTarea(int idTarea)
+        {
+            Tarea tarea = _context.Tareas.Find(idTarea);
+
+            if (tarea == null)
+                throw new ApiException("La tarea no existe");
+
+            int idEstado = _context.EstadoActividads.Where(x => x.Descripcion == Defs.TAREA_CERRADA).FirstOrDefault().IdEstadoActividad;
+
+            tarea.IdEstadoActividad = idEstado;
+
+            _context.SaveChanges();
+
+            return "La tarea se cerró correctamente";
         }
 
         public string ModificarTarea(int id, TareaDTO tareaModificada)
@@ -198,6 +215,57 @@ namespace CRM.Services.Actividad
             }
 
             return tareasCalendario;
+        }
+
+        public TareaInfoDTO ObtenerTareaByIdParaDetalle(int idTarea)
+        {
+            Tarea tarea = _context.Tareas.Find(idTarea);
+
+            if (tarea == null)
+                throw new ApiException("La Tarea no existe");
+
+            TareaInfoDTO tareaResponse = new TareaInfoDTO
+            {
+                IdTarea = tarea.IdTarea,
+                Titulo = tarea.Titulo,
+                Descripcion = tarea.Descripcion,
+                FechaInicio = tarea.FechaInicio.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture),
+                FechaCierre = tarea.FechaCierre.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture),
+                Tipo = _context.TipoTareas.Where(x => x.IdTipoTarea == tarea.IdTipoTarea).Select(x => x.Descripcion).FirstOrDefault(),
+                Estado = _context.EstadoActividads.Where(x => x.IdEstadoActividad == tarea.IdEstadoActividad).Select(x => x.Descripcion).FirstOrDefault(),
+                Responsable = _context.Usuarios.Where(x => x.IdUsuario == tarea.IdUsuarioResponsable).Select(x => x.Nombres + " " + x.Apellidos).FirstOrDefault()
+            };
+
+            if (tarea.IdContacto != null)
+            {
+                Contacto contactoAsociado = _context.Contactos.Find(tarea.IdContacto);
+                tareaResponse.ContactoAsociado = new ContactoInfoDTO
+                {
+                    IdContacto = contactoAsociado.IdContacto,
+                    NombreCompleto = contactoAsociado.Nombres + " " + contactoAsociado.Apellidos,
+                    Celular = contactoAsociado.Celular,
+                    Email = contactoAsociado.Email
+                };
+                tareaResponse.AsociarCon = Defs.CONTACTO;
+            }
+            else if (tarea.IdEmpresa != null)
+            {
+                Empresa empresaAsociada = _context.Empresas.Find(tarea.IdEmpresa);
+                tareaResponse.EmpresaAsociada = new EmpresaInfoDTO
+                {
+                    IdEmpresa= empresaAsociada.IdEmpresa,
+                    Nombre = empresaAsociada.Nombre,
+                    Celular = empresaAsociada.Celular,
+                    Telefono = empresaAsociada.Telefono,
+                    Email = empresaAsociada.Email
+                };
+                tareaResponse.AsociarCon = Defs.EMPRESA;
+            }
+            else if (tarea.IdOportunidad != null)
+            {
+                tareaResponse.AsociarCon = Defs.OPORTUNIDAD;
+            }
+            return tareaResponse;
         }
 
         public List<EstadoTareaDTO> ObtenerEstadosTarea()

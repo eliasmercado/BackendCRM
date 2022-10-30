@@ -60,6 +60,24 @@ namespace CRM.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("info/{idTarea}")]
+        public ApiResponse<TareaInfoDTO> GetTareaParaDetalle(int idTarea)
+        {
+            try
+            {
+                ApiResponse<TareaInfoDTO> response = new();
+
+                response.Data = TareaService.ObtenerTareaByIdParaDetalle(idTarea);
+
+                return response;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         [HttpGet("{idTarea}")]
         public ApiResponse<TareaDTO> GetTarea(int idTarea)
         {
@@ -106,6 +124,47 @@ namespace CRM.Controllers
             try
             {
                 response.Data = TareaService.ModificarTarea(id, tarea);
+            }
+            catch (ApiException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return response;
+        }
+
+        [HttpPut("cerrar-tarea/{idTarea}")]
+        public ApiResponse<object> CerrarTarea(int idTarea)
+        {
+            ApiResponse<object> response = new();
+
+            try
+            {
+                response.Data = TareaService.CerrarTarea(idTarea);
+            }
+            catch (ApiException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return response;
+        }
+
+        [HttpDelete("{id}")]
+        public ApiResponse<object> DeleteTarea(int id)
+        {
+            ApiResponse<object> response = new();
+            try
+            {
+                response.Data = TareaService.EliminarTarea(id);
             }
             catch (ApiException)
             {

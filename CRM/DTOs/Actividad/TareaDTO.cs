@@ -21,6 +21,48 @@ namespace CRM.DTOs.Actividad
         public int? IdOportunidadAsociada { get; set; }
     }
 
+    public class TareaInfoDTO
+    {
+        public int IdTarea { get; set; }
+        public string Titulo { get; set; }
+        public string Descripcion { get; set; }
+        public string Tipo { get; set; }
+        public string Estado { get; set; }
+        public string FechaInicio { get; set; }
+        public string FechaCierre { get; set; }
+        public string Responsable { get; set; }
+        public string AsociarCon { get; set; }
+        public ContactoInfoDTO ContactoAsociado { get; set; }
+        public EmpresaInfoDTO EmpresaAsociada { get; set; }
+        public OportunidadInfoDTO OportunidadAsociada { get; set; }
+    }
+
+    public class ContactoInfoDTO
+    {
+        public int IdContacto { get; set; }
+        public string NombreCompleto { get; set; }
+        public string Celular { get; set; }
+        public string Email { get; set; }
+    }
+
+    public class EmpresaInfoDTO
+    {
+        public int IdEmpresa { get; set; }
+        public string Nombre { get; set; }
+        public string Celular { get; set; }
+        public string Telefono { get; set; }
+        public string Email { get; set; }
+    }
+
+    public class OportunidadInfoDTO
+    {
+        public int IdOportunidad { get; set; }
+        public string Nombre { get; set; }
+        public string Etapa { get; set; }
+        public string Valor { get; set; }
+        public string Contacto { get; set; }
+    }
+
     public class ListaTareaDTO
     {
         public int IdTarea { get; set; }
@@ -58,12 +100,12 @@ namespace CRM.DTOs.Actividad
     public class ContactoDTO
     {
         public int IdContacto { get; set; }
-        public string Nombre{ get; set; }
+        public string Nombre { get; set; }
     }
 
     public class EmpresaDTO
     {
-        public int IdEmpresa{ get; set; }
+        public int IdEmpresa { get; set; }
         public string Nombre { get; set; }
     }
 
