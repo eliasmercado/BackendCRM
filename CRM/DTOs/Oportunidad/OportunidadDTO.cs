@@ -1,4 +1,5 @@
-﻿using CRM.DTOs.Empresa;
+﻿using CRM.DTOs.Actividad;
+using CRM.DTOs.Empresa;
 using CRM.DTOs.Seguridad;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,18 @@ namespace CRM.DTOs.Oportunidad
         public string TipoCliente { get; set; }
         public string Contacto { get; set; }
         public string Propietario { get; set; }
+    }
+
+    public class OportunidadInfoDTO : ListaOportunidadDTO
+    {
+        public string Fuente { get; set; }
+        public string Sucursal { get; set; }
+        public string Observacion { get; set; }
+        public new string FechaCierre { get; set; }
+        public string TipoContacto { get; set; }
+        public List<DetalleOportunidadDTO> Detalles { get; set; }
+        public ContactoInfoDTO ContactoAsociado { get; set; }
+        public EmpresaInfoDTO EmpresaAsociada { get; set; }
     }
 
     public class OportunidadDTO
@@ -42,20 +55,16 @@ namespace CRM.DTOs.Oportunidad
     {
         public int IdDetalleOportunidad { get; set; }
         public int IdProducto { get; set; }
+        public string Producto { get; set; }
         public int Cantidad { get; set; }
     }
 
-    public class ContactoAsociadoDTO : ContactoDTO
-    {   
-        public bool EsLead { get; set; }
-    }
+    public class ContactoAsociadoDTO : Contacto.ContactoDTO { }
 
-    public class EmpresaAsociadaDTO : EmpresaDTO
+    public class EmpresaAsociadaDTO : Empresa.EmpresaDTO { }
+
+    public class InfoContacto
     {
-        public bool EsLead { get; set; }
-    }
-
-    public class InfoContacto {
         public object DatosContacto { get; set; }
         public string TipoContacto { get; set; }
     }
@@ -69,7 +78,7 @@ namespace CRM.DTOs.Oportunidad
     public class EtapaDTO
     {
         public int IdEtapa { get; set; }
-        public string Etapa{ get; set; }
+        public string Etapa { get; set; }
     }
 
     public class SelectSucursalDTO

@@ -2,6 +2,7 @@
 using CRM.Helpers;
 using CRM.Models;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -58,6 +59,25 @@ namespace CRM.Services.ProductoService
             return productoDto;
         }
 
+        public InfoProductoDTO ObtenerInfoProducto(int idProducto)
+        {
+            InfoProductoDTO productoInfo = new();
+            Producto producto = _context.Productos.Find(idProducto);
+
+            if (producto == null)
+                throw new ApiException("No se encontró el producto");
+
+            productoInfo.Descripcion = producto.Descripcion;
+            productoInfo.Precio = "Gs " + producto.Precio.ToString("N0", new CultureInfo("es-PY"));
+
+            Categoria categoriaProducto = _context.Categoria.Where(x => x.IdCategoria == producto.IdCategoria).FirstOrDefault();
+            productoInfo.Categoria = _context.Categoria.Find(categoriaProducto.IdCategoriaPadre).Nombre;
+            productoInfo.Subcategoria = categoriaProducto.Nombre;
+            productoInfo.Marca = _context.Marcas.Find(producto.IdMarca).Nombre;
+
+            return productoInfo;
+        }
+
         public List<MonedaDTO> ObtenerListaMonedas()
         {
             List<MonedaDTO> listaMonedas = (from moneda in _context.Moneda
@@ -81,7 +101,7 @@ namespace CRM.Services.ProductoService
             Producto producto = _context.Productos.Find(id);
 
             if (producto == null)
-                throw new ApiException("El producto no existe.");
+                throw new ApiException("El producto no existe");
 
             producto.Descripcion = prdModificado.Descripcion;
             producto.Precio = prdModificado.Precio;
@@ -91,7 +111,7 @@ namespace CRM.Services.ProductoService
 
             _context.SaveChanges();
 
-            return "El producto se modificó correctamente.";
+            return "El producto se modificó correctamente";
         }
 
         public string CrearProducto(ProductoDTO prodNuevo)
@@ -107,7 +127,7 @@ namespace CRM.Services.ProductoService
             _context.Productos.Add(producto);
             _context.SaveChanges();
 
-            return "El producto se agregó correctamente.";
+            return "El producto se agregó correctamente";
         }
 
         public string EliminarProducto(int id)
@@ -115,12 +135,12 @@ namespace CRM.Services.ProductoService
             Producto producto = _context.Productos.Find(id);
 
             if (producto == null)
-                throw new ApiException("El producto no existe.");
+                throw new ApiException("El producto no existe");
 
             _context.Remove(producto);
             _context.SaveChanges();
 
-            return "El producto se eliminó correctamente.";
+            return "El producto se eliminó correctamente";
         }
     }
 }

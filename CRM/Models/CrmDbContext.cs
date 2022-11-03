@@ -712,6 +712,8 @@ namespace CRM.Models
                     .IsRequired()
                     .HasMaxLength(200);
 
+                entity.Property(e => e.FechaInicio).HasColumnType("datetime");
+
                 entity.Property(e => e.FechaCierre).HasColumnType("datetime");
 
                 entity.Property(e => e.FechaCreacion).HasColumnType("datetime");

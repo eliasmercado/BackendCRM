@@ -18,6 +18,7 @@ namespace CRM.Models
         public int IdEstadoActividad { get; set; }
         public int IdUsuarioResponsable { get; set; }
         public DateTime FechaCreacion { get; set; }
+        public DateTime FechaInicio { get; set; }
         public DateTime FechaCierre { get; set; }
         public int IdTipoTarea { get; set; }
         public int? IdRecordatorio { get; set; }

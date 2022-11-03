@@ -23,4 +23,14 @@ namespace CRM.DTOs.Producto
         public string Moneda { get; set; }
         public string Codigo { get; set; }
     }
+
+    public class InfoProductoDTO
+    {
+        public string Descripcion { get; set; }
+        public string Precio { get; set; }
+        public string Categoria { get; set; }
+        public string Subcategoria { get; set; }
+        public string Marca { get; set; }
+    }
+
 }

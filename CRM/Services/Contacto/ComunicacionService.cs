@@ -40,7 +40,7 @@ namespace CRM.Services.ComunicacionService
 
             _context.SaveChanges();
 
-            return "La llamada se registró correctamente.";
+            return "La llamada se registró correctamente";
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace CRM.Services.ComunicacionService
 
             _context.SaveChanges();
 
-            return "El correo se envió correctamente.";
+            return "El correo se envió correctamente";
         }
 
         private void ActualizarUltimoContacto(int? idContacto, int? idEmpresa, DateTime ultimoContacto)

@@ -60,6 +60,24 @@ namespace CRM.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("info/{idOportunidad}")]
+        public ApiResponse<OportunidadInfoDTO> GetOportunidadInfo(int idOportunidad)
+        {
+            try
+            {
+                ApiResponse<OportunidadInfoDTO> response = new();
+
+                response.Data = OportunidadService.ObtenerOportunidadInfo(idOportunidad);
+
+                return response;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         [HttpPost]
         public ApiResponse<object> PostOportunidad(OportunidadDTO oportunidad)
         {
@@ -68,6 +86,27 @@ namespace CRM.Controllers
             try
             {
                 response.Data = OportunidadService.CrearOportunidad(oportunidad);
+            }
+            catch (ApiException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return response;
+        }
+
+        [HttpPut("actualizar-etapa/{idOportunidad}")]
+        public ApiResponse<object> ModificarEtapaOportunidad(int idOportunidad, [FromQuery] string etapa)
+        {
+            ApiResponse<object> response = new();
+
+            try
+            {
+                response.Data = OportunidadService.ModificarEtapaOportunidad(idOportunidad, etapa);
             }
             catch (ApiException)
             {

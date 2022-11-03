@@ -66,7 +66,29 @@ namespace CRM.Controllers
             }
         }
 
-        [HttpGet("{id}")]
+        [HttpGet]
+        [Route("info/{idProducto}")]
+        public ApiResponse<InfoProductoDTO> GetInfoProducto(int idProducto)
+        {
+            try
+            {
+                ApiResponse<InfoProductoDTO> response = new();
+
+                response.Data = ProductoService.ObtenerInfoProducto(idProducto);
+
+                return response;
+            }
+            catch (ApiException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
         [Route("moneda")]
         public ApiResponse<List<MonedaDTO>> GetMonedas()
         {

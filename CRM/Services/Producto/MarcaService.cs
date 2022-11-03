@@ -56,7 +56,7 @@ namespace CRM.Services.MarcaService
             Marca marca = _context.Marcas.Find(id);
 
             if (marca == null)
-                throw new ApiException("La marca no existe.");
+                throw new ApiException("La marca no existe");
 
             marca.Nombre = marcaModificada.Nombre;
             marca.Descripcion = string.IsNullOrEmpty(marcaModificada.Descripcion) ? null : marcaModificada.Descripcion;
@@ -64,7 +64,7 @@ namespace CRM.Services.MarcaService
 
             _context.SaveChanges();
 
-            return "La marca se modificó correctamente.";
+            return "La marca se modificó correctamente";
         }
 
         public string CrearMarca(MarcaDTO marcaNueva)
@@ -78,7 +78,7 @@ namespace CRM.Services.MarcaService
             _context.Marcas.Add(marca);
             _context.SaveChanges();
 
-            return "La marca se agregó correctamente.";
+            return "La marca se agregó correctamente";
         }
 
         public string EliminarMarca(int id)
@@ -86,14 +86,14 @@ namespace CRM.Services.MarcaService
             Marca marca = _context.Marcas.Where(x => x.Estado && x.IdMarca == id).FirstOrDefault();
 
             if (marca == null)
-                throw new ApiException("La marca no existe.");
+                throw new ApiException("La marca no existe");
 
             marca.Estado = false;
 
             _context.Entry(marca).State = EntityState.Modified;
             _context.SaveChanges();
 
-            return "La marca se eliminó correctamente.";
+            return "La marca se eliminó correctamente";
         }
     }
 }
