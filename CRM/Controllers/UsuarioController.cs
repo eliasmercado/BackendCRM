@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CRM.Models;
 using Microsoft.AspNetCore.Authorization;
+using CRM.Services.Seguridad;
+using CRM.Helpers;
+using CRM.DTOs.Seguridad;
 
 namespace CRM.Controllers
 {
@@ -15,95 +18,108 @@ namespace CRM.Controllers
     [Authorize]
     public class UsuarioController : ControllerBase
     {
-        private readonly CrmDbContext _context;
+        private readonly UsuarioService UsuarioService;
 
         public UsuarioController(CrmDbContext context)
         {
-            _context = context;
+            UsuarioService = new UsuarioService(context);
         }
 
         // GET: api/Usuario
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Usuario>>> GetUsuarios()
+        public ApiResponse<List<UsuarioDTO>> GetUsuarios()
         {
-            return await _context.Usuarios.ToListAsync();
+            try
+            {
+                ApiResponse<List<UsuarioDTO>> response = new();
+
+                response.Data = UsuarioService.ObtenerListaUsuarios();
+
+                return response;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
-        // GET: api/Usuario/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Usuario>> GetUsuario(int id)
+        [HttpPut("{idUsuario}")]
+        public ApiResponse<object> PutUsuario(int idUsuario, UsuarioDTO usuario)
         {
-            var usuario = await _context.Usuarios.FindAsync(id);
-
-            if (usuario == null)
-            {
-                return NotFound();
-            }
-
-            return usuario;
-        }
-
-        // PUT: api/Usuario/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutUsuario(int id, Usuario usuario)
-        {
-            if (id != usuario.IdUsuario)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(usuario).State = EntityState.Modified;
+            ApiResponse<object> response = new();
 
             try
             {
-                await _context.SaveChangesAsync();
+                response.Data = UsuarioService.ModificarUsuario(idUsuario, usuario);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (ApiException)
             {
-                if (!UsuarioExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
             }
 
-            return NoContent();
+            return response;
         }
 
-        // POST: api/Usuario
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Usuario>> PostUsuario(Usuario usuario)
+        public ApiResponse<object> PostUsuario(UsuarioDTO usuario)
         {
-            _context.Usuarios.Add(usuario);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetUsuario", new { id = usuario.IdUsuario }, usuario);
-        }
-
-        // DELETE: api/Usuario/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUsuario(int id)
-        {
-            var usuario = await _context.Usuarios.FindAsync(id);
-            if (usuario == null)
+            ApiResponse<object> response = new();
+            try
             {
-                return NotFound();
+                response.Data = UsuarioService.CrearUsuario(usuario);
+            }
+            catch (ApiException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
             }
 
-            _context.Usuarios.Remove(usuario);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            return response;
         }
 
-        private bool UsuarioExists(int id)
+        [HttpDelete("{idUsuario}")]
+        public ApiResponse<object> DeleteContacto(int idUsuario)
         {
-            return _context.Usuarios.Any(e => e.IdUsuario == id);
+            ApiResponse<object> response = new();
+            try
+            {
+                response.Data = UsuarioService.EliminarUsuario(idUsuario);
+            }
+            catch (ApiException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return response;
+        }
+
+        [HttpGet]
+        [Route("perfil")]
+        public ApiResponse<List<PerfilDTO>> GetPerfiles()
+        {
+            try
+            {
+                ApiResponse<List<PerfilDTO>> response = new();
+
+                response.Data = UsuarioService.ObtenerPerfiles();
+
+                return response;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }
