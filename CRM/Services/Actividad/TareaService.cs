@@ -253,7 +253,7 @@ namespace CRM.Services.Actividad
                 Empresa empresaAsociada = _context.Empresas.Find(tarea.IdEmpresa);
                 tareaResponse.EmpresaAsociada = new EmpresaInfoDTO
                 {
-                    IdEmpresa= empresaAsociada.IdEmpresa,
+                    IdEmpresa = empresaAsociada.IdEmpresa,
                     Nombre = empresaAsociada.Nombre,
                     Celular = empresaAsociada.Celular,
                     Telefono = empresaAsociada.Telefono,
@@ -264,8 +264,32 @@ namespace CRM.Services.Actividad
             else if (tarea.IdOportunidad != null)
             {
                 tareaResponse.AsociarCon = Defs.OPORTUNIDAD;
+                Oportunidad oportunidadAsociada = _context.Oportunidads.Find(tarea.IdOportunidad);
+                tareaResponse.OportunidadAsociada = new OportunidadInfoDTO
+                {
+                    IdOportunidad = oportunidadAsociada.IdOportunidad,
+                    Nombre = oportunidadAsociada.Nombre,
+                    Etapa = _context.Etapas.Where(x => x.IdEtapa == oportunidadAsociada.IdEtapa).Select(x => x.Descripcion).FirstOrDefault(),
+                    Valor = "Gs " + oportunidadAsociada.Valor.ToString("N0", new CultureInfo("es-PY")),
+                    Contacto = ObtenerContactoDeOportunidad(oportunidadAsociada)
+                };
             }
             return tareaResponse;
+        }
+
+        private string ObtenerContactoDeOportunidad(Oportunidad oportunidadAsociada)
+        {
+            //Si es un cliente pf
+            if (oportunidadAsociada.IdEmpresa == null)
+            {
+                Contacto contacto = _context.Contactos.Find(oportunidadAsociada.IdContacto);
+                return contacto.Nombres + " " + contacto.Apellidos;
+            }
+            //si es cliente pj
+            else
+            {
+                return _context.Empresas.Find(oportunidadAsociada.IdEmpresa).Nombre;
+            }
         }
 
         public List<EstadoTareaDTO> ObtenerEstadosTarea()

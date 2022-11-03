@@ -39,7 +39,7 @@ namespace CRM.Services.OportunidadService
                 oportunidadDto.FechaCreacion = oportunidad.FechaCreacion;
                 oportunidadDto.Etapa = (from etapa in _context.Etapas where etapa.IdEtapa == oportunidad.IdEtapa select etapa.Descripcion).FirstOrDefault();
                 oportunidadDto.Prioridad = (from prioridad in _context.Prioridads where prioridad.IdPrioridad == oportunidad.IdPrioridad select prioridad.Descripcion).FirstOrDefault();
-                oportunidadDto.Valor =  "Gs " + oportunidad.Valor.ToString("N0", new CultureInfo("es-PY")); ;
+                oportunidadDto.Valor = "Gs " + oportunidad.Valor.ToString("N0", new CultureInfo("es-PY"));
                 oportunidadDto.Propietario = (from propietario in _context.Usuarios where propietario.IdUsuario == oportunidad.IdPropietario select propietario.Nombres + " " + propietario.Apellidos).FirstOrDefault();
 
                 contactoAsociado = ObtenerContacto(oportunidad);
@@ -104,6 +104,71 @@ namespace CRM.Services.OportunidadService
             oportunidadDto.Observacion = oportunidad.Observacion;
 
             return oportunidadDto;
+        }
+
+        public OportunidadInfoDTO ObtenerOportunidadInfo(int idOportunidad)
+        {
+            Oportunidad oportunidad = _context.Oportunidads.Find(idOportunidad);
+            OportunidadInfoDTO oportunidadInfo = new();
+
+            if (oportunidad == null)
+                throw new ApiException("La oportunidad no existe");
+
+            oportunidadInfo.IdOportunidad = oportunidad.IdOportunidad;
+            oportunidadInfo.Nombre = oportunidad.Nombre;
+            oportunidadInfo.FechaCierre = oportunidad.FechaCierre.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
+            oportunidadInfo.Etapa = _context.Etapas.Where(x => x.IdEtapa == oportunidad.IdEtapa).Select(x => x.Descripcion).FirstOrDefault();
+            oportunidadInfo.Valor = "Gs " + oportunidad.Valor.ToString("N0", new CultureInfo("es-PY"));
+
+            InfoContacto contacto = new();
+            //Obtenemos los datos del contacto, manejamos si es LEAD o Cliente, PF o PJ
+            contacto = ObtenerContacto(oportunidad);
+
+            //Tipo de Cliente: Lead o Existente
+            oportunidadInfo.TipoCliente = ObtenerTipoCliente(contacto);
+            oportunidadInfo.Prioridad = _context.Prioridads.Where(x => x.IdPrioridad == oportunidad.IdPrioridad).Select(x => x.Descripcion).FirstOrDefault();
+            oportunidadInfo.Fuente = _context.Fuentes.Where(x => x.IdFuente == oportunidad.IdFuente).Select(x => x.Descripcion).FirstOrDefault();
+            oportunidadInfo.Sucursal = _context.Sucursals.Where(x => x.IdSucursal == oportunidad.IdSucursal).Select(x => x.Descripcion).FirstOrDefault();
+            oportunidadInfo.Observacion = oportunidad.Observacion;
+            oportunidadInfo.Propietario = _context.Usuarios.Where(x => x.IdUsuario == oportunidad.IdPropietario).Select(x => x.Nombres + " " + x.Apellidos).FirstOrDefault();
+
+            if (contacto.TipoContacto == Defs.CLIENTE_PF)
+            {
+                oportunidadInfo.ContactoAsociado = new();
+                ContactoAsociadoDTO contactoPf = (ContactoAsociadoDTO)contacto.DatosContacto;
+                oportunidadInfo.ContactoAsociado.IdContacto = contactoPf.IdContacto;
+                oportunidadInfo.ContactoAsociado.NombreCompleto = contactoPf.Nombres + " " + contactoPf.Apellidos;
+                oportunidadInfo.ContactoAsociado.Celular = contactoPf.Celular;
+                oportunidadInfo.ContactoAsociado.Email = contactoPf.Email;
+                oportunidadInfo.TipoContacto = Defs.CONTACTO;
+            }
+            else
+            {
+                oportunidadInfo.EmpresaAsociada = new();
+                EmpresaAsociadaDTO contactoPj = (EmpresaAsociadaDTO)contacto.DatosContacto;
+                oportunidadInfo.EmpresaAsociada.IdEmpresa = contactoPj.IdEmpresa;
+                oportunidadInfo.EmpresaAsociada.Nombre = contactoPj.Nombre;
+                oportunidadInfo.EmpresaAsociada.Celular = contactoPj.Celular;
+                oportunidadInfo.EmpresaAsociada.Telefono = contactoPj.Telefono;
+                oportunidadInfo.EmpresaAsociada.Email = contactoPj.Email;
+                oportunidadInfo.TipoContacto = Defs.EMPRESA;
+            }
+
+            List<DetalleOportunidad> detalles = _context.DetalleOportunidads.Where(x => x.IdOportunidad == oportunidad.IdOportunidad).ToList();
+
+            oportunidadInfo.Detalles = new();
+            foreach (var detalleOp in detalles)
+            {
+                oportunidadInfo.Detalles.Add(new DetalleOportunidadDTO()
+                {
+                    IdDetalleOportunidad = detalleOp.IdDetalleOportunidad,
+                    IdProducto = detalleOp.IdProducto,
+                    Producto = _context.Productos.Find(detalleOp.IdProducto).Descripcion,
+                    Cantidad = detalleOp.Cantidad
+                });
+            }
+
+            return oportunidadInfo;
         }
 
         public string CrearOportunidad(OportunidadDTO oportunidadNueva)
@@ -268,7 +333,7 @@ namespace CRM.Services.OportunidadService
 
             if (etapa.Descripcion == Defs.OPORTUNIDAD_GANADA)
             {
-                if(esPF)
+                if (esPF)
                 {
                     Contacto contacto = _context.Contactos.Where(x => x.IdContacto == idContactoAsociado).FirstOrDefault();
                     contacto.EsLead = false;
@@ -326,7 +391,7 @@ namespace CRM.Services.OportunidadService
             return resultado;
         }
 
-        private InfoContacto ObtenerContacto(Oportunidad oportunidad)
+        public InfoContacto ObtenerContacto(Oportunidad oportunidad)
         {
             InfoContacto respuesta = new();
 

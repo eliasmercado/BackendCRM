@@ -60,6 +60,24 @@ namespace CRM.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("info/{idOportunidad}")]
+        public ApiResponse<OportunidadInfoDTO> GetOportunidadInfo(int idOportunidad)
+        {
+            try
+            {
+                ApiResponse<OportunidadInfoDTO> response = new();
+
+                response.Data = OportunidadService.ObtenerOportunidadInfo(idOportunidad);
+
+                return response;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         [HttpPost]
         public ApiResponse<object> PostOportunidad(OportunidadDTO oportunidad)
         {
