@@ -2,6 +2,7 @@
 using CRM.Helpers;
 using CRM.Models;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -56,6 +57,25 @@ namespace CRM.Services.ProductoService
                                        }).FirstOrDefault();
 
             return productoDto;
+        }
+
+        public InfoProductoDTO ObtenerInfoProducto(int idProducto)
+        {
+            InfoProductoDTO productoInfo = new();
+            Producto producto = _context.Productos.Find(idProducto);
+
+            if (producto == null)
+                throw new ApiException("No se encontró el producto");
+
+            productoInfo.Descripcion = producto.Descripcion;
+            productoInfo.Precio = "Gs " + producto.Precio.ToString("N0", new CultureInfo("es-PY"));
+
+            Categoria categoriaProducto = _context.Categoria.Where(x => x.IdCategoria == producto.IdCategoria).FirstOrDefault();
+            productoInfo.Categoria = _context.Categoria.Find(categoriaProducto.IdCategoriaPadre).Nombre;
+            productoInfo.Subcategoria = categoriaProducto.Nombre;
+            productoInfo.Marca = _context.Marcas.Find(producto.IdMarca).Nombre;
+
+            return productoInfo;
         }
 
         public List<MonedaDTO> ObtenerListaMonedas()
