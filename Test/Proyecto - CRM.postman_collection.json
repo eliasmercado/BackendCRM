@@ -110,14 +110,14 @@
 							}
 						],
 						"url": {
-							"raw": "{{url-base}}/api/contacto/2",
+							"raw": "{{url-base}}/api/contacto/9",
 							"host": [
 								"{{url-base}}"
 							],
 							"path": [
 								"api",
 								"contacto",
-								"2"
+								"9"
 							]
 						}
 					},
@@ -160,7 +160,7 @@
 					"response": []
 				},
 				{
-					"name": "Obtener Estado Civil",
+					"name": "Obtener Actividad Economica",
 					"event": [
 						{
 							"listen": "prerequest",
@@ -196,7 +196,7 @@
 					"response": []
 				},
 				{
-					"name": "Obtener Actividad Economica",
+					"name": "Obtener Estado Civi",
 					"event": [
 						{
 							"listen": "prerequest",
@@ -1131,14 +1131,51 @@
 							}
 						],
 						"url": {
-							"raw": "{{url-base}}/api/producto/2",
+							"raw": "{{url-base}}/api/producto/6",
 							"host": [
 								"{{url-base}}"
 							],
 							"path": [
 								"api",
 								"producto",
-								"2"
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Info producto por ID",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url-base}}/api/producto/info/6",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"producto",
+								"info",
+								"6"
 							]
 						}
 					},
@@ -1657,6 +1694,38 @@
 								"type": "text"
 							}
 						],
+						"url": {
+							"raw": "{{url-base}}/api/oportunidad/actualizar-etapa/13?etapa=Cerrada Perdida",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"oportunidad",
+								"actualizar-etapa",
+								"13"
+							],
+							"query": [
+								{
+									"key": "etapa",
+									"value": "Cerrada Perdida"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Modificar Etapa Oportunidad",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\r\n    \"idOportunidad\": 13,\r\n    \"nombre\": \"nombrePrueba\",\r\n    \"idEtapa\": 2,\r\n    \"fechaCierre\": \"2022-09-25T14:18:13.467\",\r\n    \"idPrioridad\": 2,\r\n    \"idContactoAsociado\": \"PF-9\",\r\n    \"idFuente\": 1,\r\n    \"observacion\": \"una observacion de test\",\r\n    \"idSucursal\": 2,\r\n    \"idPropietario\": 1,\r\n    \"detalles\": [\r\n        {\r\n            \"idDetalleOportunidad\": 0,\r\n            \"cantidad\": 1,\r\n            \"idProducto\": 6\r\n        }\r\n    ]\r\n}",
@@ -1700,6 +1769,32 @@
 								"api",
 								"oportunidad",
 								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Oportunidad Info por ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url-base}}/api/oportunidad/info/12",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"oportunidad",
+								"info",
+								"12"
 							]
 						}
 					},
@@ -1800,6 +1895,440 @@
 								"api",
 								"oportunidad",
 								"contacto"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tareas",
+			"item": [
+				{
+					"name": "Obtener Tareas",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url-base}}/api/tarea",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"tarea"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Tareas Para Calendario",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url-base}}/api/tarea/calendario",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"tarea",
+								"calendario"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Tarea By Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url-base}}/api/tarea/4",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"tarea",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Tarea By Para Detalle",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url-base}}/api/tarea/info/11",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"tarea",
+								"info",
+								"11"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Tipos Tarea",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url-base}}/api/tarea/tipo",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"tarea",
+								"tipo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Estados Tarea",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url-base}}/api/tarea/estado",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"tarea",
+								"estado"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Contactos",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url-base}}/api/tarea/contacto",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"tarea",
+								"contacto"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Empresas",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url-base}}/api/tarea/empresa",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"tarea",
+								"empresa"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Oportunidades",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url-base}}/api/tarea/oportunidad",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"tarea",
+								"oportunidad"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Crear Tareas",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"titulo\" :\"Tarea de prueba\",\r\n    \"descripcion\": \"descripcion de una tarea\",\r\n    \"idTipo\" : 1,\r\n    \"idEstado\": 1,\r\n    \"fechaInicio\": \"2022-09-25T14:18:13.467\",\r\n    \"fechaCierre\": \"2022-09-25T14:18:13.467\",\r\n    \"idResponsable\": 1,\r\n    \"idContactoAsociado\": 9,\r\n    \"asociarCon\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url-base}}/api/tarea",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"tarea"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Modificar Tarea",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"idTarea\" : 3,\r\n    \"titulo\" :\"Tarea de prueba\",\r\n    \"descripcion\": \"descripcion de una tarea\",\r\n    \"idTipo\" : 1,\r\n    \"idEstado\": 2,\r\n    \"fechaInicio\": \"2022-09-25T14:18:13.467\",\r\n    \"fechaCierre\": \"2022-09-25T14:18:13.467\",\r\n    \"idResponsable\": 1,\r\n    \"idContactoAsociado\": 9,\r\n    \"asociarCon\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url-base}}/api/tarea/cerrar-tarea/12",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"tarea",
+								"cerrar-tarea",
+								"12"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cerrar Tarea",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"idTarea\" : 3,\r\n    \"titulo\" :\"Tarea de prueba\",\r\n    \"descripcion\": \"descripcion de una tarea\",\r\n    \"idTipo\" : 1,\r\n    \"idEstado\": 2,\r\n    \"fechaInicio\": \"2022-09-25T14:18:13.467\",\r\n    \"fechaCierre\": \"2022-09-25T14:18:13.467\",\r\n    \"idResponsable\": 1,\r\n    \"idContactoAsociado\": 9,\r\n    \"asociarCon\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url-base}}/api/tarea/3",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"tarea",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar Tarea",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{tokenAutorizacion}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url-base}}/api/tarea/3",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"tarea",
+								"3"
 							]
 						}
 					},
@@ -1945,6 +2474,68 @@
 							"path": [
 								"api",
 								"prioridad"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Seguridad",
+			"item": [
+				{
+					"name": "Obtener Usuarios",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{tokenAutorizacion}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url-base}}/api/usuario",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"usuario"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Perfiles",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{tokenAutorizacion}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url-base}}/api/usuario/perfil",
+							"host": [
+								"{{url-base}}"
+							],
+							"path": [
+								"api",
+								"usuario",
+								"perfil"
 							]
 						}
 					},
