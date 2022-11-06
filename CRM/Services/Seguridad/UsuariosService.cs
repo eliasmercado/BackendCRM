@@ -69,7 +69,7 @@ namespace CRM.Services.Seguridad
                 Email = usuarioNuevo.Email,
                 Direccion = usuarioNuevo.Direccion,
                 UserName = usuarioNuevo.Username,
-                Password = "",
+                Password = Util.UtilService.Hash(Defs.DEFAULT_PASS),
                 FechaCreacion = DateTime.Now,
                 IdPerfil = usuarioNuevo.IdPerfil,
                 Estado = true
