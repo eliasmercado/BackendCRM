@@ -106,6 +106,27 @@ namespace CRM.Controllers
         }
 
         [HttpPost]
+        [Route("validar-username")]
+        public ApiResponse<bool> PostVerificarUsername(UsuarioCredencialDTO credencial)
+        {
+            ApiResponse<bool> response = new();
+            try
+            {
+                response.Data = UsuarioService.ValidarUsername(credencial);
+            }
+            catch (ApiException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return response;
+        }
+
+        [HttpPost]
         [Route("cambiar-password")]
         public ApiResponse<object> PostCambiarPassword(UsuarioCredencialDTO credencial)
         {

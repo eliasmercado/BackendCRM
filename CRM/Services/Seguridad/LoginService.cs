@@ -30,6 +30,9 @@ namespace CRM.Services.Seguridad
             if (user == null)
                 throw new ApiException("El usuario no existe");
 
+            if(!user.Estado)
+                throw new ApiException("El usuario no está activo");
+
             if (user.Password == Util.UtilService.Hash(password))
             {
                 Perfil perfil = _context.Perfils.Where(x => x.IdPerfil == user.IdPerfil).FirstOrDefault();

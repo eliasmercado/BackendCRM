@@ -115,6 +115,13 @@ namespace CRM.Services.Seguridad
             return usuario.Password == Util.UtilService.Hash(credencial.Password);
         }
 
+        public bool ValidarUsername(UsuarioCredencialDTO credencial)
+        {
+            Usuario usuario = _context.Usuarios.Where(x => x.UserName == credencial.Username).FirstOrDefault();
+
+            return usuario != null;
+        }
+
         public string CambiarPassword(UsuarioCredencialDTO credencial)
         {
             Usuario usuario = _context.Usuarios.Find(credencial.IdUsuario);
