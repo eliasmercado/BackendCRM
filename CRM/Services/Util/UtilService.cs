@@ -3,6 +3,8 @@ using CRM.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace CRM.Services.Util
@@ -60,6 +62,12 @@ namespace CRM.Services.Util
                                          Prioridad = prioridad.Descripcion
                                      }).ToList();
             return prioridades;
+        }
+
+        public static string Hash(string input)
+        {
+            using var sha1 = SHA1.Create();
+            return Convert.ToHexString(sha1.ComputeHash(Encoding.UTF8.GetBytes(input)));
         }
     }
 }
