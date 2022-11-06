@@ -115,6 +115,16 @@ namespace CRM.Services.Seguridad
             return usuario.Password == Util.UtilService.Hash(credencial.Password);
         }
 
+        public string ResetearPassword(UsuarioCredencialDTO credencial)
+        {
+            Usuario usuario = _context.Usuarios.Find(credencial.IdUsuario);
+            usuario.Password = Util.UtilService.Hash(Defs.DEFAULT_PASS);
+            _context.Entry(usuario).State = EntityState.Modified;
+            _context.SaveChanges();
+
+            return "La contraseña se reseteó correctamente";
+        }
+
         public bool ValidarUsername(UsuarioCredencialDTO credencial)
         {
             Usuario usuario = _context.Usuarios.Where(x => x.UserName == credencial.Username).FirstOrDefault();

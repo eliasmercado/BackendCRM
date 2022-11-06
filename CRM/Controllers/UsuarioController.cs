@@ -127,6 +127,27 @@ namespace CRM.Controllers
         }
 
         [HttpPost]
+        [Route("resetear-password")]
+        public ApiResponse<object> PostResetPassword(UsuarioCredencialDTO credencial)
+        {
+            ApiResponse<object> response = new();
+            try
+            {
+                response.Data = UsuarioService.ResetearPassword(credencial);
+            }
+            catch (ApiException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return response;
+        }
+
+        [HttpPost]
         [Route("cambiar-password")]
         public ApiResponse<object> PostCambiarPassword(UsuarioCredencialDTO credencial)
         {
