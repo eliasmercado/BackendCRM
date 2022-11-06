@@ -22,5 +22,6 @@ namespace CRM.Helpers
         public const string OPORTUNIDAD = "Oportunidad";
         public const string TAREA_ABIERTA = "Abierta";
         public const string TAREA_CERRADA = "Cerrada";
+        public const string DEFAULT_PASS = "12345678";
     }
 }

@@ -21,4 +21,10 @@ namespace CRM.DTOs.Seguridad
         public int IdPerfil { get; set; }
         public string Perfil { get; set; }
     }
+
+    public class UsuarioCredencialDTO
+    {
+        public int IdUsuario { get; set; }
+        public string Password { get; set; }
+    }
 }

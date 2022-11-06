@@ -107,5 +107,22 @@ namespace CRM.Services.Seguridad
 
             return perfiles;
         }
+
+        public bool ValidarPassword(UsuarioCredencialDTO credencial)
+        {
+            Usuario usuario = _context.Usuarios.Find(credencial.IdUsuario);
+
+            return usuario.Password == Util.UtilService.Hash(credencial.Password);
+        }
+
+        public string CambiarPassword(UsuarioCredencialDTO credencial)
+        {
+            Usuario usuario = _context.Usuarios.Find(credencial.IdUsuario);
+            usuario.Password = Util.UtilService.Hash(credencial.Password);
+            _context.Entry(usuario).State = EntityState.Modified;
+            _context.SaveChanges();
+
+            return "La contraseña se modificó correctamente";
+        }
     }
 }
