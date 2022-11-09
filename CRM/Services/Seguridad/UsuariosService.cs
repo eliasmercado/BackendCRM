@@ -108,6 +108,52 @@ namespace CRM.Services.Seguridad
             return perfiles;
         }
 
+        public string ModificarPerfil(int idPerfil, PerfilDTO perfilModificado)
+        {
+            if (idPerfil != perfilModificado.IdPerfil)
+            {
+                throw new ApiException("Identificador de perfil no válido");
+            }
+
+            Perfil perfil = _context.Perfils.Find(idPerfil);
+
+            if (perfil == null)
+                throw new ApiException("El perfil no existe");
+
+            perfil.Descripcion = perfilModificado.Perfil;
+
+            _context.SaveChanges();
+
+            return "El perfil se modificó correctamente";
+        }
+
+        public string CrearPerfil(PerfilDTO perfilNuevo)
+        {
+            Perfil perfil = new()
+            {
+                Descripcion = perfilNuevo.Perfil,
+                Estado = true
+            };
+            _context.Perfils.Add(perfil);
+            _context.SaveChanges();
+
+            return "El perfil se agregó correctamente";
+        }
+
+        public string EliminarPerfil(int idPerfil)
+        {
+            Perfil perfil = _context.Perfils.Where(x => x.IdPerfil == idPerfil).FirstOrDefault();
+
+            if (perfil == null)
+                throw new ApiException("El perfil no existe");
+
+            perfil.Estado = false;
+
+            _context.SaveChanges();
+
+            return "El perfil se eliminó correctamente";
+        }
+
         public bool ValidarPassword(UsuarioCredencialDTO credencial)
         {
             Usuario usuario = _context.Usuarios.Find(credencial.IdUsuario);
