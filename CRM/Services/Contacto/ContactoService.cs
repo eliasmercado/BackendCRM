@@ -5,6 +5,7 @@ using CRM.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -75,10 +76,26 @@ namespace CRM.Services.ContactoService
                                         DireccionLaboral = contact.DireccionLaboral,
                                         TelefonoLaboral = contact.TelefonoLaboral,
                                         CorreoLaboral = contact.CorreoLaboral,
-                                        IdPropietario = contact.IdPropietario
+                                        IdPropietario = contact.IdPropietario,
                                     }).FirstOrDefault();
 
+            contacto.Comunicaciones = ObtenerComunicacionesContacto(contacto.IdContacto);
+
             return contacto;
+        }
+
+        public List<ListaComunicacionDTO> ObtenerComunicacionesContacto(int idContacto)
+        {
+            List<ListaComunicacionDTO> comunicaciones = (from comm in _context.Comunicacions
+                                                         where comm.IdContacto == idContacto
+                                                         select new ListaComunicacionDTO
+                                                         {
+                                                             Tipo = comm.IdMedioComunicacionNavigation.Descripcion,
+                                                             Motivo = comm.MotivoComunicacion,
+                                                             Fecha = comm.FechaComunicacion.ToString("dd/MM/yyyy hh:MM:ss", CultureInfo.InvariantCulture),
+                                                         }).ToList();
+
+            return comunicaciones.OrderByDescending(x => x.Fecha).ToList();
         }
 
         public string ModificarContacto(int id, ContactoDTO contactoModificado)

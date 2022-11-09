@@ -26,5 +26,13 @@ namespace CRM.DTOs.Contacto
         public string CorreoLaboral { get; set; }
         public bool EsLead{ get; set; }
         public int IdPropietario { get; set; }
+        public List<ListaComunicacionDTO> Comunicaciones { get; set; }
+    }
+
+    public class ListaComunicacionDTO
+    {
+        public string Tipo { get; set; }
+        public string Motivo { get; set; }
+        public string Fecha { get; set; }
     }
 }

@@ -6,6 +6,7 @@ using CRM.Models;
 using CRM.DTOs.Empresa;
 using CRM.Helpers;
 using CRM.Services.EmpresaService;
+using CRM.DTOs.Contacto;
 
 namespace CRM.Controllers
 {
@@ -84,6 +85,24 @@ namespace CRM.Controllers
             }
 
             return response;
+        }
+
+        [HttpGet]
+        [Route("comunicacion/{idEmpresa}")]
+        public ApiResponse<List<ListaComunicacionDTO>> GetComunicaciones(int idEmpresa)
+        {
+            try
+            {
+                ApiResponse<List<ListaComunicacionDTO>> response = new();
+
+                response.Data = EmpresaService.ObtenerComunicacionesContacto(idEmpresa);
+
+                return response;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         [HttpPost]

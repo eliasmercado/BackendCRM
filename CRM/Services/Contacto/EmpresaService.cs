@@ -1,8 +1,10 @@
-﻿using CRM.DTOs.Empresa;
+﻿using CRM.DTOs.Contacto;
+using CRM.DTOs.Empresa;
 using CRM.Helpers;
 using CRM.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 
@@ -64,7 +66,23 @@ namespace CRM.Services.EmpresaService
                                        IdPropietario = empresa.IdPropietario
                                    }).FirstOrDefault();
 
+            contacto.Comunicaciones = ObtenerComunicacionesContacto(contacto.IdEmpresa);
+
             return contacto;
+        }
+
+        public List<ListaComunicacionDTO> ObtenerComunicacionesContacto(int idEmpresa)
+        {
+            List<ListaComunicacionDTO> comunicaciones = (from comm in _context.Comunicacions
+                                                         where comm.IdEmpresa == idEmpresa
+                                                         select new ListaComunicacionDTO
+                                                         {
+                                                             Tipo = comm.IdMedioComunicacionNavigation.Descripcion,
+                                                             Motivo = comm.MotivoComunicacion,
+                                                             Fecha = comm.FechaComunicacion.ToString("dd/MM/yyyy hh:MM:ss", CultureInfo.InvariantCulture),
+                                                         }).ToList();
+
+            return comunicaciones.OrderByDescending(x => x.Fecha).ToList();
         }
 
         public string ModificarEmpresa(int id, EmpresaDTO empresaModificada)

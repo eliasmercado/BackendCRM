@@ -128,6 +128,24 @@ namespace CRM.Controllers
         }
 
         [HttpGet]
+        [Route("comunicacion/{idContacto}")]
+        public ApiResponse<List<ListaComunicacionDTO>> GetComunicaciones(int idContacto)
+        {
+            try
+            {
+                ApiResponse<List<ListaComunicacionDTO>> response = new();
+
+                response.Data = ContactoService.ObtenerComunicacionesContacto(idContacto);
+
+                return response;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
         [Route("tipoDocumento")]
         public ApiResponse<List<TipoDocumentoDTO>> GetTipoDocumentos()
         {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CRM.DTOs.Contacto;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,5 +21,6 @@ namespace CRM.DTOs.Empresa
         public string CelularRepresentante { get; set; }
         public bool EsLead { get; set; }
         public int IdPropietario { get; set; }
+        public List<ListaComunicacionDTO> Comunicaciones { get; set; }
     }
 }
