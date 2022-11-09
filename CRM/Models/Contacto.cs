@@ -21,6 +21,7 @@ namespace CRM.Models
         public string Celular { get; set; }
         public string Email { get; set; }
         public DateTime FechaNacimiento { get; set; }
+        public DateTime FechaCreacion { get; set; }
         public int IdTipoDocumento { get; set; }
         public string Documento { get; set; }
         public int IdCiudad { get; set; }

@@ -1,4 +1,5 @@
 ﻿using CRM.DTOs.Dashboard;
+using CRM.Helpers;
 using CRM.Models;
 using System;
 using System.Collections.Generic;
@@ -18,32 +19,44 @@ namespace CRM.Services.Dashboard
 
         public CantidadRegistroDTO ObtenerCantidadRegistros()
         {
+            //Obtenemos las tareas
+            IQueryable<Tarea> tareas = _context.Tareas.Where(x => x.FechaCierre.Year == DateTime.Now.Year);
+
+            //Obtenemos los contactos y empresas, obtenemos todos y luego dividimos por leads o cliente
+            IQueryable<Contacto> contactos = _context.Contactos.Where(x => x.Estado);
+            IQueryable<Empresa> empresas = _context.Empresas.Where(x => x.Estado);
+
+            //Obtenemos las oportunidades
+            IQueryable<Oportunidad> oportunidades = _context.Oportunidads.Where(x => x.IdEtapaNavigation.Descripcion != Defs.OPORTUNIDAD_CANCELADA);
+
             CantidadRegistroDTO cantidad = new()
             {
                 Tareas = new EstructuraRegistroDTO()
                 {
-                    Cantidad = 5,
-                    Total = 10
+                    Cantidad = tareas.Where(x => x.IdEstadoActividadNavigation.Descripcion == Defs.TAREA_ABIERTA).Count(),
+                    Total = tareas.Count()
                 },
                 Leads = new EstructuraRegistroDTO()
                 {
-                    Cantidad = 1,
-                    Total = 10
+                    Cantidad = contactos.Where(x => x.FechaCreacion.Month == DateTime.Now.Month && x.EsLead).Count()
+                                + empresas.Where(x => x.FechaCreacion.Month == DateTime.Now.Month && x.EsLead).Count(),
+                    Total = contactos.Where(x => x.EsLead).Count() + empresas.Where(x => x.EsLead).Count()
                 },
                 Contactos = new EstructuraRegistroDTO()
                 {
-                    Cantidad = 2,
-                    Total = 101
+                    Cantidad = contactos.Where(x => x.FechaCreacion.Month == DateTime.Now.Month && !x.EsLead).Count()
+                                + empresas.Where(x => x.FechaCreacion.Month == DateTime.Now.Month && !x.EsLead).Count(),
+                    Total = contactos.Where(x => !x.EsLead).Count() + empresas.Where(x => !x.EsLead).Count()
                 },
                 OportunidadesAbiertas = new EstructuraRegistroDTO()
                 {
-                    Cantidad = 2,
-                    Total = 101
+                    Cantidad = oportunidades.Where(x => x.IdEtapaNavigation.Descripcion != Defs.OPORTUNIDAD_GANADA && x.IdEtapaNavigation.Descripcion != Defs.OPORTUNIDAD_PERDIDA).Count(),
+                    Total = oportunidades.Count()
                 },
                 OportunidadesGanadas = new EstructuraRegistroDTO()
                 {
-                    Cantidad = 51,
-                    Total = 100
+                    Cantidad = oportunidades.Where(x => x.IdEtapaNavigation.Descripcion == Defs.OPORTUNIDAD_GANADA).Count(),
+                    Total = oportunidades.Count()
                 }
             };
 

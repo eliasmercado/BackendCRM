@@ -176,6 +176,8 @@ namespace CRM.Models
 
                 entity.Property(e => e.FechaNacimiento).HasColumnType("datetime");
 
+                entity.Property(e => e.FechaCreacion).HasColumnType("datetime");
+
                 entity.Property(e => e.NombreEmpresa).HasMaxLength(50);
 
                 entity.Property(e => e.Nombres)
@@ -291,6 +293,8 @@ namespace CRM.Models
                     .HasMaxLength(50);
 
                 entity.Property(e => e.UltimoContacto).HasColumnType("datetime");
+
+                entity.Property(e => e.FechaCreacion).HasColumnType("datetime");
 
                 entity.HasOne(d => d.IdCiudadNavigation)
                     .WithMany(p => p.Empresas)

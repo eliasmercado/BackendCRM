@@ -135,7 +135,8 @@ namespace CRM.Services.ContactoService
                 TelefonoLaboral = contactoNuevo.TelefonoLaboral,
                 CorreoLaboral = contactoNuevo.CorreoLaboral,
                 IdPropietario = contactoNuevo.IdPropietario,
-                EsLead = contactoNuevo.EsLead
+                EsLead = contactoNuevo.EsLead,
+                FechaCreacion = DateTime.Now
             };
             _context.Contactos.Add(contacto);
             _context.SaveChanges();

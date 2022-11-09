@@ -111,7 +111,8 @@ namespace CRM.Services.EmpresaService
                 NombreRepresentante = empresaNueva.NombreRepresentante,
                 CelularRepresentante = empresaNueva.CelularRepresentante,
                 IdPropietario = empresaNueva.IdPropietario,
-                EsLead = empresaNueva.EsLead
+                EsLead = empresaNueva.EsLead,
+                FechaCreacion = System.DateTime.Now
             };
             _context.Empresas.Add(empresa);
             _context.SaveChanges();
