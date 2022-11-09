@@ -592,7 +592,8 @@ namespace CRM.Models
 
             modelBuilder.Entity<PerfilPermiso>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.IdPerfilPermiso)
+                    .HasName("PK__Perfil__Permiso");
 
                 entity.ToTable("PerfilPermiso");
 
