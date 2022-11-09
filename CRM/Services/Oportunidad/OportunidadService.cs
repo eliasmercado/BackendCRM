@@ -25,7 +25,7 @@ namespace CRM.Services.OportunidadService
         /// <returns></returns>
         public List<ListaOportunidadDTO> ObtenerListaOportunidades()
         {
-            List<Oportunidad> listaOportunidades = _context.Oportunidads.ToList();
+            List<Oportunidad> listaOportunidades = _context.Oportunidads.Where(x => x.IdEtapaNavigation.Descripcion != Defs.OPORTUNIDAD_CANCELADA).ToList();
             List<ListaOportunidadDTO> listaOportunidadesDto = new();
             ListaOportunidadDTO oportunidadDto;
             InfoContacto contactoAsociado = new();
@@ -53,7 +53,7 @@ namespace CRM.Services.OportunidadService
                 listaOportunidadesDto.Add(oportunidadDto);
             }
 
-            return listaOportunidadesDto.OrderByDescending(x => x.FechaCreacion).Where(x => x.Etapa != Defs.OPORTUNIDAD_CANCELADA).ToList();
+            return listaOportunidadesDto.OrderByDescending(x => x.FechaCreacion).ToList();
         }
 
         /// <summary>
@@ -399,7 +399,7 @@ namespace CRM.Services.OportunidadService
             if (oportunidad.IdEmpresa == null)
             {
                 ContactoAsociadoDTO contacto = (from contact in _context.Contactos
-                                                where contact.Estado && contact.IdContacto == oportunidad.IdContacto
+                                                where contact.IdContacto == oportunidad.IdContacto
                                                 select new ContactoAsociadoDTO()
                                                 {
                                                     IdContacto = contact.IdContacto,
@@ -430,7 +430,7 @@ namespace CRM.Services.OportunidadService
             else
             {
                 EmpresaAsociadaDTO contacto = (from empresa in _context.Empresas
-                                               where empresa.Estado && empresa.IdEmpresa == oportunidad.IdEmpresa
+                                               where empresa.IdEmpresa == oportunidad.IdEmpresa
                                                select new EmpresaAsociadaDTO()
                                                {
                                                    IdEmpresa = empresa.IdEmpresa,

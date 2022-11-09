@@ -5,6 +5,7 @@ using CRM.Services.Dashboard;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,10 +19,11 @@ namespace CRM.Controllers
     public class DashboardController : ControllerBase
     {
         private readonly DashboardService DashboardService;
+        public IConfiguration Configuration { get; }
 
-        public DashboardController(CrmDbContext context)
+        public DashboardController(CrmDbContext context, IConfiguration configuration)
         {
-            DashboardService = new DashboardService(context);
+            DashboardService = new DashboardService(context, configuration);
         }
 
 

@@ -55,7 +55,7 @@ namespace CRM.Services.ContactoService
         public ContactoDTO ObtenerContactoById(int id, bool esLead)
         {
             ContactoDTO contacto = (from contact in _context.Contactos
-                                    where contact.Estado && contact.EsLead == esLead && contact.IdContacto == id
+                                    where contact.EsLead == esLead && contact.IdContacto == id
                                     select new ContactoDTO()
                                     {
                                         IdContacto = contact.IdContacto,

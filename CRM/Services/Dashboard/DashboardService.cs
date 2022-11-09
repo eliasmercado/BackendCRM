@@ -1,6 +1,9 @@
 ﻿using CRM.DTOs.Dashboard;
 using CRM.Helpers;
 using CRM.Models;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,10 +14,12 @@ namespace CRM.Services.Dashboard
     public class DashboardService
     {
         private CrmDbContext _context;
+        public IConfiguration Configuration { get; }
 
-        public DashboardService(CrmDbContext context)
+        public DashboardService(CrmDbContext context, IConfiguration configuration)
         {
             _context = context;
+            Configuration = configuration;
         }
 
         public CantidadRegistroDTO ObtenerCantidadRegistros()
@@ -65,68 +70,70 @@ namespace CRM.Services.Dashboard
 
         public List<EstructuraVentaDTO> ObtenerVentasPorMes()
         {
+            IQueryable<Oportunidad> oportunidades = _context.Oportunidads.Where(x => x.IdEtapaNavigation.Descripcion == Defs.OPORTUNIDAD_GANADA
+                                        && x.FechaCreacion.Year == DateTime.Now.Year);
 
             List<EstructuraVentaDTO> ventas = new List<EstructuraVentaDTO>
             {
                 new EstructuraVentaDTO()
                 {
                     Mes = "Enero",
-                    Cantidad = 10
+                    Cantidad = oportunidades.Where(x => x.FechaCreacion.Month == 1).Count()
                 },
                 new EstructuraVentaDTO()
                 {
                     Mes = "Febreo",
-                    Cantidad = 100
+                    Cantidad = oportunidades.Where(x => x.FechaCreacion.Month == 2).Count()
                 },
                  new EstructuraVentaDTO()
                 {
                     Mes = "Marzo",
-                    Cantidad = 80
+                    Cantidad = oportunidades.Where(x => x.FechaCreacion.Month == 3).Count()
                 },
                 new EstructuraVentaDTO()
                 {
                     Mes = "Abril",
-                    Cantidad = 110
+                    Cantidad = oportunidades.Where(x => x.FechaCreacion.Month == 4).Count()
                 },
                 new EstructuraVentaDTO()
                 {
                     Mes = "Mayo",
-                    Cantidad = 30
+                    Cantidad = oportunidades.Where(x => x.FechaCreacion.Month == 5).Count()
                 },
                 new EstructuraVentaDTO()
                 {
                     Mes = "Junio",
-                    Cantidad = 50
+                    Cantidad = oportunidades.Where(x => x.FechaCreacion.Month == 6).Count()
                 },
                 new EstructuraVentaDTO()
                 {
                     Mes = "Julio",
-                    Cantidad = 40
+                    Cantidad = oportunidades.Where(x => x.FechaCreacion.Month == 7).Count()
                 },
                 new EstructuraVentaDTO()
                 {
                     Mes = "Agosto",
-                    Cantidad = 60
+                    Cantidad = oportunidades.Where(x => x.FechaCreacion.Month == 8).Count()
                 },
                 new EstructuraVentaDTO()
                 {
                     Mes = "Setiembre",
-                    Cantidad = 95
+                    Cantidad = oportunidades.Where(x => x.FechaCreacion.Month == 9).Count()
                 },
                 new EstructuraVentaDTO()
                 {
                     Mes = "Octubre",
-                    Cantidad = 62
+                    Cantidad = oportunidades.Where(x => x.FechaCreacion.Month == 10).Count()
                 },
                 new EstructuraVentaDTO()
                 {
                     Mes = "Noviembre",
-                    Cantidad = 22
+                    Cantidad = oportunidades.Where(x => x.FechaCreacion.Month == 11).Count()
                 },
                 new EstructuraVentaDTO()
                 {
                     Mes = "Diciembre",
-                    Cantidad = 44
+                    Cantidad = oportunidades.Where(x => x.FechaCreacion.Month == 12).Count()
                 }
             };
 
@@ -135,110 +142,72 @@ namespace CRM.Services.Dashboard
 
         public List<EstructuraFuenteDTO> ObtenerFuentesOportunidad()
         {
+            List<EstructuraFuenteDTO> fuentes = (from oportunidad in _context.Oportunidads
+                                                 where oportunidad.FechaCreacion.Year == DateTime.Now.Year
+                                                 group oportunidad by oportunidad.IdFuenteNavigation.Descripcion into fuente
+                                                 select new EstructuraFuenteDTO
+                                                 {
+                                                     Fuente = fuente.Key,
+                                                     Cantidad = fuente.Count()
+                                                 }).ToList();
 
-            List<EstructuraFuenteDTO> fuentes = new List<EstructuraFuenteDTO>
-            {
-                new EstructuraFuenteDTO()
-                {
-                    Fuente = "CRM",
-                    Cantidad = 10
-                },
-                new EstructuraFuenteDTO()
-                {
-                    Fuente = "Ecommerce",
-                    Cantidad = 20
-                },
-                new EstructuraFuenteDTO()
-                {
-                    Fuente = "Landing Page",
-                    Cantidad = 5
-                },
-                new EstructuraFuenteDTO()
-                {
-                    Fuente = "Sitio Web",
-                    Cantidad = 17
-                },
-                new EstructuraFuenteDTO()
-                {
-                    Fuente = "Facebook",
-                    Cantidad = 2
-                },
-                new EstructuraFuenteDTO()
-                {
-                    Fuente = "Instagram",
-                    Cantidad = 0
-                },
-            };
 
             return fuentes;
         }
 
         public List<EstructuraCategoriaDTO> ObtenerVentasPorCategoria()
         {
+            string sql = @"
+                            select
+	                            COUNT(1) as Cantidad,
+	                            c2.Nombre as Categoria,
+	                            '' AS CategoriaPadre
+                            from
+	                            DetalleOportunidad do
+                            join Producto p on
+	                            do.IdProducto = p.IdProducto
+                            join Categoria c on
+	                            c.IdCategoria = p.IdCategoria
+                            join Categoria c2 on
+	                            c2.IdCategoria = c.IdCategoriaPadre
+                            GROUP by
+	                            c2.Nombre
+                            UNION
+                            select
+	                            COUNT(1) as Cantidad,
+	                            c.Nombre as Categoria,
+		                            c2.Nombre as CategoriaPadre
+                            from
+	                            DetalleOportunidad do
+                            join Producto p on
+	                            do.IdProducto = p.IdProducto
+                            join Categoria c on
+	                            c.IdCategoria = p.IdCategoria
+                            join Categoria c2 on
+	                            c2.IdCategoria = c.IdCategoriaPadre
+                            GROUP by
+	                            c2.Nombre,
+	                            c.Nombre";
+            List<EstructuraCategoriaDTO> categorias = new List<EstructuraCategoriaDTO>();
 
-            List<EstructuraCategoriaDTO> categorias = new List<EstructuraCategoriaDTO>
+            using (SqlConnection conexion = new SqlConnection(Configuration.GetConnectionString("CrmDbContext")))
             {
-                new EstructuraCategoriaDTO()
+                conexion.Open();
+                SqlCommand comando = new SqlCommand(sql, conexion);
+                SqlDataReader registro = comando.ExecuteReader();
+
+                while (registro.Read())
                 {
-                   Categoria = "Categoria 1",
-                    Cantidad = 100,
-                    CategoriaPadre =""
-                },
-                new EstructuraCategoriaDTO()
-                {
-                   Categoria = "Categoria 2",
-                    Cantidad = 112,
-                    CategoriaPadre =""
-                },
-                new EstructuraCategoriaDTO()
-                {
-                   Categoria = "Categoria 3",
-                    Cantidad = 53,
-                    CategoriaPadre =""
-                },
-                new EstructuraCategoriaDTO()
-                {
-                   Categoria = "Categoria hijo 1",
-                    Cantidad = 10,
-                    CategoriaPadre ="Categoria 1"
-                },
-                new EstructuraCategoriaDTO()
-                {
-                   Categoria = "Categoria hijo 1.2",
-                    Cantidad = 80,
-                    CategoriaPadre ="Categoria 1"
-                },
-                new EstructuraCategoriaDTO()
-                {
-                   Categoria = "Categoria hijo 1.3",
-                    Cantidad = 10,
-                    CategoriaPadre ="Categoria 1"
-                },
-                new EstructuraCategoriaDTO()
-                {
-                   Categoria = "Categoria hijo 2",
-                    Cantidad = 112,
-                    CategoriaPadre ="Categoria 2"
-                },
-                new EstructuraCategoriaDTO()
-                {
-                   Categoria = "Categoria hijo 3",
-                    Cantidad = 10,
-                    CategoriaPadre ="Categoria 3"
-                },
-                new EstructuraCategoriaDTO()
-                {
-                   Categoria = "Categoria hijo 2.3",
-                    Cantidad = 30,
-                    CategoriaPadre ="Categoria 3"
-                },
-                new EstructuraCategoriaDTO()
-                {
-                   Categoria = "Categoria hijo 3.3",
-                    Cantidad = 13,
-                    CategoriaPadre ="Categoria 3"
-                },
-            };
+                    categorias.Add(new EstructuraCategoriaDTO
+                    {
+                        Cantidad = Convert.ToInt32(registro["Cantidad"]),
+                        Categoria = registro["Categoria"].ToString(),
+                        CategoriaPadre = registro["CategoriaPadre"].ToString()
+
+                    });
+                };
+                conexion.Close();
+            }
 
             return categorias;
         }

@@ -47,7 +47,7 @@ namespace CRM.Services.EmpresaService
         public EmpresaDTO ObtenerEmpresaById(int id, bool esLead)
         {
             EmpresaDTO contacto = (from empresa in _context.Empresas
-                                   where empresa.Estado && empresa.EsLead == esLead && empresa.IdEmpresa == id
+                                   where empresa.EsLead == esLead && empresa.IdEmpresa == id
                                    select new EmpresaDTO()
                                    {
                                        IdEmpresa = empresa.IdEmpresa,
