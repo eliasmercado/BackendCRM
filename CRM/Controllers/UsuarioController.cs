@@ -205,5 +205,71 @@ namespace CRM.Controllers
                 throw;
             }
         }
+
+
+        [HttpPut]
+        [Route("perfil/{idPerfil}")]
+
+        public ApiResponse<object> PutPerfil(int idPerfil, PerfilDTO perfil)
+        {
+            ApiResponse<object> response = new();
+
+            try
+            {
+                response.Data = UsuarioService.ModificarPerfil(idPerfil, perfil);
+            }
+            catch (ApiException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return response;
+        }
+
+        [HttpPost]
+        [Route("perfil")]
+        public ApiResponse<object> PostPerfil(PerfilDTO perfil)
+        {
+            ApiResponse<object> response = new();
+            try
+            {
+                response.Data = UsuarioService.CrearPerfil(perfil);
+            }
+            catch (ApiException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return response;
+        }
+
+        [HttpDelete]
+        [Route("perfil/{idPerfil}")]
+        public ApiResponse<object> DeletePerfil(int idPerfil)
+        {
+            ApiResponse<object> response = new();
+            try
+            {
+                response.Data = UsuarioService.EliminarPerfil(idPerfil);
+            }
+            catch (ApiException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return response;
+        }
     }
 }
