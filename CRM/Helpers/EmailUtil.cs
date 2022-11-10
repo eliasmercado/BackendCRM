@@ -15,7 +15,7 @@ namespace CRM.Helpers
             int puerto = 587;
 
             string gmailUser = "informaciones.crm@gmail.com";
-            string gmailPass = "proy2CRM";
+            string gmailPass = "iaocwlbcaxlirfqz";
 
             MimeMessage mensaje = new();
             mensaje.From.Add(new MailboxAddress("Informaciones CRM", gmailUser));

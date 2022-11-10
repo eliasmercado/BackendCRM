@@ -75,14 +75,15 @@ namespace CRM.Services.EmpresaService
         {
             List<ListaComunicacionDTO> comunicaciones = (from comm in _context.Comunicacions
                                                          where comm.IdEmpresa == idEmpresa
+                                                         orderby comm.FechaComunicacion descending
                                                          select new ListaComunicacionDTO
                                                          {
                                                              Tipo = comm.IdMedioComunicacionNavigation.Descripcion,
                                                              Motivo = comm.MotivoComunicacion,
-                                                             Fecha = comm.FechaComunicacion.ToString("dd/MM/yyyy hh:MM:ss", CultureInfo.InvariantCulture),
+                                                             Fecha = comm.FechaComunicacion.ToString("dd/MM/yyyy hh:mm:ss", CultureInfo.InvariantCulture),
                                                          }).ToList();
 
-            return comunicaciones.OrderByDescending(x => x.Fecha).ToList();
+            return comunicaciones;
         }
 
         public string ModificarEmpresa(int id, EmpresaDTO empresaModificada)

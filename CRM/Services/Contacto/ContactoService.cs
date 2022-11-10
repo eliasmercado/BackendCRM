@@ -88,14 +88,15 @@ namespace CRM.Services.ContactoService
         {
             List<ListaComunicacionDTO> comunicaciones = (from comm in _context.Comunicacions
                                                          where comm.IdContacto == idContacto
+                                                         orderby comm.FechaComunicacion descending
                                                          select new ListaComunicacionDTO
                                                          {
                                                              Tipo = comm.IdMedioComunicacionNavigation.Descripcion,
                                                              Motivo = comm.MotivoComunicacion,
-                                                             Fecha = comm.FechaComunicacion.ToString("dd/MM/yyyy hh:MM:ss", CultureInfo.InvariantCulture),
+                                                             Fecha = comm.FechaComunicacion.ToString("dd/MM/yyyy hh:mm:ss", CultureInfo.InvariantCulture),
                                                          }).ToList();
 
-            return comunicaciones.OrderByDescending(x => x.Fecha).ToList();
+            return comunicaciones;
         }
 
         public string ModificarContacto(int id, ContactoDTO contactoModificado)
